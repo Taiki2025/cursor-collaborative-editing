@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIエージェントUI (360度ビュー)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="九州電力.png" alt="九州電力ロゴ" class="logo">
+            <h1>AIエージェントUI (360度ビュー)</h1>
+        </header>
+        <main class="main-content">
+            <div class="left-panel">
+                <div class="customer-card">
+                    <!-- Customer and Contract Info -->
+                    <h2>顧客・契約情報</h2>
+                    <p>顧客ID: CUST-2025-0001</p>
+                    <p>顧客名: 山田 太郎</p>
+                    <p>契約ID: CTR-09-1234-5678</p>
+                    <p>プラン: ナイト・セレクト</p>
+                    <p>アンペア: 40A</p>
+                    <p>契約ステータス: Active</p>
+                </div>
+                <div class="tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" data-tab="overview">概要</button>
+                        <button class="tab-button" data-tab="billing-history">請求履歴</button>
+                        <button class="tab-button" data-tab="unpaid-management">未収管理</button>
+                        <button class="tab-button" data-tab="contract-service">契約・サービス</button>
+                        <button class="tab-button" data-tab="restore-power">再点申込</button>
+                        <button class="tab-button" data-tab="simulation">料金シミュレーション</button>
+                        <button class="tab-button" data-tab="change-plan">契約変更</button>
+                        <button class="tab-button" data-tab="termination">契約廃止</button>
+                        <button class="tab-button" data-tab="interaction-history">対応履歴</button>
+                    </div>
+                    <div class="tab-content active" id="overview">
+                        <h3>概要タブ</h3>
+                        <table>
+                            <tr><th>フィールド</th><th>値</th></tr>
+                            <tr><td>顧客ID</td><td>`CUST-2025-0001`</td></tr>
+                            <tr><td>顧客名</td><td>山田 太郎</td></tr>
+                            <tr><td>契約ID</td><td>`CTR-09-1234-5678`</td></tr>
+                            <tr><td>プラン</td><td>ナイト・セレクト</td></tr>
+                            <tr><td>アンペア</td><td>40A</td></tr>
+                            <tr><td>契約ステータス</td><td>Active</td></tr>
+                            <tr><td>最終更新日時</td><td>2025/08/01 14:32</td></tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" id="billing-history">
+                        <h3>請求履歴タブ</h3>
+                        <table>
+                            <tr><th>年月</th><th>請求額（¥）</th><th>支払状況</th></tr>
+                            <tr><td>2025/07</td><td>7,980</td><td>Paid</td></tr>
+                            <tr><td>2025/06</td><td>8,120</td><td>Paid</td></tr>
+                            <tr><td>2025/05</td><td>8,350</td><td>Unpaid</td></tr>
+                            <tr><td>2025/04</td><td>7,650</td><td>Paid</td></tr>
+                            <tr><td>2025/03</td><td>7,420</td><td>Paid</td></tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" id="unpaid-management">
+                        <h3>未収管理タブ</h3>
+                        <table>
+                            <tr><th>請求ID</th><th>月</th><th>請求額（¥）</th><th>未収期間</th><th>最終督促日</th><th>次回督促予定</th></tr>
+                            <tr><td>BILL-202505</td><td>2025/05</td><td>8,350</td><td>3ヶ月</td><td>2025/06/10</td><td>2025/08/10</td></tr>
+                            <tr><td>BILL-202504</td><td>2025/04</td><td>7,650</td><td>4ヶ月</td><td>2025/05/12</td><td>2025/08/12</td></tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" id="contract-service">
+                        <h3>契約・サービスタブ</h3>
+                        <table>
+                            <tr><th>項目</th><th>フィールド名</th><th>値</th></tr>
+                            <tr><td>供給地点特定番号</td><td>supply_point_id</td><td>`09-1234-1234-1234-0000-0000`</td></tr>
+                            <tr><td>契約開始日</td><td>contract_start_date</td><td>2020/10/01</td></tr>
+                            <tr><td>更新日</td><td>contract_renewal_date</td><td>2024/10/01</td></tr>
+                            <tr><td>プラン変更履歴</td><td>plan_change_history</td><td>2023/11/15: レギュラー → ナイト・セレクト</td></tr>
+                            <tr><td>過去12ヶ月平均使用量 (kWh)</td><td>avg_usage_12mo</td><td>235</td></tr>
+                            <tr><td>現在請求アンペア</td><td>ampere</td><td>40A</td></tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" id="restore-power">
+                        <h3>再点申込タブ</h3>
+                        <p><strong>検索フォーム</strong></p>
+                        <ul>
+                            <li>顧客ID: `CUST-2025-0001`</li>
+                            <li>契約ID: `CTR-09-1234-5678`</li>
+                        </ul>
+                        <p><strong>未収情報</strong>: 未収金額 ¥15,430、未収期間 3ヶ月</p>
+                        <p><strong>再点可能日</strong>: 2025-08-12（09:00, 13:00, 15:30）</p>
+                        <p><strong>予約結果</strong>:</p>
+                        <blockquote>
+                            <p>ID: RES-20250812-0001</p>
+                            <p>予約日時: `2025-08-12 13:00`</p>
+                        </blockquote>
+                    </div>
+                    <div class="tab-content" id="simulation">
+                        <h3>料金シミュレーションタブ</h3>
+                        <table>
+                            <tr><th>入力パラメータ</th><th>値</th></tr>
+                            <tr><td>現行プラン</td><td>ナイト・セレクト</td></tr>
+                            <tr><td>予測使用量 (kWh/月)</td><td>250</td></tr>
+                            <tr><td>選択プラン候補</td><td>レギュラー, デイタイム</td></tr>
+                        </table>
+                        <p><strong>試算結果</strong></p>
+                        <table>
+                            <tr><th>プラン名</th><th>月次料金試算（¥）</th><th>差分（現行比）</th></tr>
+                            <tr><td>レギュラー</td><td>9,200</td><td>+1,220</td></tr>
+                            <tr><td>デイタイム</td><td>10,500</td><td>+2,520</td></tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" id="change-plan">
+                        <h3>契約変更タブ</h3>
+                        <p><strong>AI提案プラン</strong>：レギュラー（試算 ¥9,200/月）</p>
+                        <p><strong>顧客同意</strong>：☑ チェック済み</p>
+                        <p><strong>API結果</strong>:</p>
+                        <blockquote>
+                            <p>変更ID: CHG-20250806-0001</p>
+                            <p>変更日時: `2025-08-06 10:15`</p>
+                        </blockquote>
+                    </div>
+                    <div class="tab-content" id="termination">
+                        <h3>契約廃止タブ</h3>
+                        <table>
+                            <tr><th>項目</th><th>値</th></tr>
+                            <tr><td>廃止理由</td><td>引越しによる解約</td></tr>
+                            <tr><td>希望廃止日</td><td>2025/07/31</td></tr>
+                            <tr><td>確定廃止日</td><td>2025/07/31</td></tr>
+                            <tr><td>廃止前最終使用量</td><td>220 kWh</td></tr>
+                            <tr><td>最終請求額</td><td>¥7,753</td></tr>
+                            <tr><td>帳票リンク</td><td><a href="https://chatgpt.com/g/g-p-689308ddd50481918d04804cf65c2c7d-sisutemu/c/68935f80-0108-8320-bb9e-92d8c3789640?model=o4-mini-high" target="_blank">廃止通知書PDFをダウンロード</a></td></tr>
+                        </table>
+                    </div>
+                    <div class="tab-content" id="interaction-history">
+                        <h3>対応履歴タブ</h3>
+                        <table>
+                            <tr><th>日時</th><th>担当者</th><th>要約</th></tr>
+                            <tr><td>2025-08-01 14:30</td><td>Ops_A</td><td>電話着信→未収確認→再点申込提案</td></tr>
+                            <tr><td>2025-07-25 09:15</td><td>Ops_B</td><td>プラン変更シミュレーション→レギュラー提案</td></tr>
+                            <tr><td>2025-07-10 16:45</td><td>Ops_C</td><td>廃止理由ヒアリング（引越し）→廃止手続き案内</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="right-panel">
+                <div class="chat-panel">
+                    <div class="chat-header">
+                        My Assistant
+                    </div>
+                    <div class="message-area">
+                        <!-- Chat messages will be appended here -->
+                    </div>
+                    <div class="input-area">
+                        <input type="text" placeholder="再点申込の手順" class="chat-input">
+                        <button class="send-button">
+                            <!-- Paper plane icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                        </button>
+                        <button class="voice-input-button">
+                            <!-- Microphone icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
+                                <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.2-3c0 3.53-2.64 6.44-6.2 6.93V21h-2v-3.07c-3.56-.49-6.2-3.4-6.2-6.93h-2c0 4.17 3.06 7.6 7 8.4V21h4v-2.57c3.94-.8 7-4.23 7-8.4h-2z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
