@@ -1,2 +1,3 @@
 # cursor-collaborative-editing
 cursorにてUIを作成するリポジトリです
+テスト入力
