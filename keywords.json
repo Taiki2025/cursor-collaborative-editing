@@ -1,0 +1,47 @@
+[
+  {
+    "scenario": "OUTAGE",
+    "trigger": "電気が止まった",
+    "bot_prompt": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。"
+  },
+  {
+    "scenario": "OUTAGE",
+    "trigger": "停電",
+    "bot_prompt": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。"
+  },
+  {
+    "scenario": "BILLING",
+    "trigger": "請求額",
+    "bot_prompt": "最新の請求額は¥7,980です。支払期限は2025/08/20になります。"
+  },
+  {
+    "scenario": "BILLING",
+    "trigger": "支払額",
+    "bot_prompt": "最新の請求額は¥7,980です。支払期限は2025/08/20になります。"
+  },
+  {
+    "scenario": "CHANGE_PLAN",
+    "trigger": "プラン変更",
+    "bot_prompt": "プラン変更ですね。現在のプランはナイト・セレクトです。ご希望のプランをお知らせください。"
+  },
+  {
+    "scenario": "TERMINATION",
+    "trigger": "解約",
+    "bot_prompt": "ご解約ですね。ご希望の廃止日と理由を教えていただけますか？"
+  },
+  {
+    "scenario": "TERMINATION",
+    "trigger": "廃止",
+    "bot_prompt": "ご解約ですね。ご希望の廃止日と理由を教えていただけますか？"
+  },
+  {
+    "scenario": "HARASSMENT",
+    "trigger": "パワハラ",
+    "bot_prompt": "お客様の発言にハラスメントの可能性が検知されました。対応方法をご確認ください。"
+  },
+  {
+    "scenario": "HARASSMENT",
+    "trigger": "怒鳴る",
+    "bot_prompt": "お客様の発言にハラスメントの可能性が検知されました。対応方法をご確認ください。"
+  }
+]
