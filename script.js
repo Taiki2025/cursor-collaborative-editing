@@ -4,6 +4,7 @@ let demoMode = false;
 let keywords = [];
 let scenarios = [];
 let currentScenarioIndex = 0;
+let operatorActionIndex = 0; // オペレーター動作のインデックス
 
 // DOM要素の取得
 const elements = {
@@ -83,94 +84,84 @@ async function loadKeywords() {
         // 直接データを埋め込み（CORSエラー回避）
         keywords = [
             {
-                "scenario": "OUTAGE",
+                "scenario": "RESTORE_POWER",
                 "trigger": "電気が止まった",
                 "bot_prompt": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。"
             },
             {
-                "scenario": "OUTAGE",
+                "scenario": "RESTORE_POWER",
                 "trigger": "停電",
                 "bot_prompt": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。"
             },
             {
-                "scenario": "BILLING",
+                "scenario": "RESTORE_POWER",
+                "trigger": "再点",
+                "bot_prompt": "再点申込の手順をご案内します。契約番号をお願いします。"
+            },
+            {
+                "scenario": "USAGE_CALCULATION",
+                "trigger": "使用量",
+                "bot_prompt": "使用量の確認ですね。契約番号をお願いします。"
+            },
+            {
+                "scenario": "USAGE_CALCULATION",
+                "trigger": "料金",
+                "bot_prompt": "料金の確認ですね。契約番号をお願いします。"
+            },
+            {
+                "scenario": "USAGE_CALCULATION",
+                "trigger": "計算",
+                "bot_prompt": "料金計算のご相談ですね。契約番号をお願いします。"
+            },
+            {
+                "scenario": "BILLING_MANAGEMENT",
                 "trigger": "請求額",
                 "bot_prompt": "最新の請求額は¥7,980です。支払期限は2025/08/20になります。"
             },
             {
-                "scenario": "BILLING",
+                "scenario": "BILLING_MANAGEMENT",
                 "trigger": "請求",
                 "bot_prompt": "請求額の確認ですね。契約番号をお願いします。"
             },
             {
-                "scenario": "BILLING",
+                "scenario": "BILLING_MANAGEMENT",
                 "trigger": "支払い",
                 "bot_prompt": "支払いについてのご相談ですね。契約番号をお願いします。"
             },
             {
-                "scenario": "CHANGE_PLAN",
+                "scenario": "BILLING_MANAGEMENT",
+                "trigger": "未収",
+                "bot_prompt": "未収金についてのご相談ですね。契約番号をお願いします。"
+            },
+            {
+                "scenario": "CONTRACT_CHANGE",
                 "trigger": "プラン変更",
                 "bot_prompt": "プラン変更の手続きをご案内します。現在のプランと希望プランをお聞かせください。"
             },
             {
-                "scenario": "CHANGE_PLAN",
+                "scenario": "CONTRACT_CHANGE",
                 "trigger": "プラン",
                 "bot_prompt": "プラン変更のご相談ですね。現在のプランと希望プランをお聞かせください。"
             },
             {
-                "scenario": "TERMINATION",
+                "scenario": "CONTRACT_CHANGE",
+                "trigger": "契約変更",
+                "bot_prompt": "契約変更の手続きをご案内します。変更内容をお聞かせください。"
+            },
+            {
+                "scenario": "CONTRACT_TERMINATION",
                 "trigger": "契約廃止",
                 "bot_prompt": "契約廃止の手続きをご案内します。廃止理由と希望日をお聞かせください。"
             },
             {
-                "scenario": "TERMINATION",
+                "scenario": "CONTRACT_TERMINATION",
                 "trigger": "解約",
                 "bot_prompt": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。"
             },
             {
-                "scenario": "TERMINATION",
+                "scenario": "CONTRACT_TERMINATION",
                 "trigger": "廃止",
                 "bot_prompt": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。"
-            },
-            {
-                "scenario": "HARASSMENT",
-                "trigger": "バカヤロー",
-                "bot_prompt": "お客様のご不満をお聞かせください。冷静にお話ししましょう。"
-            },
-            {
-                "scenario": "HARASSMENT",
-                "trigger": "お前",
-                "bot_prompt": "お客様のご不満をお聞かせください。冷静にお話ししましょう。"
-            },
-            {
-                "scenario": "HARASSMENT",
-                "trigger": "クソ",
-                "bot_prompt": "お客様のご不満をお聞かせください。冷静にお話ししましょう。"
-            },
-            {
-                "scenario": "SEXUAL_HARASSMENT",
-                "trigger": "美人",
-                "bot_prompt": "業務以外の話はお受けできません。ご用件をお聞かせください。"
-            },
-            {
-                "scenario": "SEXUAL_HARASSMENT",
-                "trigger": "可愛い",
-                "bot_prompt": "業務以外の話はお受けできません。ご用件をお聞かせください。"
-            },
-            {
-                "scenario": "SEXUAL_HARASSMENT",
-                "trigger": "デート",
-                "bot_prompt": "業務以外の話はお受けできません。ご用件をお聞かせください。"
-            },
-            {
-                "scenario": "MISSING_INFO",
-                "trigger": "手続き",
-                "bot_prompt": "手続きについてのご案内ですね。詳しくご説明いたします。"
-            },
-            {
-                "scenario": "MISSING_INFO",
-                "trigger": "方法",
-                "bot_prompt": "手続き方法についてのご案内ですね。詳しくご説明いたします。"
             }
         ];
         console.log('キーワードデータ読み込み完了:', keywords.length, '件');
@@ -190,8 +181,8 @@ async function loadScenarios() {
         // 直接データを埋め込み（CORSエラー回避）
         scenarios = [
             {
-                "code": "OUTAGE",
-                "name": "停電対応",
+                "code": "RESTORE_POWER",
+                "name": "再点申込",
                 "icon": "⚡",
                 "transcript": [
                     { "timestamp": "14:00:01", "speaker": "顧客", "text": "もしもし、電気が止まってしまったんですが…" },
@@ -208,31 +199,95 @@ async function loadScenarios() {
                     { "time": "14:01:00", "summary": "予約完了：RES-20250812-0001" }
                 ],
                 "alerts": [],
-                "sharedInfo": []
+                "sharedInfo": [],
+                "operatorActions": [
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
+                    { "type": "SWITCH_TAB", "tabId": "unpaid-management", "tabName": "未収管理" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidAmount", "description": "未収金額を確認", "duration": 2000 },
+                    { "type": "SWITCH_TAB", "tabId": "restore-power", "tabName": "再点申込" },
+                    { "type": "SELECT_OPTION", "selector": "#restoreDate", "value": "2025-08-12", "description": "再点日を選択" },
+                    { "type": "CLICK_BUTTON", "buttonId": "confirmRestore", "description": "再点申込確認ボタンをクリック" },
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                ]
             },
             {
-                "code": "BILLING",
-                "name": "請求確認",
-                "icon": "💰",
+                "code": "USAGE_CALCULATION",
+                "name": "使用量計算～料金計算",
+                "icon": "🧮",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "今月の請求額を確認したいのですが" },
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "今月の使用量と料金を教えてください" },
                     { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたしました。契約番号をお願いします。" },
                     { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "2025年7月分の請求額は¥7,980です。" },
-                    { "timestamp": "14:00:20", "speaker": "顧客", "text": "支払期限はいつですか？" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "支払期限は2025年8月20日です。" },
-                    { "timestamp": "14:00:30", "speaker": "顧客", "text": "ありがとうございます。" }
+                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "2025年7月分の使用量は220kWhです。" },
+                    { "timestamp": "14:00:20", "speaker": "オペレーター", "text": "基本料金¥2,400、従量料金¥5,580、合計¥7,980です。" },
+                    { "timestamp": "14:00:25", "speaker": "顧客", "text": "前月と比べてどうですか？" },
+                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "前月比-15kWh、料金差額-¥140の減少です。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "7月分請求額¥7,980を確認" },
-                    { "time": "14:00:25", "summary": "支払期限2025/08/20を案内" }
+                    { "time": "14:00:15", "summary": "7月分使用量220kWhを確認" },
+                    { "time": "14:00:20", "summary": "料金内訳：基本¥2,400＋従量¥5,580＝¥7,980" },
+                    { "time": "14:00:30", "summary": "前月比-15kWh、-¥140の減少を案内" }
                 ],
                 "alerts": [],
-                "sharedInfo": []
+                "sharedInfo": [],
+                "operatorActions": [
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
+                    { "type": "SWITCH_TAB", "tabId": "billing-history", "tabName": "請求履歴" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentUsage", "description": "現在の使用量を確認", "duration": 2000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentBill", "description": "現在の請求額を確認", "duration": 2000 },
+                    { "type": "SWITCH_TAB", "tabId": "simulation", "tabName": "料金シミュレーション" },
+                    { "type": "INPUT_DATA", "field": "usageInput", "value": "220", "description": "使用量を入力" },
+                    { "type": "CLICK_BUTTON", "buttonId": "calculateBill", "description": "料金計算ボタンをクリック" },
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                ]
             },
             {
-                "code": "CHANGE_PLAN",
-                "name": "プラン変更",
+                "code": "BILLING_MANAGEMENT",
+                "name": "請求・未収管理",
+                "icon": "💰",
+                "transcript": [
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "未収金の支払いについて相談したいのですが" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたしました。契約番号をお願いします。" },
+                    { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。" },
+                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "未収金額は¥15,430（3ヶ月分）です。" },
+                    { "timestamp": "14:00:20", "speaker": "オペレーター", "text": "分割払いも可能です。いかがでしょうか？" },
+                    { "timestamp": "14:00:25", "speaker": "顧客", "text": "分割払いでお願いします。" },
+                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "3回払いで設定いたします。1回目は8月20日までです。" }
+                ],
+                "summaryUpdates": [
+                    { "time": "14:00:15", "summary": "未収¥15,430（3ヶ月分）を確認" },
+                    { "time": "14:00:20", "summary": "分割払い案内実施" },
+                    { "time": "14:00:30", "summary": "3回払い設定完了、1回目8/20期限" }
+                ],
+                "alerts": [
+                    {
+                        "type": "UNPAID_ALERT",
+                        "message": "未収金3ヶ月分¥15,430の支払い相談",
+                        "severity": "MEDIUM",
+                        "timestamp": "14:00:15"
+                    }
+                ],
+                "sharedInfo": [],
+                "operatorActions": [
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
+                    { "type": "SWITCH_TAB", "tabId": "unpaid-management", "tabName": "未収管理" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidAmount", "description": "未収金額を確認", "duration": 2000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidMonths", "description": "未収月数を確認", "duration": 2000 },
+                    { "type": "SELECT_OPTION", "selector": "#paymentMethod", "value": "installment", "description": "分割払いを選択" },
+                    { "type": "SELECT_OPTION", "selector": "#installmentCount", "value": "3", "description": "3回払いを選択" },
+                    { "type": "CLICK_BUTTON", "buttonId": "confirmPayment", "description": "支払い方法確認ボタンをクリック" },
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                ]
+            },
+            {
+                "code": "CONTRACT_CHANGE",
+                "name": "契約変更",
                 "icon": "🔄",
                 "transcript": [
                     { "timestamp": "14:00:01", "speaker": "顧客", "text": "プランを変更したいのですが" },
@@ -250,10 +305,22 @@ async function loadScenarios() {
                     { "time": "14:00:35", "summary": "変更完了：適用開始2025/09/01" }
                 ],
                 "alerts": [],
-                "sharedInfo": []
+                "sharedInfo": [],
+                "operatorActions": [
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
+                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentPlan", "description": "現在のプランを確認", "duration": 2000 },
+                    { "type": "SWITCH_TAB", "tabId": "change-plan", "tabName": "プラン変更" },
+                    { "type": "SELECT_OPTION", "selector": "#newPlan", "value": "regular", "description": "レギュラープランを選択" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "planComparison", "description": "プラン比較を確認", "duration": 2000 },
+                    { "type": "CLICK_BUTTON", "buttonId": "confirmPlanChange", "description": "プラン変更確認ボタンをクリック" },
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                ]
             },
             {
-                "code": "TERMINATION",
+                "code": "CONTRACT_TERMINATION",
                 "name": "契約廃止",
                 "icon": "🚪",
                 "transcript": [
@@ -273,110 +340,19 @@ async function loadScenarios() {
                     { "time": "14:00:35", "summary": "廃止手続き完了" }
                 ],
                 "alerts": [],
-                "sharedInfo": []
-            },
-            {
-                "code": "HARASSMENT",
-                "name": "ハラスメント対応",
-                "icon": "⚠️",
-                "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "お前ら電力会社はどうしてこんなに高いんだ！" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "申し訳ございません。契約番号をお願いします。" },
-                    { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678だ！" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "料金についてご相談ですね。詳しくお聞かせください。" },
-                    { "timestamp": "14:00:20", "speaker": "顧客", "text": "バカヤロー！こんなに高いのはおかしいだろ！" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "お客様のご不満をお聞かせください。冷静にお話ししましょう。" },
-                    { "timestamp": "14:00:30", "speaker": "顧客", "text": "もういい！切るぞ！" }
-                ],
-                "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "料金に関する苦情対応開始" },
-                    { "time": "14:00:20", "summary": "ハラスメント検知：パワハラワード検出" },
-                    { "time": "14:00:30", "summary": "通話終了：顧客からの一方的な切断" }
-                ],
-                "alerts": [
-                    {
-                        "type": "HARASSMENT",
-                        "message": "パワハラワード検出：「バカヤロー」「お前ら」",
-                        "severity": "HIGH",
-                        "timestamp": "14:00:20"
-                    }
-                ],
-                "sharedInfo": [
-                    {
-                        "type": "MISSING_INFO",
-                        "message": "料金の詳細説明が未実施",
-                        "priority": "MEDIUM",
-                        "timestamp": "14:00:25"
-                    }
-                ]
-            },
-            {
-                "code": "SEXUAL_HARASSMENT",
-                "name": "セクハラ対応",
-                "icon": "🚨",
-                "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "もしもし、美人のオペレーターさんかな？" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "申し訳ございません。契約番号をお願いします。" },
-                    { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。声が可愛いね。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "ご用件をお聞かせください。" },
-                    { "timestamp": "14:00:20", "speaker": "顧客", "text": "デートしない？" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "業務以外の話はお受けできません。ご用件をお聞かせください。" },
-                    { "timestamp": "14:00:30", "speaker": "顧客", "text": "切るよ。" }
-                ],
-                "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "セクハラ対応開始" },
-                    { "time": "14:00:20", "summary": "セクハラ検知：不適切な発言検出" },
-                    { "time": "14:00:30", "summary": "通話終了：顧客からの切断" }
-                ],
-                "alerts": [
-                    {
-                        "type": "SEXUAL_HARASSMENT",
-                        "message": "セクハラ検知：「美人」「可愛い」「デート」",
-                        "severity": "HIGH",
-                        "timestamp": "14:00:20"
-                    }
-                ],
-                "sharedInfo": [
-                    {
-                        "type": "MISSING_INFO",
-                        "message": "業務用件の確認が未完了",
-                        "priority": "HIGH",
-                        "timestamp": "14:00:25"
-                    }
-                ]
-            },
-            {
-                "code": "MISSING_INFO",
-                "name": "伝達漏れ対応",
-                "icon": "📝",
-                "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "料金の支払い方法を教えてください" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたしました。契約番号をお願いします。" },
-                    { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "口座振替、クレジットカード、コンビニ支払いがございます。" },
-                    { "timestamp": "14:00:20", "speaker": "顧客", "text": "口座振替の手続きをしたいです。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "承知いたしました。手続き完了いたします。" },
-                    { "timestamp": "14:00:30", "speaker": "顧客", "text": "ありがとうございます。" }
-                ],
-                "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "支払い方法の案内実施" },
-                    { "time": "14:00:25", "summary": "口座振替手続き申込受付" },
-                    { "time": "14:00:30", "summary": "手続き完了" }
-                ],
-                "alerts": [],
-                "sharedInfo": [
-                    {
-                        "type": "MISSING_INFO",
-                        "message": "口座振替の手続き方法詳細説明が未実施",
-                        "priority": "MEDIUM",
-                        "timestamp": "14:00:25"
-                    },
-                    {
-                        "type": "MISSING_INFO",
-                        "message": "手続き完了後の確認方法説明が未実施",
-                        "priority": "LOW",
-                        "timestamp": "14:00:30"
-                    }
+                "sharedInfo": [],
+                "operatorActions": [
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
+                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "契約状況を確認", "duration": 2000 },
+                    { "type": "SWITCH_TAB", "tabId": "termination", "tabName": "契約廃止" },
+                    { "type": "SELECT_OPTION", "selector": "#terminationReason", "value": "moving", "description": "廃止理由を選択" },
+                    { "type": "INPUT_DATA", "field": "terminationDate", "value": "2025-07-31", "description": "廃止希望日を入力" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "finalBill", "description": "最終請求額を確認", "duration": 2000 },
+                    { "type": "CLICK_BUTTON", "buttonId": "confirmTermination", "description": "契約廃止確認ボタンをクリック" },
+                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
                 ]
             }
         ];
@@ -391,7 +367,24 @@ function setupEventListeners() {
     // タブ切り替え
     elements.tabButtons.forEach(button => {
         button.addEventListener('click', () => {
-            switchTab(button.dataset.tab);
+            const tabId = button.dataset.tab;
+            const tabContent = document.getElementById(tabId);
+            
+            if (tabContent) {
+                // すべてのタブボタンからactiveクラスを削除
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // すべてのタブコンテンツからactiveクラスを削除
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // 選択されたタブボタンとコンテンツにactiveクラスを追加
+                button.classList.add('active');
+                tabContent.classList.add('active');
+            }
         });
     });
     
@@ -542,6 +535,7 @@ function startScenarioPlayback() {
     let summaryIndex = 0;
     let alertIndex = 0;
     let sharedInfoIndex = 0;
+    operatorActionIndex = 0;
     
     // メッセージ表示インターバル
     const messageInterval = setInterval(() => {
@@ -612,12 +606,30 @@ function startScenarioPlayback() {
         }
     }, 12000);
     
+    // オペレーター動作シミュレーションインターバル
+    const operatorActionInterval = setInterval(() => {
+        if (!demoMode) {
+            clearInterval(operatorActionInterval);
+            return;
+        }
+        
+        if (currentScenario.operatorActions && operatorActionIndex < currentScenario.operatorActions.length) {
+            const action = currentScenario.operatorActions[operatorActionIndex];
+            console.log('オペレーター動作実行:', action);
+            executeOperatorAction(action);
+            operatorActionIndex++;
+        } else {
+            clearInterval(operatorActionInterval);
+        }
+    }, 3000);
+    
     // インターバルIDを保存
     window.scenarioIntervals = {
         message: messageInterval,
         summary: summaryInterval,
         alert: alertInterval,
-        sharedInfo: sharedInfoInterval
+        sharedInfo: sharedInfoInterval,
+        operatorAction: operatorActionInterval
     };
 }
 
@@ -678,7 +690,8 @@ function getAlertTypeText(type) {
     const typeMap = {
         'HARASSMENT': 'パワハラ検知',
         'SEXUAL_HARASSMENT': 'セクハラ検知',
-        'MISSING_INFO': '伝達漏れ検知'
+        'MISSING_INFO': '伝達漏れ検知',
+        'UNPAID_ALERT': '未収金アラート'
     };
     return typeMap[type] || type;
 }
@@ -693,19 +706,191 @@ function getSharedInfoTypeText(type) {
     return typeMap[type] || type;
 }
 
+// オペレーター動作実行
+function executeOperatorAction(action) {
+    // 進行状況を表示
+    showOperatorProgress(action.description);
+    
+    switch (action.type) {
+        case 'SWITCH_TAB':
+            switchTab(action.tabId);
+            addOperatorActionLog(`タブ切り替え: ${action.tabName}`);
+            break;
+        case 'INPUT_DATA':
+            inputCustomerData(action.field, action.value);
+            addOperatorActionLog(`データ入力: ${action.field} = ${action.value}`);
+            break;
+        case 'SELECT_OPTION':
+            selectOption(action.selector, action.value);
+            addOperatorActionLog(`選択: ${action.description}`);
+            break;
+        case 'CLICK_BUTTON':
+            clickButton(action.buttonId, action.description);
+            addOperatorActionLog(`ボタンクリック: ${action.description}`);
+            break;
+        case 'SCROLL_TO':
+            scrollToElement(action.elementId);
+            addOperatorActionLog(`スクロール: ${action.description}`);
+            break;
+        case 'HIGHLIGHT_FIELD':
+            highlightField(action.fieldId, action.duration);
+            addOperatorActionLog(`フィールドハイライト: ${action.description}`);
+            break;
+    }
+    
+    // 進行状況を非表示
+    setTimeout(() => {
+        hideOperatorProgress();
+    }, 2000);
+}
+
+// オペレーター進行状況表示
+function showOperatorProgress(description) {
+    // 既存の進行状況を削除
+    hideOperatorProgress();
+    
+    const progress = document.createElement('div');
+    progress.className = 'operator-progress';
+    progress.innerHTML = `
+        <span>🔄 ${description}</span>
+    `;
+    document.body.appendChild(progress);
+}
+
+// オペレーター進行状況非表示
+function hideOperatorProgress() {
+    const existingProgress = document.querySelector('.operator-progress');
+    if (existingProgress) {
+        existingProgress.remove();
+    }
+}
+
+// オペレーター動作ログ追加
+function addOperatorActionLog(description) {
+    const logArea = document.getElementById('logMessageArea');
+    if (logArea) {
+        const logEntry = document.createElement('div');
+        logEntry.classList.add('log-entry', 'operator-action');
+        logEntry.innerHTML = `
+            <span class="log-time">${formatTime(new Date())}</span>
+            <span class="log-speaker">オペレーター</span>
+            <span class="log-text">${description}</span>
+        `;
+        logArea.appendChild(logEntry);
+        logArea.scrollTop = logArea.scrollHeight;
+    }
+}
+
 // タブ切り替え
 function switchTab(tabId) {
-    // すべてのタブボタンとコンテンツからアクティブクラスを削除
-    elements.tabButtons.forEach(btn => btn.classList.remove('active'));
-    elements.tabContents.forEach(content => content.classList.remove('active'));
+    // タブボタンとタブコンテンツを取得
+    const tabButton = document.querySelector(`[data-tab="${tabId}"]`);
+    const tabContent = document.getElementById(tabId);
     
-    // クリックされたタブをアクティブにする
-    const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
-    const activeContent = document.getElementById(tabId);
-    
-    if (activeButton && activeContent) {
-        activeButton.classList.add('active');
-        activeContent.classList.add('active');
+    if (tabButton && tabContent) {
+        // タブボタンにハイライト効果を追加
+        tabButton.classList.add('operator-switching');
+        
+        setTimeout(() => {
+            // すべてのタブボタンからactiveクラスを削除
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // すべてのタブコンテンツからactiveクラスを削除
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 選択されたタブボタンとコンテンツにactiveクラスを追加
+            tabButton.classList.add('active');
+            tabContent.classList.add('active');
+            
+            setTimeout(() => {
+                tabButton.classList.remove('operator-switching');
+            }, 1000);
+        }, 500);
+    }
+}
+
+// 顧客データ入力
+function inputCustomerData(field, value) {
+    const inputElement = document.getElementById(field);
+    if (inputElement) {
+        // 入力フィールドをハイライト
+        inputElement.classList.add('operator-action-highlight');
+        inputElement.focus();
+        
+        // タイピングアニメーション
+        let currentValue = '';
+        const typeInterval = setInterval(() => {
+            if (currentValue.length < value.length) {
+                currentValue += value[currentValue.length];
+                inputElement.value = currentValue;
+                inputElement.classList.add('typing-animation');
+            } else {
+                clearInterval(typeInterval);
+                // ハイライトを解除
+                setTimeout(() => {
+                    inputElement.classList.remove('operator-action-highlight', 'typing-animation');
+                    inputElement.blur();
+                }, 1000);
+            }
+        }, 100);
+    }
+}
+
+// オプション選択
+function selectOption(selector, value) {
+    const selectElement = document.querySelector(selector);
+    if (selectElement) {
+        selectElement.classList.add('operator-action-highlight');
+        selectElement.focus();
+        selectElement.value = value;
+        
+        // changeイベントを発火
+        const event = new Event('change', { bubbles: true });
+        selectElement.dispatchEvent(event);
+        
+        setTimeout(() => {
+            selectElement.classList.remove('operator-action-highlight');
+            selectElement.blur();
+        }, 1000);
+    }
+}
+
+// ボタンクリック
+function clickButton(buttonId, description) {
+    const button = document.getElementById(buttonId);
+    if (button) {
+        button.classList.add('button-click-effect');
+        setTimeout(() => {
+            button.classList.remove('button-click-effect');
+            button.click();
+        }, 200);
+    }
+}
+
+// 要素までスクロール
+function scrollToElement(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.classList.add('scroll-target');
+        setTimeout(() => {
+            element.classList.remove('scroll-target');
+        }, 2000);
+    }
+}
+
+// フィールドハイライト
+function highlightField(fieldId, duration = 2000) {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.classList.add('field-highlight');
+        setTimeout(() => {
+            field.classList.remove('field-highlight');
+        }, duration);
     }
 }
 
@@ -748,24 +933,27 @@ function generateBotResponse(message, triggeredKeyword) {
     // デフォルト応答
     const defaultResponses = {
         "再点申込の手順を教えて": "1. 契約番号入力 → 2. 未収確認 → 3. 再点日選択 → 4. 予約実行",
+        "使用量計算の方法を教えて": "契約番号を入力いただければ、使用量と料金の詳細をお調べいたします。",
+        "料金計算の仕組みを教えて": "基本料金と従量料金の合計で計算されます。詳細は契約番号をお聞かせください。",
         "今回の請求額はいくら？": "2025年7月分は¥7,980（支払期限：08/20）",
+        "未収金の支払い方法を教えて": "分割払いも可能です。契約番号をお聞かせください。",
         "プラン変更後の試算を比較して": "レギュラー: ¥9,200/月(+¥1,220)、デイタイム: ¥10,500/月(+¥2,520)",
-        "ハラスメント検知機能とは？": "通話中にパワハラワード検出→即アラート＆管理者通知",
+        "契約変更の手続きを教えて": "現在のプランと希望プランをお聞かせください。契約番号も必要です。",
+        "契約廃止の手続きを教えて": "廃止理由と希望日をお聞かせください。契約番号も必要です。",
         "廃止手続きPDFを取れる？": "[ダウンロード](https://chatgpt.com/reports/termination/CTR-09-1234-5678.pdf)",
         "停電": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。",
         "電気が止まった": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。",
+        "再点": "再点申込の手順をご案内します。契約番号をお願いします。",
+        "使用量": "使用量の確認ですね。契約番号をお願いします。",
+        "料金": "料金の確認ですね。契約番号をお願いします。",
+        "計算": "料金計算のご相談ですね。契約番号をお願いします。",
         "請求": "請求額の確認ですね。契約番号をお願いします。",
         "支払い": "支払いについてのご相談ですね。契約番号をお願いします。",
+        "未収": "未収金についてのご相談ですね。契約番号をお願いします。",
         "プラン": "プラン変更のご相談ですね。現在のプランと希望プランをお聞かせください。",
+        "契約変更": "契約変更の手続きをご案内します。変更内容をお聞かせください。",
         "解約": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。",
-        "廃止": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。",
-        "手続き": "手続きについてのご案内ですね。詳しくご説明いたします。",
-        "方法": "手続き方法についてのご案内ですね。詳しくご説明いたします。",
-        "お前": "お客様のご不満をお聞かせください。冷静にお話ししましょう。",
-        "クソ": "お客様のご不満をお聞かせください。冷静にお話ししましょう。",
-        "美人": "業務以外の話はお受けできません。ご用件をお聞かせください。",
-        "可愛い": "業務以外の話はお受けできません。ご用件をお聞かせください。",
-        "デート": "業務以外の話はお受けできません。ご用件をお聞かせください。"
+        "廃止": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。"
     };
     
     // メッセージに含まれるキーワードをチェック
@@ -897,10 +1085,17 @@ function toggleDemoMode() {
 function stopScenarioPlayback() {
     if (window.scenarioIntervals) {
         Object.values(window.scenarioIntervals).forEach(interval => {
-            clearInterval(interval);
+            if (interval) {
+                clearInterval(interval);
+            }
         });
         window.scenarioIntervals = null;
     }
+    
+    // オペレーター進行状況を非表示
+    hideOperatorProgress();
+    
+    console.log('シナリオ再生停止');
 }
 
 // 通話ログメッセージ追加

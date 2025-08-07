@@ -1756,3 +1756,298 @@ select:focus {
         color: #fff;
     }
 }
+
+/* オペレーター動作ログのスタイル */
+.log-entry.operator-action {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-left: 4px solid #2196f3;
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.1);
+    animation: slideInLeft 0.5s ease-out;
+}
+
+.log-entry.operator-action .log-speaker {
+    color: #1976d2;
+    font-weight: 600;
+    background: rgba(33, 150, 243, 0.1);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.log-entry.operator-action .log-text {
+    color: #1565c0;
+    font-weight: 500;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* オペレーター動作のハイライト効果 */
+.operator-highlight {
+    background-color: #fff3cd !important;
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.3) !important;
+    transition: all 0.3s ease;
+}
+
+.operator-click {
+    background-color: #007bff !important;
+    color: white !important;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+/* 入力フィールドのタイピングアニメーション */
+.typing-animation {
+    border-right: 2px solid #007bff;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { border-color: #007bff; }
+    51%, 100% { border-color: transparent; }
+}
+
+/* タブ切り替えのハイライト */
+.tab-button.operator-active {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* フィールドハイライト */
+.field-highlight {
+    background-color: #fff3cd !important;
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.4) !important;
+    transition: all 0.3s ease;
+}
+
+/* ボタンクリック効果 */
+.button-click {
+    background-color: #007bff !important;
+    color: white !important;
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* スクロールターゲット */
+.scroll-target {
+    background-color: #e3f2fd !important;
+    border: 2px solid #2196f3 !important;
+    box-shadow: 0 0 12px rgba(33, 150, 243, 0.4) !important;
+}
+
+/* オペレーター動作の進行状況表示 */
+.operator-progress {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(33, 150, 243, 0.9);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+    animation: slideInDown 0.5s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* オペレーター動作関連の追加スタイル */
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group select,
+.form-group input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.payment-options,
+.plan-selection {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.payment-options h4,
+.plan-selection h4 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.payment-form,
+.plan-form {
+    display: grid;
+    gap: 15px;
+}
+
+.plan-comparison {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.plan-comparison h5 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.plan-comparison table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.plan-comparison td {
+    padding: 8px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.termination-form {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.final-bill-info {
+    background: #fff3cd;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #ffc107;
+    margin: 15px 0;
+}
+
+.final-bill-info h5 {
+    margin-bottom: 10px;
+    color: #856404;
+}
+
+.final-bill-info p {
+    margin: 0;
+    color: #856404;
+    font-size: 16px;
+}
+
+/* オペレーター動作のアニメーション強化 */
+.operator-action-highlight {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+    }
+}
+
+/* タブ切り替えの視覚的フィードバック */
+.tab-button.operator-switching {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* 入力フィールドのフォーカス効果 */
+.input-field-focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25) !important;
+    background-color: #fff !important;
+}
+
+/* ボタンのクリック効果 */
+.button-click-effect {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.4);
+    transition: all 0.2s ease;
+}
+
+/* 進行状況インジケーター */
+.progress-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.progress-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fff;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

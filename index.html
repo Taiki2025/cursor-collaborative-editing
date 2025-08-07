@@ -35,33 +35,25 @@
                             <h4>🎭 シナリオ選択</h4>
                         </div>
                         <div class="scenario-options">
-                            <button class="scenario-btn active" data-scenario="OUTAGE">
+                            <button class="scenario-btn active" data-scenario="RESTORE_POWER">
                                 <span class="scenario-icon">⚡</span>
-                                <span class="scenario-name">停電対応</span>
+                                <span class="scenario-name">再点申込</span>
                             </button>
-                            <button class="scenario-btn" data-scenario="BILLING">
+                            <button class="scenario-btn" data-scenario="USAGE_CALCULATION">
+                                <span class="scenario-icon">🧮</span>
+                                <span class="scenario-name">使用量計算～料金計算</span>
+                            </button>
+                            <button class="scenario-btn" data-scenario="BILLING_MANAGEMENT">
                                 <span class="scenario-icon">💰</span>
-                                <span class="scenario-name">請求確認</span>
+                                <span class="scenario-name">請求・未収管理</span>
                             </button>
-                            <button class="scenario-btn" data-scenario="CHANGE_PLAN">
+                            <button class="scenario-btn" data-scenario="CONTRACT_CHANGE">
                                 <span class="scenario-icon">🔄</span>
-                                <span class="scenario-name">プラン変更</span>
+                                <span class="scenario-name">契約変更</span>
                             </button>
-                            <button class="scenario-btn" data-scenario="TERMINATION">
+                            <button class="scenario-btn" data-scenario="CONTRACT_TERMINATION">
                                 <span class="scenario-icon">🚪</span>
                                 <span class="scenario-name">契約廃止</span>
-                            </button>
-                            <button class="scenario-btn" data-scenario="HARASSMENT">
-                                <span class="scenario-icon">⚠️</span>
-                                <span class="scenario-name">ハラスメント</span>
-                            </button>
-                            <button class="scenario-btn" data-scenario="SEXUAL_HARASSMENT">
-                                <span class="scenario-icon">🚨</span>
-                                <span class="scenario-name">セクハラ</span>
-                            </button>
-                            <button class="scenario-btn" data-scenario="MISSING_INFO">
-                                <span class="scenario-icon">📝</span>
-                                <span class="scenario-name">伝達漏れ</span>
                             </button>
                         </div>
                     </div>
@@ -171,36 +163,49 @@
                     </div>
                     
                     <div class="tab-contents">
-                        <!-- 概要タブ -->
+                        <!-- 顧客概要タブ -->
                         <div class="tab-content active" id="overview">
-                            <h3>📊 顧客概要</h3>
+                            <h3>👤 顧客概要</h3>
                             <div class="overview-grid">
                                 <div class="overview-card">
                                     <h4>基本情報</h4>
                                     <table>
-                                        <tr><td>顧客ID</td><td>CUST-2025-0001</td></tr>
-                                        <tr><td>顧客名</td><td>山田 太郎</td></tr>
+                                        <tr><td>顧客ID</td><td id="customerId">CUST-2025-0001</td></tr>
                                         <tr><td>契約ID</td><td>CTR-09-1234-5678</td></tr>
-                                        <tr><td>プラン</td><td>ナイト・セレクト</td></tr>
-                                        <tr><td>アンペア</td><td>40A</td></tr>
-                                        <tr><td>契約ステータス</td><td>Active</td></tr>
-                                        <tr><td>最終更新日時</td><td>2025/08/01 14:32</td></tr>
+                                        <tr><td>顧客名</td><td>田中 太郎</td></tr>
+                                        <tr><td>電話番号</td><td>092-123-4567</td></tr>
+                                        <tr><td>メールアドレス</td><td>tanaka@example.com</td></tr>
+                                        <tr><td>住所</td><td>福岡県福岡市博多区博多駅前1-1-1</td></tr>
                                     </table>
                                 </div>
                                 <div class="overview-card">
-                                    <h4>使用量統計</h4>
+                                    <h4>契約状況</h4>
+                                    <table>
+                                        <tr><td>契約状態</td><td><span class="status-active">有効</span></td></tr>
+                                        <tr><td>現在のプラン</td><td id="currentPlan">ナイト・セレクト</td></tr>
+                                        <tr><td>契約開始日</td><td>2020/10/01</td></tr>
+                                        <tr><td>更新日</td><td>2024/10/01</td></tr>
+                                        <tr><td>請求アンペア</td><td>40A</td></tr>
+                                    </table>
+                                </div>
+                                <div class="overview-card">
+                                    <h4>使用量・料金</h4>
                                     <div class="usage-stats">
                                         <div class="stat-item">
-                                            <span class="stat-label">月平均使用量</span>
-                                            <span class="stat-value">235 kWh</span>
+                                            <span class="stat-label">当月使用量</span>
+                                            <span class="stat-value" id="currentUsage">220 kWh</span>
                                         </div>
                                         <div class="stat-item">
-                                            <span class="stat-label">直近使用量</span>
-                                            <span class="stat-value">220 kWh</span>
+                                            <span class="stat-label">当月請求額</span>
+                                            <span class="stat-value" id="currentBill">¥7,980</span>
                                         </div>
                                         <div class="stat-item">
-                                            <span class="stat-label">ピーク使用量</span>
-                                            <span class="stat-value">15 kWh</span>
+                                            <span class="stat-label">未収金額</span>
+                                            <span class="stat-value" id="unpaidAmount">¥15,430</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-label">未収月数</span>
+                                            <span class="stat-value" id="unpaidMonths">3ヶ月</span>
                                         </div>
                                     </div>
                                 </div>
@@ -276,6 +281,28 @@
                                     <p>未収期間: <strong>3ヶ月</strong></p>
                                     <p>最終入金日: <strong>2025/05/20</strong></p>
                                 </div>
+                                <div class="payment-options">
+                                    <h4>支払い方法選択</h4>
+                                    <div class="payment-form">
+                                        <div class="form-group">
+                                            <label for="paymentMethod">支払い方法:</label>
+                                            <select id="paymentMethod">
+                                                <option value="full">一括払い</option>
+                                                <option value="installment">分割払い</option>
+                                                <option value="partial">一部払い</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="installmentCount">分割回数:</label>
+                                            <select id="installmentCount">
+                                                <option value="2">2回</option>
+                                                <option value="3" selected>3回</option>
+                                                <option value="6">6回</option>
+                                            </select>
+                                        </div>
+                                        <button class="action-btn" id="confirmPayment">支払い方法確認</button>
+                                    </div>
+                                </div>
                             </div>
                             <table class="unpaid-table">
                                 <thead>
@@ -327,6 +354,7 @@
                                         <tr><td>契約開始日</td><td>2020/10/01</td></tr>
                                         <tr><td>更新日</td><td>2024/10/01</td></tr>
                                         <tr><td>現在請求アンペア</td><td>40A</td></tr>
+                                        <tr><td>契約状態</td><td id="contractStatus"><span class="status-active">有効</span></td></tr>
                                     </table>
                                 </div>
                                 <div class="detail-section">
@@ -418,6 +446,10 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="action-buttons">
+                                        <button class="action-btn" id="confirmRestore">再点申込確認</button>
+                                        <button class="action-btn">予約キャンセル</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -435,7 +467,7 @@
                                         </div>
                                         <div class="param-item">
                                             <label>予測使用量 (kWh/月):</label>
-                                            <input type="number" value="250" min="0" max="1000" class="usage-input">
+                                            <input type="number" id="usageInput" value="250" min="0" max="1000" class="usage-input">
                                         </div>
                                         <div class="param-item">
                                             <label>選択プラン候補:</label>
@@ -444,6 +476,10 @@
                                                 <label><input type="checkbox" checked> デイタイム</label>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button class="action-btn" id="calculateBill">料金計算実行</button>
+                                        <button class="action-btn">シミュレーションリセット</button>
                                     </div>
                                 </div>
                                 
@@ -495,6 +531,27 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="plan-selection">
+                                        <h4>プラン選択</h4>
+                                        <div class="plan-form">
+                                            <div class="form-group">
+                                                <label for="newPlan">新しいプラン:</label>
+                                                <select id="newPlan">
+                                                    <option value="regular">レギュラー</option>
+                                                    <option value="daytime">デイタイム</option>
+                                                    <option value="night_select">ナイト・セレクト</option>
+                                                </select>
+                                            </div>
+                                            <div class="plan-comparison" id="planComparison">
+                                                <h5>プラン比較</h5>
+                                                <table>
+                                                    <tr><td>現行プラン</td><td>ナイト・セレクト</td><td>¥7,980</td></tr>
+                                                    <tr><td>新プラン</td><td>レギュラー</td><td>¥9,200</td></tr>
+                                                    <tr><td>差額</td><td></td><td>+¥1,220</td></tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <div class="form-section">
@@ -505,6 +562,7 @@
                                             <span class="checkmark"></span>
                                             顧客の同意を確認済み
                                         </label>
+                                        <button class="action-btn" id="confirmPlanChange">プラン変更確認</button>
                                     </div>
                                 </div>
                                 
@@ -531,6 +589,26 @@
                             <div class="termination-form">
                                 <div class="form-section">
                                     <h4>廃止情報</h4>
+                                    <div class="termination-form">
+                                        <div class="form-group">
+                                            <label for="terminationReason">廃止理由:</label>
+                                            <select id="terminationReason">
+                                                <option value="moving">引越し</option>
+                                                <option value="dissatisfaction">サービス不満</option>
+                                                <option value="cost">料金が高い</option>
+                                                <option value="other">その他</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="terminationDate">廃止希望日:</label>
+                                            <input type="date" id="terminationDate" value="2025-07-31">
+                                        </div>
+                                        <div class="final-bill-info" id="finalBill">
+                                            <h5>最終請求額</h5>
+                                            <p><strong>¥7,753</strong> (廃止日までの使用量に基づく)</p>
+                                        </div>
+                                        <button class="action-btn" id="confirmTermination">契約廃止確認</button>
+                                    </div>
                                     <table class="termination-table">
                                         <tr><td>廃止理由</td><td>引越しによる解約</td></tr>
                                         <tr><td>希望廃止日</td><td>2025/07/31</td></tr>
@@ -642,16 +720,24 @@
                         <div class="faq-answer">1. 契約番号入力 → 2. 未収確認 → 3. 再点日選択 → 4. 予約実行</div>
                     </div>
                     <div class="faq-item">
+                        <div class="faq-question">使用量計算の方法を教えて</div>
+                        <div class="faq-answer">契約番号を入力いただければ、使用量と料金の詳細をお調べいたします。</div>
+                    </div>
+                    <div class="faq-item">
                         <div class="faq-question">今回の請求額はいくら？</div>
                         <div class="faq-answer">2025年7月分は¥7,980（支払期限：08/20）</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">プラン変更後の試算を比較して</div>
-                        <div class="faq-answer">レギュラー: ¥9,200/月(+¥1,220)、デイタイム: ¥10,500/月(+¥2,520)</div>
+                        <div class="faq-question">未収金の支払い方法を教えて</div>
+                        <div class="faq-answer">分割払いも可能です。契約番号をお聞かせください。</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">ハラスメント検知機能とは？</div>
-                        <div class="faq-answer">通話中にパワハラワード検出→即アラート＆管理者通知</div>
+                        <div class="faq-question">契約変更の手続きを教えて</div>
+                        <div class="faq-answer">現在のプランと希望プランをお聞かせください。契約番号も必要です。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">契約廃止の手続きを教えて</div>
+                        <div class="faq-answer">廃止理由と希望日をお聞かせください。契約番号も必要です。</div>
                     </div>
                 </div>
             </div>
