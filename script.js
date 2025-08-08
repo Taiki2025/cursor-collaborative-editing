@@ -85,63 +85,48 @@ async function loadKeywords() {
         keywords = [
             {
                 "scenario": "RESTORE_POWER",
-                "trigger": "電気が止まった",
-                "bot_prompt": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。"
-            },
-            {
-                "scenario": "RESTORE_POWER",
-                "trigger": "停電",
-                "bot_prompt": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。"
+                "trigger": "再開",
+                "bot_prompt": "サービス再開のお申込みですね。契約番号をお願いします。"
             },
             {
                 "scenario": "RESTORE_POWER",
                 "trigger": "再点",
-                "bot_prompt": "再点申込の手順をご案内します。契約番号をお願いします。"
+                "bot_prompt": "再点申込の手続きをご案内します。契約番号をお願いします。"
+            },
+            {
+                "scenario": "RESTORE_POWER",
+                "trigger": "利用再開",
+                "bot_prompt": "サービス再開のお申込みですね。過去の契約履歴を確認いたします。"
             },
             {
                 "scenario": "USAGE_CALCULATION",
                 "trigger": "使用量",
-                "bot_prompt": "使用量の確認ですね。契約番号をお願いします。"
+                "bot_prompt": "使用量計算について詳しくご説明いたします。契約番号をお願いします。"
             },
             {
                 "scenario": "USAGE_CALCULATION",
-                "trigger": "料金",
-                "bot_prompt": "料金の確認ですね。契約番号をお願いします。"
+                "trigger": "料金計算",
+                "bot_prompt": "料金計算の詳細をご案内します。契約番号をお願いします。"
             },
             {
                 "scenario": "USAGE_CALCULATION",
-                "trigger": "計算",
-                "bot_prompt": "料金計算のご相談ですね。契約番号をお願いします。"
+                "trigger": "計算方法",
+                "bot_prompt": "料金の計算方法についてご説明いたします。"
             },
             {
                 "scenario": "BILLING_MANAGEMENT",
-                "trigger": "請求額",
-                "bot_prompt": "最新の請求額は¥7,980です。支払期限は2025/08/20になります。"
-            },
-            {
-                "scenario": "BILLING_MANAGEMENT",
-                "trigger": "請求",
-                "bot_prompt": "請求額の確認ですね。契約番号をお願いします。"
-            },
-            {
-                "scenario": "BILLING_MANAGEMENT",
-                "trigger": "支払い",
-                "bot_prompt": "支払いについてのご相談ですね。契約番号をお願いします。"
+                "trigger": "請求書",
+                "bot_prompt": "請求書の発行状況を確認いたします。契約番号をお願いします。"
             },
             {
                 "scenario": "BILLING_MANAGEMENT",
                 "trigger": "未収",
-                "bot_prompt": "未収金についてのご相談ですね。契約番号をお願いします。"
+                "bot_prompt": "未収金についてのご相談ですね。債権管理状況を確認いたします。"
             },
             {
-                "scenario": "CONTRACT_CHANGE",
-                "trigger": "プラン変更",
-                "bot_prompt": "プラン変更の手続きをご案内します。現在のプランと希望プランをお聞かせください。"
-            },
-            {
-                "scenario": "CONTRACT_CHANGE",
-                "trigger": "プラン",
-                "bot_prompt": "プラン変更のご相談ですね。現在のプランと希望プランをお聞かせください。"
+                "scenario": "BILLING_MANAGEMENT",
+                "trigger": "支払い",
+                "bot_prompt": "お支払いについてのご相談ですね。入金状況を確認いたします。"
             },
             {
                 "scenario": "CONTRACT_CHANGE",
@@ -149,19 +134,34 @@ async function loadKeywords() {
                 "bot_prompt": "契約変更の手続きをご案内します。変更内容をお聞かせください。"
             },
             {
-                "scenario": "CONTRACT_TERMINATION",
-                "trigger": "契約廃止",
-                "bot_prompt": "契約廃止の手続きをご案内します。廃止理由と希望日をお聞かせください。"
+                "scenario": "CONTRACT_CHANGE",
+                "trigger": "プラン変更",
+                "bot_prompt": "プラン変更のご相談ですね。現在の契約内容と変更希望を確認いたします。"
+            },
+            {
+                "scenario": "CONTRACT_CHANGE",
+                "trigger": "住所変更",
+                "bot_prompt": "住所変更の手続きをご案内します。契約番号をお願いします。"
+            },
+            {
+                "scenario": "CONTRACT_CHANGE",
+                "trigger": "オプション追加",
+                "bot_prompt": "オプション追加のご相談ですね。変更可否を審査いたします。"
             },
             {
                 "scenario": "CONTRACT_TERMINATION",
                 "trigger": "解約",
-                "bot_prompt": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。"
+                "bot_prompt": "契約廃止のお申出ですね。解約条件を確認いたします。"
             },
             {
                 "scenario": "CONTRACT_TERMINATION",
-                "trigger": "廃止",
-                "bot_prompt": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。"
+                "trigger": "契約廃止",
+                "bot_prompt": "契約廃止の手続きをご案内します。解約理由をお聞かせください。"
+            },
+            {
+                "scenario": "CONTRACT_TERMINATION",
+                "trigger": "契約終了",
+                "bot_prompt": "契約終了のお手続きですね。最終精算についてご案内いたします。"
             }
         ];
         console.log('キーワードデータ読み込み完了:', keywords.length, '件');
@@ -185,18 +185,20 @@ async function loadScenarios() {
                 "name": "再点申込",
                 "icon": "⚡",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "もしもし、電気が止まってしまったんですが…" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "申し訳ありません。契約番号をお願いします。" },
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "以前利用していたサービスを再開したいのですが…" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "再開のお申込みですね。契約番号をお願いします。" },
                     { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "未収¥15,430、最終入金2025/05/20です。" },
-                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "再点候補は08/12 09:00,13:00,15:30です。いかがですか？" },
-                    { "timestamp": "14:00:45", "speaker": "顧客", "text": "13:00でお願いします。" },
-                    { "timestamp": "14:01:00", "speaker": "オペレーター", "text": "予約完了しました。予約ID: RES-20250812-0001" }
+                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "過去の契約履歴を確認します。少々お待ちください。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "未収金額¥15,430がございます。再開には清算が必要です。" },
+                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "分割で支払い可能でしょうか？" },
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "はい、3回払いでしたら可能です。再開日程を調整いたします。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "システム上でアクティベーション完了しました。8月12日より利用再開です。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "未収¥15,430／最終入金2025/05/20を確認" },
-                    { "time": "14:00:25", "summary": "再点希望13:00で予約指示" },
-                    { "time": "14:01:00", "summary": "予約完了：RES-20250812-0001" }
+                    { "time": "14:00:15", "summary": "顧客情報および過去契約履歴の照会開始" },
+                    { "time": "14:00:25", "summary": "未収金確認：¥15,430／再開条件を明示" },
+                    { "time": "14:00:40", "summary": "分割払い条件で再開可否審査完了" },
+                    { "time": "14:00:50", "summary": "サービス再開設定完了：2025/08/12より利用開始" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
@@ -204,12 +206,13 @@ async function loadScenarios() {
                     { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
                     { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
                     { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
+                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "過去の契約履歴を確認", "duration": 2000 },
                     { "type": "SWITCH_TAB", "tabId": "unpaid-management", "tabName": "未収管理" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidAmount", "description": "未収金額を確認", "duration": 2000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidAmount", "description": "未収金額確認", "duration": 2000 },
+                    { "type": "SELECT_OPTION", "selector": "#paymentMethod", "value": "installment", "description": "分割払い条件設定" },
                     { "type": "SWITCH_TAB", "tabId": "restore-power", "tabName": "再点申込" },
-                    { "type": "SELECT_OPTION", "selector": "#restoreDate", "value": "2025-08-12", "description": "再点日を選択" },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmRestore", "description": "再点申込確認ボタンをクリック" },
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                    { "type": "CLICK_BUTTON", "buttonId": "confirmRestore", "description": "サービス再開設定実行" }
                 ]
             },
             {
@@ -217,32 +220,35 @@ async function loadScenarios() {
                 "name": "使用量計算～料金計算",
                 "icon": "🧮",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "今月の使用量と料金を教えてください" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたしました。契約番号をお願いします。" },
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "今月の料金計算について詳しく教えてください" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。契約番号をお願いします。" },
                     { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "2025年7月分の使用量は220kWhです。" },
-                    { "timestamp": "14:00:20", "speaker": "オペレーター", "text": "基本料金¥2,400、従量料金¥5,580、合計¥7,980です。" },
-                    { "timestamp": "14:00:25", "speaker": "顧客", "text": "前月と比べてどうですか？" },
-                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "前月比-15kWh、料金差額-¥140の減少です。" }
+                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "利用ログとメーター情報を収集します。少々お待ちください。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "7月分の使用量は220kWhです。料金プランとのマッチングを行います。" },
+                    { "timestamp": "14:00:35", "speaker": "オペレーター", "text": "ナイト・セレクトプラン適用で基本料金¥2,400、従量料金¥5,580です。" },
+                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "異常値チェック完了、請求データを生成いたします。" },
+                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "合計¥7,980の請求データが完成しました。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "7月分使用量220kWhを確認" },
-                    { "time": "14:00:20", "summary": "料金内訳：基本¥2,400＋従量¥5,580＝¥7,980" },
-                    { "time": "14:00:30", "summary": "前月比-15kWh、-¥140の減少を案内" }
+                    { "time": "14:00:15", "summary": "利用ログ・メーター情報の収集開始" },
+                    { "time": "14:00:25", "summary": "使用量220kWh確認、料金プランマッチング実施" },
+                    { "time": "14:00:35", "summary": "ナイト・セレクト適用：基本¥2,400＋従量¥5,580" },
+                    { "time": "14:00:45", "summary": "課金エラー検知・異常値チェック完了" },
+                    { "time": "14:00:55", "summary": "請求データ生成完了：¥7,980" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
                     { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
                     { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
-                    { "type": "SWITCH_TAB", "tabId": "billing-history", "tabName": "請求履歴" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentUsage", "description": "現在の使用量を確認", "duration": 2000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentBill", "description": "現在の請求額を確認", "duration": 2000 },
+                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentPlan", "description": "料金プランを確認", "duration": 2000 },
                     { "type": "SWITCH_TAB", "tabId": "simulation", "tabName": "料金シミュレーション" },
-                    { "type": "INPUT_DATA", "field": "usageInput", "value": "220", "description": "使用量を入力" },
-                    { "type": "CLICK_BUTTON", "buttonId": "calculateBill", "description": "料金計算ボタンをクリック" },
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                    { "type": "INPUT_DATA", "field": "usageInput", "value": "220", "description": "使用量データ入力" },
+                    { "type": "CLICK_BUTTON", "buttonId": "calculateBill", "description": "料金計算実行" },
+                    { "type": "SWITCH_TAB", "tabId": "billing-history", "tabName": "請求履歴" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentBill", "description": "生成された請求データ確認", "duration": 2000 }
                 ]
             },
             {
@@ -250,39 +256,40 @@ async function loadScenarios() {
                 "name": "請求・未収管理",
                 "icon": "💰",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "未収金の支払いについて相談したいのですが" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたしました。契約番号をお願いします。" },
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "未払いの請求について相談したいのですが" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。契約番号をお願いします。" },
                     { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "未収金額は¥15,430（3ヶ月分）です。" },
-                    { "timestamp": "14:00:20", "speaker": "オペレーター", "text": "分割払いも可能です。いかがでしょうか？" },
-                    { "timestamp": "14:00:25", "speaker": "顧客", "text": "分割払いでお願いします。" },
-                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "3回払いで設定いたします。1回目は8月20日までです。" }
+                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "請求書発行状況を確認します。郵送とWeb請求書を発行済みです。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "入金確認の結果、¥15,430の未入金がございます。" },
+                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "分割での支払いは可能でしょうか？" },
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "はい、3回分割が可能です。催促状の送付を停止いたします。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "分割払い設定完了です。債権管理帳票を更新いたします。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "未収¥15,430（3ヶ月分）を確認" },
-                    { "time": "14:00:20", "summary": "分割払い案内実施" },
-                    { "time": "14:00:30", "summary": "3回払い設定完了、1回目8/20期限" }
+                    { "time": "14:00:15", "summary": "請求書発行状況確認：郵送・Web請求書発行済み" },
+                    { "time": "14:00:25", "summary": "入金確認・差額チェック：未入金¥15,430検出" },
+                    { "time": "14:00:40", "summary": "分割払い条件調整、催促状送付停止" },
+                    { "time": "14:00:50", "summary": "債権管理帳票更新完了" }
                 ],
                 "alerts": [
                     {
                         "type": "UNPAID_ALERT",
-                        "message": "未収金3ヶ月分¥15,430の支払い相談",
+                        "message": "未収金3ヶ月分¥15,430の債権管理対象",
                         "severity": "MEDIUM",
-                        "timestamp": "14:00:15"
+                        "timestamp": "14:00:25"
                     }
                 ],
                 "sharedInfo": [],
                 "operatorActions": [
                     { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
                     { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
+                    { "type": "SWITCH_TAB", "tabId": "billing-history", "tabName": "請求履歴" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentBill", "description": "請求書発行状況確認", "duration": 2000 },
                     { "type": "SWITCH_TAB", "tabId": "unpaid-management", "tabName": "未収管理" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidAmount", "description": "未収金額を確認", "duration": 2000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidMonths", "description": "未収月数を確認", "duration": 2000 },
-                    { "type": "SELECT_OPTION", "selector": "#paymentMethod", "value": "installment", "description": "分割払いを選択" },
-                    { "type": "SELECT_OPTION", "selector": "#installmentCount", "value": "3", "description": "3回払いを選択" },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmPayment", "description": "支払い方法確認ボタンをクリック" },
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidAmount", "description": "未入金額確認", "duration": 2000 },
+                    { "type": "SELECT_OPTION", "selector": "#paymentMethod", "value": "installment", "description": "分割払い設定" },
+                    { "type": "CLICK_BUTTON", "buttonId": "confirmPayment", "description": "債権管理帳票更新" }
                 ]
             },
             {
@@ -290,33 +297,33 @@ async function loadScenarios() {
                 "name": "契約変更",
                 "icon": "🔄",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "プランを変更したいのですが" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたしました。契約番号をお願いします。" },
-                    { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "現在はナイト・セレクトプランですね。" },
-                    { "timestamp": "14:00:20", "speaker": "顧客", "text": "レギュラープランに変更したいです。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "月額¥1,220の増額になりますが、よろしいですか？" },
-                    { "timestamp": "14:00:30", "speaker": "顧客", "text": "はい、お願いします。" },
-                    { "timestamp": "14:00:35", "speaker": "オペレーター", "text": "変更完了しました。適用開始は9月1日です。" }
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "契約内容を変更したいのですが" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。変更内容と契約番号をお願いします。" },
+                    { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。プランとアンペア数を変更したいです。" },
+                    { "timestamp": "14:00:20", "speaker": "オペレーター", "text": "変更可否と影響範囲を審査いたします。少々お待ちください。" },
+                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "レギュラープラン50Aへの変更で、月額¥1,420の増額になります。" },
+                    { "timestamp": "14:00:40", "speaker": "顧客", "text": "はい、お願いします。" },
+                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "システム上の契約情報を更新します。" },
+                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "新料金計算設定完了。変更完了通知を送付いたします。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "現在プラン：ナイト・セレクトを確認" },
-                    { "time": "14:00:25", "summary": "レギュラープラン変更希望、+¥1,220/月" },
-                    { "time": "14:00:35", "summary": "変更完了：適用開始2025/09/01" }
+                    { "time": "14:00:20", "summary": "変更申込受付：プラン・アンペア変更希望" },
+                    { "time": "14:00:30", "summary": "変更可否・影響範囲審査：レギュラー50A、+¥1,420/月" },
+                    { "time": "14:00:45", "summary": "システム契約情報更新実行" },
+                    { "time": "14:00:55", "summary": "新料金計算設定・変更完了通知送付" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
                     { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
                     { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
                     { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentPlan", "description": "現在のプランを確認", "duration": 2000 },
-                    { "type": "SWITCH_TAB", "tabId": "change-plan", "tabName": "プラン変更" },
-                    { "type": "SELECT_OPTION", "selector": "#newPlan", "value": "regular", "description": "レギュラープランを選択" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "planComparison", "description": "プラン比較を確認", "duration": 2000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmPlanChange", "description": "プラン変更確認ボタンをクリック" },
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentPlan", "description": "現在の契約内容確認", "duration": 2000 },
+                    { "type": "SWITCH_TAB", "tabId": "change-plan", "tabName": "契約変更" },
+                    { "type": "SELECT_OPTION", "selector": "#newPlan", "value": "regular", "description": "新プラン選択" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "planComparison", "description": "変更影響範囲確認", "duration": 2000 },
+                    { "type": "CLICK_BUTTON", "buttonId": "confirmPlanChange", "description": "契約情報更新実行" }
                 ]
             },
             {
@@ -324,35 +331,35 @@ async function loadScenarios() {
                 "name": "契約廃止",
                 "icon": "🚪",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "契約を廃止したいのですが" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたしました。契約番号をお願いします。" },
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "契約を完全に終了したいのですが" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "解約のお申出ですね。契約番号をお願いします。" },
                     { "timestamp": "14:00:12", "speaker": "顧客", "text": "CTR-09-1234-5678です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "廃止理由をお聞かせください。" },
-                    { "timestamp": "14:00:20", "speaker": "顧客", "text": "引越しのためです。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "希望廃止日はいつでしょうか？" },
-                    { "timestamp": "14:00:30", "speaker": "顧客", "text": "7月31日でお願いします。" },
-                    { "timestamp": "14:00:35", "speaker": "オペレーター", "text": "廃止手続き完了しました。最終請求書を送付いたします。" }
+                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "解約条件を確認します。最低利用期間と違約金はございません。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "解約日設定およびシステム停止手続きを行います。" },
+                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "7月31日で終了でお願いします。" },
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "最終請求の精算と機器返却の手配をいたします。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "解約完了通知と解約証明書を送付いたします。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "廃止理由ヒアリング開始" },
-                    { "time": "14:00:20", "summary": "廃止理由：引越し" },
-                    { "time": "14:00:30", "summary": "希望廃止日：2025/07/31" },
-                    { "time": "14:00:35", "summary": "廃止手続き完了" }
+                    { "time": "14:00:15", "summary": "解約申請受付：契約終了希望" },
+                    { "time": "14:00:25", "summary": "解約条件確認：最低利用期間・違約金なし" },
+                    { "time": "14:00:35", "summary": "解約日設定：2025/07/31" },
+                    { "time": "14:00:40", "summary": "最終精算請求・機器返却手配" },
+                    { "time": "14:00:50", "summary": "解約完了通知・証明書送付手配" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
                     { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号フィールドを確認", "duration": 2000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
                     { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
                     { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "契約状況を確認", "duration": 2000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "契約状況確認", "duration": 2000 },
                     { "type": "SWITCH_TAB", "tabId": "termination", "tabName": "契約廃止" },
-                    { "type": "SELECT_OPTION", "selector": "#terminationReason", "value": "moving", "description": "廃止理由を選択" },
-                    { "type": "INPUT_DATA", "field": "terminationDate", "value": "2025-07-31", "description": "廃止希望日を入力" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "finalBill", "description": "最終請求額を確認", "duration": 2000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmTermination", "description": "契約廃止確認ボタンをクリック" },
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要に戻る" }
+                    { "type": "SELECT_OPTION", "selector": "#terminationReason", "value": "moving", "description": "廃止理由設定" },
+                    { "type": "INPUT_DATA", "field": "terminationDate", "value": "2025-07-31", "description": "解約日設定" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "finalBill", "description": "最終精算額確認", "duration": 2000 },
+                    { "type": "CLICK_BUTTON", "buttonId": "confirmTermination", "description": "解約手続き実行" }
                 ]
             }
         ];
