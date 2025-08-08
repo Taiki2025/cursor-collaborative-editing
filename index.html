@@ -10,7 +10,7 @@
     <div class="container">
         <header class="header">
             <img src="九州電力ロゴ.png" alt="九州電力ロゴ" class="logo">
-            <h1>AIエージェントUI (360度ビュー)</h1>
+            <h1>オペレータ業務画面</h1>
             <div class="header-controls">
                 <button class="demo-toggle" id="demoToggle">デモモード</button>
                 <span class="status-indicator" id="statusIndicator">● 接続中</span>
@@ -117,34 +117,17 @@
             
             <!-- 中央カラム: メイン360度ビュー -->
             <div class="center-column">
+                <div class="center-header"><span>🧭 AIエージェントUI (360度ビュー)</span></div>
                 <div class="customer-card">
                     <div class="customer-info">
                         <h2>👤 顧客・契約情報</h2>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="label">顧客ID:</span>
-                                <span class="value">CUST-2025-0001</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">顧客名:</span>
-                                <span class="value">山田 太郎</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">契約ID:</span>
-                                <span class="value">CTR-09-1234-5678</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">プラン:</span>
-                                <span class="value">ナイト・セレクト</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">アンペア:</span>
-                                <span class="value">40A</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">ステータス:</span>
-                                <span class="value status-active">Active</span>
-                            </div>
+                        <div class="info-list single-frame">
+                            <div class="info-row"><span class="label">顧客ID:</span><span class="value">CUST-2025-0001</span></div>
+                            <div class="info-row"><span class="label">顧客名:</span><span class="value">山田 太郎</span></div>
+                            <div class="info-row"><span class="label">契約ID:</span><span class="value">CTR-09-1234-5678</span></div>
+                            <div class="info-row"><span class="label">プラン:</span><span class="value">ナイト・セレクト</span></div>
+                            <div class="info-row"><span class="label">アンペア:</span><span class="value">40A</span></div>
+                            <div class="info-row"><span class="label">ステータス:</span><span class="value status-active">Active</span></div>
                         </div>
                     </div>
                 </div>
