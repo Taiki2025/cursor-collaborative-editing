@@ -562,6 +562,44 @@ body {
     font-size: 20px;
     font-weight: 600;
 }
+/* 顧客・契約情報 レイアウト */
+.customer-summary { display: flex; flex-direction: column; gap: 12px; }
+.name-block { display: flex; flex-direction: column; gap: 4px; }
+.furigana { font-size: 12px; color: #777; letter-spacing: 0.08em; }
+.name-and-id { display: flex; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+.full-name { font-size: 20px; font-weight: 700; color: #222; }
+.customer-number { font-size: 13px; color: #555; }
+.customer-columns { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px; }
+.customer-columns .info-row { display: flex; gap: 8px; align-items: center; padding: 6px 0; border-bottom: 1px dashed #e6e9ee; }
+.customer-columns .info-row:last-child { border-bottom: none; }
+.customer-columns .info-row .icon { width: 18px; text-align: center; }
+.customer-columns .info-row .label { width: 180px; color: #666; font-weight: 600; }
+.customer-columns .info-row .value { color: #333; font-weight: 600; }
+.customer-columns .info-row .value.supply-id { white-space: nowrap; }
+
+/* 左列の供給地点特定番号もラベル-値の間隔を最適化 */
+.customer-columns .column-left .info-row.labeled {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  column-gap: 8px;
+}
+.customer-columns .column-left .info-row.labeled .label { width: auto; }
+.customer-columns .column-left .info-row.labeled .value { white-space: nowrap; }
+
+/* 右列のラベル-値の間隔を最適化し、値の開始位置を揃える */
+.customer-columns .column-right .info-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  column-gap: 8px;
+}
+.customer-columns .column-right .info-row .label { width: auto; }
+.customer-columns .column-right .info-row .value { white-space: nowrap; }
+
+@media (max-width: 768px) {
+  .customer-columns { grid-template-columns: 1fr; }
+}
 
 .info-grid {
     display: grid;
@@ -2183,3 +2221,18 @@ select:focus {
 .info-row { display: flex; gap: 12px; }
 .info-row .label { width: 110px; color: #666; font-weight: 600; }
 .info-row .value { color: #333; font-weight: 600; }
+
+/* =============================
+   Global compact typography + unified header heights
+   ============================= */
+body { font-size: 14px !important; }
+.header h1 { font-size: 18px !important; }
+.call-log-header,
+.center-header,
+.chat-header {
+  font-size: 14px !important;
+  padding: 10px 14px !important;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
