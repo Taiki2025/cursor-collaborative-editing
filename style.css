@@ -1120,6 +1120,144 @@ body {
     gap: 25px;
 }
 
+/* 使用量入力フィールド */
+.collection-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #e1e5e9;
+    margin-bottom: 8px;
+}
+
+.collection-item .label {
+    font-weight: 600;
+    color: #666;
+    min-width: 160px;
+}
+
+.collection-item .value {
+    font-weight: 600;
+    color: #005BAC;
+}
+
+.collection-item .unit {
+    font-weight: 500;
+    color: #666;
+    margin-left: 5px;
+}
+
+#usageInput {
+    width: 80px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+}
+
+#usageInput:focus {
+    outline: none;
+    border-color: #005BAC;
+    box-shadow: 0 0 0 2px rgba(0, 91, 172, 0.25);
+}
+
+/* 計算処理の視覚的フィードバック */
+.calc-step {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #e1e5e9;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.calc-step.processing {
+    background: #fff3cd;
+    border-color: #ffc107;
+    box-shadow: 0 0 8px rgba(255, 193, 7, 0.3);
+}
+
+.calc-step.completed {
+    background: #d4edda;
+    border-color: #28a745;
+}
+
+.calc-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: #666;
+    background: #f8f9fa;
+}
+
+.calc-status.processing {
+    color: #856404;
+    background: #fff3cd;
+}
+
+.calc-status.completed {
+    color: #155724;
+    background: #d4edda;
+}
+
+/* エラーチェックの視覚的フィードバック */
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #e1e5e9;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.check-item.processing {
+    background: #fff3cd;
+    border-color: #ffc107;
+}
+
+.check-item.completed {
+    background: #d4edda;
+    border-color: #28a745;
+}
+
+.check-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+/* 請求データ生成の視覚的フィードバック */
+#billingResult.processing {
+    background: #fff3cd !important;
+    border-color: #ffc107 !important;
+}
+
+#billingResult.completed {
+    background: #d4edda !important;
+    border-color: #28a745 !important;
+}
+
+#generationStatus.processing {
+    color: #856404;
+    font-weight: 600;
+}
+
+#generationStatus.completed {
+    color: #155724;
+    font-weight: 600;
+}
+
 .input-params {
     display: flex;
     flex-direction: column;

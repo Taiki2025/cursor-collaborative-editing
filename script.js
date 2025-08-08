@@ -5,6 +5,7 @@ let keywords = [];
 let scenarios = [];
 let currentScenarioIndex = 0;
 let operatorActionIndex = 0; // オペレーター動作のインデックス
+let chatHistory = []; // チャット履歴（タイムライン紐づけ用）
 
 // DOM要素の取得
 const elements = {
@@ -452,7 +453,10 @@ function setupInitialState() {
     switchTab('overview');
     
     // 初期メッセージを表示
-    addChatMessage('bot', 'こんにちは！九州電力のAIアシスタントです。何かお手伝いできることはありますか？', '14:00');
+    addChatMessage('bot', 'こんにちは！九州電力のAIアシスタントです。何かお手伝いできることはありますか？', '14:00', {
+        type: 'ai_greeting',
+        scenario: null
+    });
     
     // 初期通話ログをクリア（停電対応の自動設定を防ぐ）
     elements.logMessageArea.innerHTML = '';
@@ -470,6 +474,14 @@ function setupInitialState() {
     elements.sharedInfoPanel.style.display = 'none';
     elements.alertContent.innerHTML = '';
     elements.sharedInfoContent.innerHTML = '';
+    
+    // デモモード説明をチャットに追加
+    setTimeout(() => {
+        addChatMessage('bot', 'デモモードを有効にすると、様々なシナリオの通話・操作を再現できます。右上の「デモモード」ボタンをクリックしてお試しください。', '14:00', {
+            type: 'ai_instruction',
+            scenario: null
+        });
+    }, 2000);
 }
 
 // シナリオ選択
@@ -514,6 +526,13 @@ function selectScenario(scenarioCode) {
         timestamp: "14:00:00",
         speaker: "システム",
         text: `シナリオ開始: ${currentScenario.name}`
+    });
+    
+    // AIからシナリオ開始の案内を追加
+    const now = formatTime(new Date());
+    addChatMessage('bot', `${currentScenario.name}のシナリオを開始します。このシナリオでは、通話ログ、オペレーター操作、AI応答が連動して表示されます。`, now, {
+        type: 'ai_scenario_start',
+        scenario: scenarioCode
     });
     
     // デモモード中なら即座にシナリオ再生開始
@@ -744,6 +763,9 @@ function executeOperatorAction(action) {
             addOperatorActionLog(`フィールドハイライト: ${action.description}`);
             break;
     }
+
+    // 操作に応じたAI提案を追加
+    maybePushAISuggestionForAction(action);
     
     // 進行状況を非表示
     setTimeout(() => {
@@ -835,6 +857,14 @@ function inputCustomerData(field, value) {
                 currentValue += value[currentValue.length];
                 inputElement.value = currentValue;
                 inputElement.classList.add('typing-animation');
+                
+                // usageInputの場合は関連表示も更新
+                if (field === 'usageInput') {
+                    const usageDisplay = document.getElementById('usageDisplay');
+                    if (usageDisplay) {
+                        usageDisplay.textContent = currentValue;
+                    }
+                }
             } else {
                 clearInterval(typeInterval);
                 // ハイライトを解除
@@ -873,7 +903,13 @@ function clickButton(buttonId, description) {
         button.classList.add('button-click-effect');
         setTimeout(() => {
             button.classList.remove('button-click-effect');
-            button.click();
+            
+            // calculateBillボタンの場合は料金計算処理を実行
+            if (buttonId === 'calculateBill') {
+                executeCalculationProcess();
+            } else {
+                button.click();
+            }
         }, 200);
     }
 }
@@ -910,7 +946,10 @@ function sendChatMessage() {
     const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
     
     // ユーザーメッセージを追加
-    addChatMessage('user', message, time);
+    addChatMessage('user', message, time, {
+        type: 'operator_chat',
+        scenario: currentScenario ? currentScenario.code : undefined
+    });
     elements.chatInput.value = '';
     
     // キーワードトリガーチェック
@@ -919,7 +958,11 @@ function sendChatMessage() {
     // ボット応答を生成
     setTimeout(() => {
         const botResponse = generateBotResponse(message, triggeredKeyword);
-        addChatMessage('bot', botResponse, time);
+        addChatMessage('bot', botResponse, time, {
+            type: 'ai_response',
+            linkedTo: 'operator_chat',
+            scenario: currentScenario ? currentScenario.code : undefined
+        });
     }, 500);
 }
 
@@ -975,7 +1018,10 @@ function generateBotResponse(message, triggeredKeyword) {
 }
 
 // チャットメッセージ追加
-function addChatMessage(sender, text, time) {
+function addChatMessage(sender, text, time, meta = {}) {
+    // チャット履歴へ保存（タイムライン紐づけ情報付き）
+    chatHistory.push({ sender, text, time, meta });
+
     const messageContainer = document.createElement('div');
     messageContainer.classList.add('message-bubble', sender);
     
@@ -1142,7 +1188,12 @@ function addCallLogMessage(message) {
         const triggeredKeyword = checkKeywordTrigger(message.text);
         if (triggeredKeyword) {
             setTimeout(() => {
-                addChatMessage('bot', triggeredKeyword.bot_prompt, message.timestamp);
+                addChatMessage('bot', triggeredKeyword.bot_prompt, message.timestamp, {
+                    type: 'ai_response',
+                    linkedTo: 'transcript',
+                    scenario: currentScenario ? currentScenario.code : undefined,
+                    transcriptTimestamp: message.timestamp
+                });
             }, 1000);
         }
     }
@@ -1215,6 +1266,409 @@ function debounce(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
+
+// 操作内容に基づくオペレーターの質問とAI回答を生成
+function maybePushAISuggestionForAction(action) {
+    if (!currentScenario) return;
+    const now = formatTime(new Date());
+
+    // オペレーターが質問 → AIが回答する自然な流れを演出
+    setTimeout(() => {
+        if (currentScenario.code === 'RESTORE_POWER') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'unpaid-management') {
+                // オペレーターの質問
+                addChatMessage('user', '未収管理タブを確認していますが、支払い条件はどうすればいいですか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                // AIの回答
+                setTimeout(() => {
+                    addChatMessage('bot', '未収金額¥15,430が3ヶ月分あります。分割払い（3回）を選択することで再開可能です。初回¥5,143をご案内ください。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+            if (action.type === 'SELECT_OPTION' && action.selector === '#paymentMethod' && action.value === 'installment') {
+                addChatMessage('user', '分割払いを設定しました。次のステップは？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '✅ 分割払い設定完了です。再点申込タブで最終確認を行い、サービス再開設定を実行してください。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1200);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmRestore') {
+                addChatMessage('user', '再開設定を実行しました。通知関連はどうしますか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '🎉 再開設定完了です。顧客への通知送信とSLA記録を実施してください。メール・SMSで完了通知が送られます。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+
+        if (currentScenario.code === 'USAGE_CALCULATION') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'simulation') {
+                addChatMessage('user', '料金シミュレーションタブで使用量を確認中です。220kWhは適正ですか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '220kWhは前月235kWhと比較して適正値です。ナイト・セレクトプランで基本料金¥2,400＋従量料金¥5,580で計算されます。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1100);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'calculateBill') {
+                addChatMessage('user', '料金計算を実行しました。結果に問題はありませんか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '💰 計算結果は¥7,980です。異常値チェックも完了しており、請求データ生成に問題ありません。監査ログも生成済みです。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+
+        if (currentScenario.code === 'BILLING_MANAGEMENT') {
+            if (action.type === 'HIGHLIGHT_FIELD' && action.fieldId === 'unpaidAmount') {
+                addChatMessage('user', '未収金額を確認しています。どのような対応が適切ですか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '⚠️ 未収¥15,430（3ヶ月分）です。分割払い3回での支払いを提案し、催促状送付を停止することをお勧めします。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1200);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmPayment') {
+                addChatMessage('user', '支払い方法を確認しました。債権管理の更新は完了していますか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '✅ 債権管理帳票の更新が完了しました。催促状送付停止と分割払い設定が適用されています。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+
+        if (currentScenario.code === 'CONTRACT_CHANGE') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'change-plan') {
+                addChatMessage('user', '契約変更タブで確認中です。レギュラー50Aへの変更影響は？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', 'レギュラー50Aへの変更で月額+¥1,420（年間+¥17,040）となります。アンペア変更工事費¥3,300が別途発生します。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1100);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmPlanChange') {
+                addChatMessage('user', '契約変更を実行しました。顧客への通知はどうしますか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '🔄 変更完了です。変更後契約書PDFの生成とメール通知を送付してください。適用開始は2025/09/01からです。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+
+        if (currentScenario.code === 'CONTRACT_TERMINATION') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'termination') {
+                addChatMessage('user', '契約廃止タブを確認中です。解約条件に問題はありませんか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '解約条件を確認しました。最低利用期間・違約金はありません。2025/07/31での解約が可能です。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1200);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmTermination') {
+                addChatMessage('user', '解約手続きを実行しました。証明書の発行はどうしますか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '🚪 解約手続き完了です。解約証明書PDFを即時発行し、顧客へ送付してください。最終精算書は8/5に送付予定です。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+    }, 1500); // 1.5秒遅延でオペレーターが操作を確認してから質問する流れを演出
+}
+
+// シナリオ別にチャット履歴を取得
+function getChatHistoryByScenario(code) {
+    return chatHistory.filter(entry => (entry.meta && entry.meta.scenario) === code);
+}
+
+// チャット履歴の統計情報を取得
+function getChatStatistics() {
+    const stats = {
+        total: chatHistory.length,
+        byType: {},
+        byScenario: {},
+        withTimeline: 0
+    };
+    
+    chatHistory.forEach(entry => {
+        // タイプ別統計
+        const type = entry.meta?.type || 'unknown';
+        stats.byType[type] = (stats.byType[type] || 0) + 1;
+        
+        // シナリオ別統計
+        const scenario = entry.meta?.scenario || 'no_scenario';
+        stats.byScenario[scenario] = (stats.byScenario[scenario] || 0) + 1;
+        
+        // タイムライン紐づけ有無
+        if (entry.meta?.linkedTo) {
+            stats.withTimeline++;
+        }
+    });
+    
+    return stats;
+}
+
+// デバッグ用：チャット履歴をコンソールに出力
+function debugChatHistory() {
+    console.log('=== チャット履歴デバッグ ===');
+    console.log('総メッセージ数:', chatHistory.length);
+    console.log('統計情報:', getChatStatistics());
+    console.log('履歴詳細:', chatHistory);
+    
+    if (currentScenario) {
+        console.log('現在のシナリオのチャット:', getChatHistoryByScenario(currentScenario.code));
+    }
+}
+
+// 料金計算処理の実行
+function executeCalculationProcess() {
+    console.log('料金計算処理を開始します');
+    
+    // 1. データ収集状況の更新
+    const collectionStatus = document.getElementById('collectionStatus');
+    if (collectionStatus) {
+        collectionStatus.textContent = '収集中...';
+        collectionStatus.style.color = '#856404';
+    }
+    
+    setTimeout(() => {
+        if (collectionStatus) {
+            collectionStatus.textContent = '収集完了';
+            collectionStatus.style.color = '#155724';
+        }
+        
+        // 2. 段階的な計算処理
+        executeCalculationSteps();
+    }, 1000);
+}
+
+// 段階的な計算処理の実行
+function executeCalculationSteps() {
+    const steps = [
+        { id: 'basicFeeStep', statusId: 'basicFeeStatus', delay: 800 },
+        { id: 'usageFeeStep', statusId: 'usageFeeStatus', delay: 1000 },
+        { id: 'discountStep', statusId: 'discountStatus', delay: 600 },
+        { id: 'totalStep', statusId: 'totalStatus', delay: 800 }
+    ];
+    
+    let currentStep = 0;
+    
+    function processNextStep() {
+        if (currentStep >= steps.length) {
+            // 全ステップ完了後にエラーチェックを実行
+            executeErrorCheck();
+            return;
+        }
+        
+        const step = steps[currentStep];
+        const stepElement = document.getElementById(step.id);
+        const statusElement = document.getElementById(step.statusId);
+        
+        if (stepElement && statusElement) {
+            // 処理中状態
+            stepElement.classList.add('processing');
+            statusElement.textContent = '計算中...';
+            statusElement.classList.add('processing');
+            
+            setTimeout(() => {
+                // 完了状態
+                stepElement.classList.remove('processing');
+                stepElement.classList.add('completed');
+                statusElement.textContent = '完了';
+                statusElement.classList.remove('processing');
+                statusElement.classList.add('completed');
+                
+                currentStep++;
+                setTimeout(processNextStep, 300);
+            }, step.delay);
+        } else {
+            currentStep++;
+            processNextStep();
+        }
+    }
+    
+    processNextStep();
+}
+
+// エラーチェック処理の実行
+function executeErrorCheck() {
+    const checks = [
+        { id: 'usageCheck', iconId: 'usageCheckIcon', resultId: 'usageCheckResult', delay: 600 },
+        { id: 'calculationCheck', iconId: 'calculationCheckIcon', resultId: 'calculationCheckResult', delay: 800 },
+        { id: 'planCheck', iconId: 'planCheckIcon', resultId: 'planCheckResult', delay: 500 }
+    ];
+    
+    let currentCheck = 0;
+    
+    function processNextCheck() {
+        if (currentCheck >= checks.length) {
+            // 全チェック完了後に請求データ生成を実行
+            generateBillingData();
+            return;
+        }
+        
+        const check = checks[currentCheck];
+        const checkElement = document.getElementById(check.id);
+        const iconElement = document.getElementById(check.iconId);
+        const resultElement = document.getElementById(check.resultId);
+        
+        if (checkElement && iconElement && resultElement) {
+            // 処理中状態
+            checkElement.classList.add('processing');
+            iconElement.textContent = '🔄';
+            resultElement.textContent = 'チェック中';
+            
+            setTimeout(() => {
+                // 完了状態
+                checkElement.classList.remove('processing');
+                checkElement.classList.add('completed');
+                iconElement.textContent = '✅';
+                resultElement.textContent = '正常';
+                
+                currentCheck++;
+                setTimeout(processNextCheck, 200);
+            }, check.delay);
+        } else {
+            currentCheck++;
+            processNextCheck();
+        }
+    }
+    
+    processNextCheck();
+}
+
+// 請求データ生成処理の実行
+function generateBillingData() {
+    const billingResult = document.getElementById('billingResult');
+    const billingResultTitle = document.getElementById('billingResultTitle');
+    const generationStatus = document.getElementById('generationStatus');
+    const billingId = document.getElementById('billingId');
+    const finalBillAmount = document.getElementById('finalBillAmount');
+    const auditLog = document.getElementById('auditLog');
+    
+    if (billingResult && generationStatus) {
+        // 生成中状態
+        billingResult.classList.add('processing');
+        billingResultTitle.textContent = '📄 請求データ生成中...';
+        generationStatus.textContent = '生成中...';
+        generationStatus.classList.add('processing');
+        
+        setTimeout(() => {
+            // 完了状態
+            billingResult.classList.remove('processing');
+            billingResult.classList.add('completed');
+            billingResultTitle.textContent = '📄 請求データ生成完了';
+            generationStatus.textContent = '生成完了';
+            generationStatus.classList.remove('processing');
+            generationStatus.classList.add('completed');
+            
+            // データ更新
+            if (billingId) billingId.textContent = 'BILL-202507-0001';
+            if (finalBillAmount) finalBillAmount.textContent = '¥7,980';
+            if (auditLog) auditLog.textContent = '生成済み';
+        }, 1500);
+    }
+}
+
+// グローバルに公開（ブラウザコンソールから利用可能）
+window.chatHistory = chatHistory;
+window.getChatHistoryByScenario = getChatHistoryByScenario;
+window.getChatStatistics = getChatStatistics;
+window.debugChatHistory = debugChatHistory;
+window.executeCalculationProcess = executeCalculationProcess;
 
 // エラーハンドリング
 window.addEventListener('error', (event) => {
