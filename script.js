@@ -21,8 +21,6 @@ const elements = {
     faqButton: document.getElementById('faqButton'),
     
     // 通話ログ関連
-    transcriptToggle: document.getElementById('transcriptToggle'),
-    transcriptContent: document.getElementById('transcriptContent'),
     logMessageArea: document.getElementById('logMessageArea'),
     summaryWindow: document.getElementById('summaryWindow'),
     summaryContent: document.getElementById('summaryContent'),
@@ -198,21 +196,21 @@ async function loadScenarios() {
                 "icon": "⚡",
                 "transcript": [
                     { "timestamp": "14:00:01", "speaker": "顧客", "text": "新しい場所で電気を使いたいのですが…" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。引っ越しに伴う電気利用のお申込みですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたしました。引っ越しに伴う電気利用のお申込みですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
                     { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
-                    { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
+                    { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "山田太郎様ですね。ご利用いただいているお電話番号をお聞かせください。" },
                     { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
-                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "現在のご住所もお聞かせください。" },
+                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "092-123-4567ですね。現在のご住所をお聞かせください。" },
                     { "timestamp": "14:00:22", "speaker": "顧客", "text": "福岡県福岡市博多区博多駅前1-1-1です。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "お客様情報を検索いたします。引っ越し先での電気利用に関する手続きを進めます。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "ありがとうございます。お客様情報の。引っ越し先での電気利用に関する手続きを進めます。" },
                     { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "新しい利用場所の住所をお聞かせください。" },
                     { "timestamp": "14:00:35", "speaker": "顧客", "text": "福岡県福岡市中央区天神2-2-2のマンションです。" },
                     { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "利用開始希望日はいつでしょうか？" },
                     { "timestamp": "14:00:45", "speaker": "顧客", "text": "8月15日からお願いします。" },
-                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "承知いたします。8月15日から電気がご利用いただけるよう手続きいたします。" },
-                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "ところで、現在の利用場所での電気利用契約について、まだ解約手続きがお済みでないようですが、こちらのお電話で合わせて対応できますが、いかがいたしますか？" },
-                    { "timestamp": "14:01:00", "speaker": "顧客", "text": "じゃあ、それも今お願いしようかな。" },
-                    { "timestamp": "14:01:05", "speaker": "オペレーター", "text": "承知いたします。解約手続きも進めさせていただきます。ありがとうございました。" }
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "承知いたしました。それでは8月15日より、新しいご住所の福岡県福岡市中央区天神2-2-2のマンションにて電気がご利用いただけるよう、契約申し込みの受付処理をいたします。" },
+                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "山田様、現在も弊社との契約で電気をご利用いただいているかと存じますが、こちらの電気利用契約はまだ解約手続きがお済みでないようです。こちらのお電話で合わせて対応できますが、いかがいたしますか？" },
+                    { "timestamp": "14:01:00", "speaker": "顧客", "text": "それも対応できるなら、今お願いしようかな。" },
+                    { "timestamp": "14:01:05", "speaker": "オペレーター", "text": "承知いたしました。それでは現在のご契約の解約手続きも進めさせていただきます。" }
                 ],
                 "summaryUpdates": [
                     { "time": "14:00:25", "summary": "顧客情報検索・引っ越しに伴う再点申込受付開始" },
@@ -230,7 +228,7 @@ async function loadScenarios() {
                         "value": "山田太郎", 
                         "description": "顧客氏名をリアルタイム入力",
                         "timing": "dialog_3_customer_name",
-                        "delay": 5000  // 3番目の会話「山田太郎です」表示(4秒) + 1秒後に入力開始
+                        "delay": 5500  // 3番目の会話「山田太郎です」表示(4秒) + 1.5秒後に入力開始
                     },
                     { 
                         "type": "INPUT_SEARCH_FIELD", 
@@ -238,7 +236,7 @@ async function loadScenarios() {
                         "value": "092-123-4567", 
                         "description": "顧客電話番号をリアルタイム入力",
                         "timing": "dialog_5_customer_phone",
-                        "delay": 9000  // 5番目の会話「092-123-4567です」表示(8秒) + 1秒後に入力開始
+                        "delay": 9500  // 5番目の会話「092-123-4567です」表示(8秒) + 1.5秒後に入力開始
                     },
                     { 
                         "type": "INPUT_SEARCH_FIELD", 
@@ -246,7 +244,7 @@ async function loadScenarios() {
                         "value": "福岡県福岡市博多区博多駅前1-1-1", 
                         "description": "顧客住所をリアルタイム入力",
                         "timing": "dialog_7_customer_address",
-                        "delay": 13000  // 7番目の会話「福岡県福岡市博多区...」表示(12秒) + 1秒後に入力開始
+                        "delay": 13500  // 7番目の会話「福岡県福岡市博多区...」表示(12秒) + 1.5秒後に入力開始
                     },
                     
                     // Phase 2: 本人確認完了後の顧客検索実行 (8番目の会話「お客様情報を検索いたします」と同時)
@@ -254,7 +252,7 @@ async function loadScenarios() {
                         "type": "CLICK_SEARCH_BUTTON", 
                         "description": "顧客情報検索実行",
                         "timing": "dialog_8_search_execution",
-                        "delay": 15000  // 8番目の会話表示(14秒) + 1秒後に検索実行
+                        "delay": 15500  // 8番目の会話表示(14秒) + 1.5秒後に検索実行
                     },
                     { 
                         "type": "SWITCH_TAB", 
@@ -262,7 +260,7 @@ async function loadScenarios() {
                         "tabName": "再点申込",
                         "description": "再点申込画面に移動",
                         "timing": "after_search_complete",
-                        "delay": 17000  // 検索完了後に再点申込画面準備
+                        "delay": 17500  // 検索完了後に再点申込画面準備
                     },
                     
                     // Phase 4: 新住所回答後に入力 (10番目の会話「福岡県福岡市中央区天神...」の後)
@@ -272,7 +270,7 @@ async function loadScenarios() {
                         "value": "福岡県福岡市中央区天神2-2-2", 
                         "description": "新住所をシステムに入力",
                         "timing": "dialog_10_new_address_provided",
-                        "delay": 19500  // 10番目の会話表示(18秒) + 1.5秒後に入力開始
+                        "delay": 20000  // 10番目の会話表示(18秒) + 2秒後に入力開始
                     },
                     
                     // Phase 5: 開始日回答後に設定 (12番目の会話「8月15日からお願いします」の後)
@@ -282,7 +280,7 @@ async function loadScenarios() {
                         "value": "2025-08-15", 
                         "description": "利用開始日をシステムに設定",
                         "timing": "dialog_12_start_date_provided",
-                        "delay": 23500  // 12番目の会話表示(22秒) + 1.5秒後に設定
+                        "delay": 24000  // 12番目の会話表示(22秒) + 2秒後に設定
                     },
                     
                     // Phase 6: 手続き確認時に契約実行 (13番目の会話「手続きいたします」と同時)
@@ -291,7 +289,7 @@ async function loadScenarios() {
                         "buttonId": "confirmNewContract", 
                         "description": "新規契約手続き実行",
                         "timing": "dialog_13_procedure_confirm",
-                        "delay": 25000  // 13番目の会話表示(24秒) + 1秒後に実行
+                        "delay": 25500  // 13番目の会話表示(24秒) + 1.5秒後に実行
                     },
                     
                     // Phase 7: 解約提案時に現在契約確認 (14番目の会話「現在の利用場所での解約は」と同時)
@@ -301,7 +299,7 @@ async function loadScenarios() {
                         "tabName": "契約・サービス",
                         "description": "現在の契約状況を確認",
                         "timing": "dialog_14_termination_proposal",
-                        "delay": 27000  // 14番目の会話表示(26秒) + 1秒後に確認
+                        "delay": 27500  // 14番目の会話表示(26秒) + 1.5秒後に確認
                     },
                     
                     // Phase 8: 顧客同意後に解約手続き (15番目の会話「それも今お願いしようかな」の後)
@@ -311,7 +309,7 @@ async function loadScenarios() {
                         "tabName": "契約廃止",
                         "description": "解約手続き画面に移動",
                         "timing": "dialog_15_customer_agrees",
-                        "delay": 29500  // 15番目の会話表示(28秒) + 1.5秒後に移動
+                        "delay": 30000  // 15番目の会話表示(28秒) + 2秒後に移動
                     },
                     { 
                         "type": "INPUT_DATA", 
@@ -319,23 +317,79 @@ async function loadScenarios() {
                         "value": "2025-08-14", 
                         "description": "旧住所解約日設定（新契約前日）",
                         "timing": "termination_date_input",
-                        "delay": 31500  // 解約画面移動後2秒で日付設定
+                        "delay": 32000  // 解約画面移動後2秒で日付設定
                     },
                     { 
                         "type": "CLICK_BUTTON", 
                         "buttonId": "confirmTermination", 
                         "description": "解約手続き実行",
                         "timing": "termination_execution",
-                        "delay": 33500  // 解約日設定後2秒で実行
+                        "delay": 34000  // 解約日設定後2秒で実行
                     }
                 ],
                 "aiGuidance": [
-                    { "trigger": "scenario_start", "message": "会話内容から「再点の申込」と理解しました。再点の処理に移ってよろしいですか？", "options": ["はい", "いいえ"] },
-                    { "trigger": "customer_identified", "message": "顧客は特定できましたか？", "options": ["はい", "いいえ"] },
-                    { "trigger": "existing_customer", "message": "既存の顧客であると理解しました。まずは新規利用契約の確認フローを進めてください。", "guidance": "新住所を確認してください", "options": ["住所を確認", "住所不明"] },
-                    { "trigger": "address_confirmed", "message": "新住所が確認できました。次に利用開始日を確認してください。", "options": ["開始日を確認", "開始日未定"] },
-                    { "trigger": "new_contract_ready", "message": "新規契約手続きの準備が整いました。契約を実行してください。", "options": ["契約実行", "保留"] },
-                    { "trigger": "old_contract_check", "message": "旧住所の契約状況を確認してください。解約手続きが必要な場合があります。", "options": ["解約必要", "解約済み", "確認中"] }
+                    { 
+                        "trigger": "scenario_start", 
+                        "message": "会話内容から「再点の申込」と解釈しました。再点の処理に移ってよろしいですか？", 
+                        "autoResponse": "はい",
+                        "delay": 1000,
+                        "responseDelay": 3000,
+                        "timing": "scenario_start"
+                    },
+                    { 
+                        "trigger": "customer_search_start", 
+                        "message": "お客様情報を確認してください。\n氏名・電話番号・住所", 
+                        "delay": 5000,
+                        "timing": "before_customer_input"
+                    },
+                    { 
+                        "trigger": "customer_identified", 
+                        "message": "お客様情報を特定できました。\n属性：既存顧客\n契約：有効", 
+                        "delay": 16000,
+                        "timing": "after_search_complete"
+                    },
+                    { 
+                        "trigger": "new_contract_flow", 
+                        "message": "新規利用契約の確認フローを進めます。\n新しく電気を利用する住所を確認してください。", 
+                        "delay": 18000,
+                        "timing": "start_new_contract_flow"
+                    },
+                    { 
+                        "trigger": "address_detected", 
+                        "message": "新住所の入力を検知しました。\n続いて利用開始日を確認してください。", 
+                        "delay": 21000,
+                        "timing": "after_address_input"
+                    },
+                    { 
+                        "trigger": "start_date_detected", 
+                        "message": "利用開始日の入力を検知しました。\n新住所と利用開始日を復唱し、再点申し込み手続きを完了させてください。", 
+                        "delay": 25000,
+                        "timing": "after_date_input"
+                    },
+                    { 
+                        "trigger": "contract_completed", 
+                        "message": "続いて、お客様は現在の契約の廃止申し込みが確認できていません。\nこの電話口で解約の申込対応も可能である旨を伝えてください。", 
+                        "delay": 27000,
+                        "timing": "suggest_termination"
+                    },
+                    { 
+                        "trigger": "termination_agreed", 
+                        "message": "お客様より解約の意図を確認しました。\n旧住所について読み上げ、確認してください。\n希望する解約日について確認してください。", 
+                        "delay": 30500,
+                        "timing": "start_termination_process"
+                    },
+                    { 
+                        "trigger": "termination_date_detected", 
+                        "message": "解約日の入力を検知しました。\n旧住所と解約日を復唱し、廃止申し込み手続きを完了させてください。", 
+                        "delay": 33000,
+                        "timing": "complete_termination"
+                    },
+                    { 
+                        "trigger": "final_summary", 
+                        "message": "対応完了しました。\n\nお客様名：山田太郎\nお客様番号：KY-2024-001234\n問合せ内容：引っ越しに伴う電気利用開始申込および旧住所解約\n回答内容：新住所（福岡市中央区天神2-2-2）での電気利用を8月15日から開始。旧住所（福岡市博多区博多駅前1-1-1）の解約を8月14日に実施。\n対応ステータス：完了", 
+                        "delay": 36000,
+                        "timing": "call_complete"
+                    }
                 ]
             },
             {
@@ -546,8 +600,8 @@ function setupEventListeners() {
         }
     });
     
-    // トランスクリプト切り替え
-    elements.transcriptToggle.addEventListener('click', toggleTranscript);
+    // トランスクリプト切り替え（削除済み）
+    // elements.transcriptToggle.addEventListener('click', toggleTranscript);
     
     // デモモード
     elements.demoModeToggle.addEventListener('change', toggleDemoMode);
@@ -681,15 +735,7 @@ function selectScenario(scenarioCode) {
         scenario: scenarioCode
     });
     
-    // AIガイダンスを開始
-    if (currentScenario.aiGuidance && currentScenario.aiGuidance.length > 0) {
-        setTimeout(() => {
-            const firstGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'scenario_start');
-            if (firstGuidance) {
-                showAIGuidance(firstGuidance);
-            }
-        }, 2000);
-    }
+    // AIガイダンスは自動システムで処理されるため、手動開始は不要
     
     // デモモード中なら即座にシナリオ再生開始
     if (demoMode) {
@@ -801,6 +847,33 @@ function startScenarioPlayback() {
                 console.log('オペレーター動作実行:', action);
                 executeOperatorAction(action);
             }, actionDelay);
+        });
+    }
+    
+    // AIガイダンス自動表示・応答システム
+    if (currentScenario.aiGuidance) {
+        currentScenario.aiGuidance.forEach((guidance, index) => {
+            if (!demoMode) return;
+            
+            const guidanceDelay = guidance.delay || (index * 5000); // デフォルト5秒間隔
+            
+            // ガイダンス表示
+            setTimeout(() => {
+                if (!demoMode) return;
+                
+                console.log('AIガイダンス表示:', guidance);
+                showAIGuidance(guidance);
+                
+                // 最初のガイダンスのみ自動応答（他は検知ベースメッセージのみ）
+                if (guidance.autoResponse && guidance.responseDelay && guidance.trigger === 'scenario_start') {
+                    setTimeout(() => {
+                        if (!demoMode) return;
+                        
+                        console.log('自動応答実行:', guidance.autoResponse);
+                        handleAutomaticGuidanceResponse(guidance.autoResponse, guidance.trigger);
+                    }, guidance.responseDelay); // 絶対タイミングで自動応答
+                }
+            }, guidanceDelay);
         });
     }
     
@@ -961,8 +1034,13 @@ function hideOperatorProgress() {
     }
 }
 
-// オペレーター動作ログ追加
+// オペレーター動作ログ追加（本番では非表示）
 function addOperatorActionLog(description) {
+    // 実際の画面では作業ログは表示しない
+    console.log('オペレーター作業:', description);
+    return;
+    
+    /* 削除対象：実際の画面では表示しない
     const logArea = document.getElementById('logMessageArea');
     if (logArea) {
         const logEntry = document.createElement('div');
@@ -975,6 +1053,7 @@ function addOperatorActionLog(description) {
         logArea.appendChild(logEntry);
         logArea.scrollTop = logArea.scrollHeight;
     }
+    */
 }
 
 // タブ切り替え
@@ -1303,11 +1382,10 @@ function closeFaqModal() {
     document.body.style.overflow = 'auto';
 }
 
-// トランスクリプト切り替え
+// トランスクリプト切り替え（削除済み機能）
 function toggleTranscript() {
-    const isVisible = elements.transcriptContent.style.display !== 'none';
-    elements.transcriptContent.style.display = isVisible ? 'none' : 'block';
-    elements.transcriptToggle.textContent = isVisible ? '▲' : '▼';
+    // リアルタイム文字起こし機能は削除済み
+    console.log('transcriptToggle機能は削除されました');
 }
 
 // デモモード切り替え
@@ -2198,6 +2276,22 @@ function typeIntoField(inputElement, value, delay = 100) {
     });
 }
 
+// 自動AIガイダンス応答処理
+function handleAutomaticGuidanceResponse(selectedOption, trigger) {
+    console.log(`自動応答: ${selectedOption} (trigger: ${trigger})`);
+    
+    // 選択されたオプションをチャットに表示
+    const now = formatTime(new Date());
+    addChatMessage('user', `選択: ${selectedOption}`, now, {
+        type: 'ai_auto_response',
+        trigger: trigger,
+        selectedOption: selectedOption
+    });
+    
+    // 選択に応じた次のガイダンスフローを実行
+    processGuidanceFlow(selectedOption, trigger);
+}
+
 // AIガイダンス機能
 function showAIGuidance(guidance) {
     const now = formatTime(new Date());
@@ -2209,12 +2303,12 @@ function showAIGuidance(guidance) {
         scenario: currentScenario ? currentScenario.code : null
     });
     
-    // 選択肢ボタンを追加
-    if (guidance.options && guidance.options.length > 0) {
-        setTimeout(() => {
-            addGuidanceOptions(guidance.options, guidance.trigger);
-        }, 500);
-    }
+    // 自動システムでは選択肢ボタンは表示しない（自動応答のため）
+    // if (guidance.options && guidance.options.length > 0) {
+    //     setTimeout(() => {
+    //         addGuidanceOptions(guidance.options, guidance.trigger);
+    //     }, 500);
+    // }
 }
 
 function addGuidanceOptions(options, trigger) {
@@ -2255,50 +2349,21 @@ function processGuidanceFlow(selectedOption, trigger) {
     if (!currentScenario || !currentScenario.aiGuidance) return;
     
     const now = formatTime(new Date());
-    let nextGuidance = null;
     
-    switch (trigger) {
-        case 'scenario_start':
-            if (selectedOption === 'はい') {
-                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'customer_identified');
-            }
-            break;
-        case 'customer_identified':
-            if (selectedOption === 'はい') {
-                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'existing_customer');
-            }
-            break;
-        case 'existing_customer':
-            if (selectedOption === '住所を確認') {
-                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'address_confirmed');
-            }
-            break;
-        case 'address_confirmed':
-            if (selectedOption === '開始日を確認') {
-                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'new_contract_ready');
-            }
-            break;
-        case 'new_contract_ready':
-            if (selectedOption === '契約実行') {
-                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'old_contract_check');
-            }
-            break;
-        case 'old_contract_check':
-            if (selectedOption === '解約必要') {
-                addChatMessage('bot', '旧住所の解約手続きも同時に進めてください。手続き完了です。', now, {
-                    type: 'ai_guidance',
-                    scenario: currentScenario.code
-                });
-                return;
-            }
-            break;
-    }
+    // 自動システムでは、応答に基づく次のガイダンス表示は不要
+    // すべてのガイダンスは事前にdelayで設定されたタイミングで自動表示される
     
-    if (nextGuidance) {
+    // 最終段階でのみ、完了メッセージを表示
+    if (trigger === 'old_contract_check' && selectedOption === '解約必要') {
         setTimeout(() => {
-            showAIGuidance(nextGuidance);
+            addChatMessage('bot', '旧住所の解約手続きも同時に進めてください。手続き完了です。', now, {
+                type: 'ai_guidance_completion',
+                trigger: 'termination_complete'
+            });
         }, 1000);
     }
+    
+    console.log(`ガイダンスフロー処理: ${selectedOption} (trigger: ${trigger}) - 自動システムにより管理`);
 }
 
 // 初期化完了メッセージ
