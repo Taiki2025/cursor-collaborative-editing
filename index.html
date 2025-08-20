@@ -118,36 +118,68 @@
             <!-- 中央カラム: メイン360度ビュー -->
             <div class="center-column">
                 <div class="center-header"><span>🧭 AIエージェントUI (360度ビュー)</span></div>
-                <div class="customer-card">
-                    <div class="customer-info">
+                <div class="customer-card" id="customerCard">
+                    <!-- 顧客検索画面（初期表示） -->
+                    <div class="customer-search" id="customerSearch">
+                        <h2>👤 顧客・契約情報</h2>
+                        <div class="search-form">
+                            <div class="search-instruction">
+                                <p>お客様の情報を入力して検索してください</p>
+                            </div>
+                            <div class="search-fields">
+                                <div class="search-field">
+                                    <label for="searchName">氏名</label>
+                                    <input type="text" id="searchName" placeholder="例：山田 太郎" class="search-input">
+                                </div>
+                                <div class="search-field">
+                                    <label for="searchPhone">電話番号</label>
+                                    <input type="text" id="searchPhone" placeholder="例：092-123-4567" class="search-input">
+                                </div>
+                                <div class="search-field">
+                                    <label for="searchAddress">住所</label>
+                                    <input type="text" id="searchAddress" placeholder="例：福岡県福岡市博多区" class="search-input">
+                                </div>
+                            </div>
+                            <div class="search-actions">
+                                <button type="button" id="searchCustomerBtn" class="search-btn">🔍 顧客検索</button>
+                                <button type="button" id="clearSearchBtn" class="clear-btn">クリア</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 顧客情報表示画面（検索後） -->
+                    <div class="customer-info" id="customerInfo" style="display: none;">
                         <h2>👤 顧客・契約情報</h2>
                         <div class="customer-summary">
                             <div class="name-block">
-                                <div class="furigana">ヤマダ タロウ</div>
+                                <div class="furigana" id="customerFurigana">ヤマダ タロウ</div>
                                 <div class="name-and-id">
-                                    <span class="full-name">山田 太郎</span>
+                                    <span class="full-name" id="customerFullName">山田 太郎</span>
                                     <span class="customer-number">お客様番号: <span id="customerId">CUST-2025-0001</span></span>
                                 </div>
                             </div>
                             <div class="customer-columns">
                                 <div class="column-left">
-                                    <div class="info-row"><span class="icon" aria-label="電話">📞</span><span class="value">092-123-4567</span></div>
-                                    <div class="info-row"><span class="icon" aria-label="メール">✉️</span><span class="value">tanaka@example.com</span></div>
-                                    <div class="info-row"><span class="icon" aria-label="住所">📍</span><span class="value">福岡県福岡市博多区博多駅前1-1-1</span></div>
-                                    <div class="info-row labeled"><span class="label">供給地点特定番号</span><span class="value supply-id">09-1234-1234-1234-0000-0000</span></div>
+                                    <div class="info-row"><span class="icon" aria-label="電話">📞</span><span class="value" id="customerPhoneDisplay">092-123-4567</span></div>
+                                    <div class="info-row"><span class="icon" aria-label="メール">✉️</span><span class="value" id="customerEmail">tanaka@example.com</span></div>
+                                    <div class="info-row"><span class="icon" aria-label="住所">📍</span><span class="value" id="customerAddressDisplay">福岡県福岡市博多区博多駅前1-1-1</span></div>
+                                    <div class="info-row labeled"><span class="label">供給地点特定番号</span><span class="value supply-id" id="customerSupplyId">09-1234-1234-1234-0000-0000</span></div>
                                 </div>
                                 <div class="column-right">
-                                    <div class="info-row"><span class="label">契約対象</span><span class="value">電気</span></div>
-                                    <div class="info-row"><span class="label">プラン</span><span class="value">ナイト・セレクト</span></div>
-                                    <div class="info-row"><span class="label">支払方法</span><span class="value">口座振替</span></div>
-                                    <div class="info-row"><span class="label">通算契約期間</span><span class="value">4年10か月</span></div>
+                                    <div class="info-row"><span class="label">契約対象</span><span class="value" id="customerContractType">電気</span></div>
+                                    <div class="info-row"><span class="label">プラン</span><span class="value" id="customerPlan">ナイト・セレクト</span></div>
+                                    <div class="info-row"><span class="label">支払方法</span><span class="value" id="customerPaymentMethod">口座振替</span></div>
+                                    <div class="info-row"><span class="label">通算契約期間</span><span class="value" id="customerContractPeriod">4年10か月</span></div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="customer-actions">
+                            <button type="button" id="newSearchBtn" class="action-btn">新規検索</button>
                         </div>
                     </div>
                 </div>
                 
-                <div class="tabs-container">
+                <div class="tabs-container" id="tabsContainer" style="display: none;">
                     <div class="tab-buttons" id="tabButtons">
                         <button class="tab-button active" data-tab="overview">📊 概要</button>
                         <button class="tab-button" data-tab="billing-history">💰 請求履歴</button>
@@ -382,86 +414,103 @@
                         
                         <!-- 再点申込タブ -->
                         <div class="tab-content" id="restore-power">
-                            <h3>⚡ 再点申込</h3>
+                            <h3>⚡ 再点申込（引っ越しに伴う新規契約）</h3>
                             <div class="restore-power-form">
                                 <div class="form-section">
-                                    <h4>1. 顧客からの再開申請受付</h4>
+                                    <h4>1. 新規利用申請受付</h4>
                                     <div class="search-info">
                                         <div class="info-item">
                                             <span class="label">申請種別:</span>
-                                            <span class="value">サービス利用再開</span>
+                                            <span class="value">引っ越しに伴う新規契約</span>
                                         </div>
                                         <div class="info-item">
                                             <span class="label">受付方法:</span>
-                                            <span class="value">Web申込</span>
+                                            <span class="value">電話申込</span>
                                         </div>
                                         <div class="info-item">
-                                            <span class="label">契約ID:</span>
-                                            <span class="value">CTR-09-1234-5678</span>
+                                            <span class="label">顧客ID:</span>
+                                            <span class="value">CUST-2025-0001</span>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="form-section">
-                                    <h4>2. 顧客情報および過去契約履歴の照会</h4>
-                                    <div class="contract-history">
-                                        <table>
-                                            <tr><td>過去契約開始日</td><td>2020/10/01</td></tr>
-                                            <tr><td>利用停止日</td><td>2025/05/20</td></tr>
-                                            <tr><td>停止理由</td><td>未払いによる停止</td></tr>
-                                            <tr><td>過去利用プラン</td><td>ナイト・セレクト 40A</td></tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-section">
-                                    <h4>3. 再開可否の審査</h4>
-                                    <div class="unpaid-info">
-                                        <div class="alert-box">
-                                            <span class="alert-icon">⚠️</span>
-                                            <div class="alert-content">
-                                                <strong>未払金確認: ¥15,430</strong><br>
-                                                再開条件: 分割払い3回（1回目：¥5,143）<br>
-                                                審査結果: <span class="status-approved">再開可能</span>
-                                            </div>
+                                    <h4>2. 新住所・利用開始日の確認</h4>
+                                    <div class="contract-info">
+                                        <div class="form-group">
+                                            <label for="newAddress">新住所:</label>
+                                            <input type="text" id="newAddress" class="form-input" placeholder="福岡県福岡市中央区天神2-2-2" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="startDate">利用開始日:</label>
+                                            <input type="date" id="startDate" class="form-input" value="2025-08-15" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="contractPlan">契約プラン:</label>
+                                            <select id="contractPlan" class="form-input">
+                                                <option value="night-select">ナイト・セレクト</option>
+                                                <option value="regular">レギュラー</option>
+                                                <option value="daytime">デイタイム</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="form-section">
-                                    <h4>4. サービス再開設定（システム上でのアクティベーション）</h4>
-                                    <div class="activation-process">
+                                    <h4>3. 契約審査・確認</h4>
+                                    <div class="contract-check">
+                                        <div class="check-item">
+                                            <span class="check-icon">✅</span>
+                                            <span class="check-text">住所確認: 福岡県福岡市中央区天神2-2-2</span>
+                                        </div>
+                                        <div class="check-item">
+                                            <span class="check-icon">✅</span>
+                                            <span class="check-text">利用開始日: 2025年8月15日</span>
+                                        </div>
+                                        <div class="check-item">
+                                            <span class="check-icon">✅</span>
+                                            <span class="check-text">既存顧客のため信用審査済み</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>4. 新規契約手続き実行</h4>
+                                    <div class="contract-process">
                                         <div class="process-step">
-                                            <span class="step-number">✓</span>
-                                            <span class="step-text">顧客データ復旧完了</span>
+                                            <span class="step-number">1</span>
+                                            <span class="step-text">新規契約データ作成</span>
+                                            <span class="step-status" id="contractCreateStatus">待機中</span>
                                         </div>
                                         <div class="process-step">
-                                            <span class="step-number">✓</span>
-                                            <span class="step-text">料金プラン設定完了</span>
+                                            <span class="step-number">2</span>
+                                            <span class="step-text">供給地点特定番号発行</span>
+                                            <span class="step-status" id="supplyPointStatus">待機中</span>
                                         </div>
                                         <div class="process-step">
-                                            <span class="step-number">✓</span>
-                                            <span class="step-text">システムアクティベーション完了</span>
+                                            <span class="step-number">3</span>
+                                            <span class="step-text">開通工事スケジュール設定</span>
+                                            <span class="step-status" id="scheduleStatus">待機中</span>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="form-section">
-                                    <h4>5. 顧客への通知・案内</h4>
+                                    <h4>5. 契約完了・顧客通知</h4>
                                     <div class="notification-result">
                                         <div class="result-card">
-                                            <h5>✅ アクティベーション完了通知</h5>
-                                            <div class="result-details">
-                                                <p><strong>再開完了ID:</strong> ACT-20250812-0001</p>
-                                                <p><strong>利用再開日:</strong> 2025年8月12日</p>
-                                                <p><strong>SLA:</strong> 1営業日以内で完了</p>
+                                            <h5 id="contractResultTitle">📄 新規契約手続き待機中</h5>
+                                            <div class="result-details" id="contractResultDetails">
+                                                <p><strong>新契約ID:</strong> <span id="newContractId">未生成</span></p>
+                                                <p><strong>開通予定日:</strong> <span id="connectionDate">2025年8月15日</span></p>
+                                                <p><strong>供給地点番号:</strong> <span id="newSupplyPoint">手続き中</span></p>
                                                 <p><strong>通知方法:</strong> 電子メール + SMS</p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="action-buttons">
-                                        <button class="action-btn" id="confirmRestore">再開設定実行</button>
-                                        <button class="action-btn">通知送信</button>
+                                        <button class="action-btn" id="confirmNewContract">新規契約実行</button>
+                                        <button class="action-btn">開通通知送信</button>
                                     </div>
                                 </div>
                             </div>
@@ -566,6 +615,81 @@
                                         <div class="action-buttons">
                                             <button class="action-btn" id="calculateBill">請求データ生成</button>
                                             <button class="action-btn">監査レポート出力</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- スクロールテスト用の追加セクション -->
+                                <div class="form-section">
+                                    <h4>7. 詳細計算内訳（スクロールテスト用）</h4>
+                                    <div class="detailed-breakdown">
+                                        <table class="breakdown-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>項目</th>
+                                                    <th>単価</th>
+                                                    <th>使用量</th>
+                                                    <th>金額</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><td>基本料金</td><td>¥1,100</td><td>-</td><td>¥1,100</td></tr>
+                                                <tr><td>従量料金 第1段階</td><td>¥17.46/kWh</td><td>120 kWh</td><td>¥2,095</td></tr>
+                                                <tr><td>従量料金 第2段階</td><td>¥23.06/kWh</td><td>100 kWh</td><td>¥2,306</td></tr>
+                                                <tr><td>燃料費調整額</td><td>¥-1.5/kWh</td><td>220 kWh</td><td>¥-330</td></tr>
+                                                <tr><td>再エネ発電賦課金</td><td>¥3.45/kWh</td><td>220 kWh</td><td>¥759</td></tr>
+                                                <tr><td>割引（ナイト・セレクト）</td><td>-</td><td>-</td><td>¥-200</td></tr>
+                                                <tr><td>消費税（10%）</td><td>-</td><td>-</td><td>¥573</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>8. 前年同月比較</h4>
+                                    <div class="comparison-data">
+                                        <div class="comparison-item">
+                                            <span class="label">前年同月使用量:</span>
+                                            <span class="value">245 kWh</span>
+                                        </div>
+                                        <div class="comparison-item">
+                                            <span class="label">前年同月料金:</span>
+                                            <span class="value">¥6,580</span>
+                                        </div>
+                                        <div class="comparison-item">
+                                            <span class="label">使用量差異:</span>
+                                            <span class="value comparison-decrease">-25 kWh (-10.2%)</span>
+                                        </div>
+                                        <div class="comparison-item">
+                                            <span class="label">料金差異:</span>
+                                            <span class="value comparison-decrease">¥-277 (-4.2%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>9. 省エネアドバイス</h4>
+                                    <div class="advice-content">
+                                        <div class="advice-item">
+                                            <span class="advice-icon">💡</span>
+                                            <div class="advice-text">
+                                                <h5>ピーク時間帯の使用量削減</h5>
+                                                <p>午後1時〜4時の使用量を20%削減すると、月額約¥300の節約が可能です。</p>
+                                            </div>
+                                        </div>
+                                        <div class="advice-item">
+                                            <span class="advice-icon">🌙</span>
+                                            <div class="advice-text">
+                                                <h5>夜間電力の有効活用</h5>
+                                                <p>23時〜7時の夜間時間帯は料金が約30%安く設定されています。</p>
+                                            </div>
+                                        </div>
+                                        <div class="advice-item">
+                                            <span class="advice-icon">📊</span>
+                                            <div class="advice-text">
+                                                <h5>季節別使用パターン</h5>
+                                                <p>夏場のエアコン使用量が全体の約40%を占めています。設定温度を1℃上げるだけで約10%の節約になります。</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
