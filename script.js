@@ -419,9 +419,8 @@ async function loadScenarios() {
                 "sharedInfo": [],
                 "operatorActions": [
                     { "type": "CUSTOMER_SEARCH", "name": "山田太郎", "phone": "092-123-4567", "address": "", "description": "顧客情報検索実行", "delay": 35000 },
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要", "delay": 37000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000, "delay": 39000 },
-                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス", "delay": 49000 },
+                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス", "delay": 37000 },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "契約番号確認", "duration": 2000, "delay": 39000 },
                     { "type": "HIGHLIGHT_FIELD", "fieldId": "currentPlan", "description": "料金プランを確認", "duration": 2000, "delay": 51000 },
                     { "type": "SWITCH_TAB", "tabId": "simulation", "tabName": "料金シミュレーション", "delay": 69000 },
                     { "type": "INPUT_DATA", "field": "usageInput", "value": "220", "description": "使用量データ入力", "delay": 71000 },
@@ -462,9 +461,6 @@ async function loadScenarios() {
                 ],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
-                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
                     { "type": "SWITCH_TAB", "tabId": "billing-history", "tabName": "請求履歴" },
                     { "type": "HIGHLIGHT_FIELD", "fieldId": "currentBill", "description": "請求書発行状況確認", "duration": 2000 },
                     { "type": "SWITCH_TAB", "tabId": "unpaid-management", "tabName": "未収管理" },
@@ -498,12 +494,9 @@ async function loadScenarios() {
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
-                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
                     { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
+                    { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "契約番号確認", "duration": 2000 },
                     { "type": "HIGHLIGHT_FIELD", "fieldId": "currentPlan", "description": "現在の契約内容確認", "duration": 2000 },
-                    { "type": "SWITCH_TAB", "tabId": "change-plan", "tabName": "契約変更" },
                     { "type": "SELECT_OPTION", "selector": "#newPlan", "value": "regular", "description": "新プラン選択" },
                     { "type": "HIGHLIGHT_FIELD", "fieldId": "planComparison", "description": "変更影響範囲確認", "duration": 2000 },
                     { "type": "CLICK_BUTTON", "buttonId": "confirmPlanChange", "description": "契約情報更新実行" }
@@ -535,9 +528,6 @@ async function loadScenarios() {
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
-                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
                     { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
                     { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "契約状況確認", "duration": 2000 },
                     { "type": "SWITCH_TAB", "tabId": "termination", "tabName": "契約廃止" },
@@ -1693,8 +1683,8 @@ function maybePushAISuggestionForAction(action) {
         }
 
         if (currentScenario.code === 'CONTRACT_CHANGE') {
-            if (action.type === 'SWITCH_TAB' && action.tabId === 'change-plan') {
-                addChatMessage('user', '契約変更タブで確認中です。レギュラー50Aへの変更影響は？', now, {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'contract-service') {
+                addChatMessage('user', '契約・サービスタブで確認中です。レギュラー50Aへの変更影響は？', now, {
                     type: 'operator_question',
                     linkedTo: 'operator_action',
                     scenario: currentScenario.code,
@@ -1728,6 +1718,22 @@ function maybePushAISuggestionForAction(action) {
         }
 
         if (currentScenario.code === 'CONTRACT_TERMINATION') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'contract-service') {
+                addChatMessage('user', '契約・サービスタブで契約状況を確認中です。解約条件に問題はありませんか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '契約状況を確認しました。契約状態は有効で、解約手続きに進むことができます。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1200);
+            }
             if (action.type === 'SWITCH_TAB' && action.tabId === 'termination') {
                 addChatMessage('user', '契約廃止タブを確認中です。解約条件に問題はありませんか？', now, {
                     type: 'operator_question',
@@ -2080,8 +2086,8 @@ function showCustomerSearch() {
     // 検索フィールドをクリア
     clearCustomerSearch();
     
-    // 概要タブをアクティブにリセット
-    switchTab('overview');
+    // 請求履歴タブをアクティブにリセット
+    switchTab('billing-history');
 }
 
 function showCustomerInfo(searchName, searchPhone, searchAddress) {
