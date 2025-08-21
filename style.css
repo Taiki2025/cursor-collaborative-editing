@@ -245,73 +245,7 @@ body {
     font-weight: 500;
 }
 
-/* トランスクリプトウィンドウ */
-.transcript-window {
-    background: #fff;
-    border: 1px solid #e1e5e9;
-    margin: 15px;
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.transcript-header {
-    background: #f8f9fa;
-    padding: 12px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e1e5e9;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.toggle-transcript {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 12px;
-    color: #666;
-    padding: 4px 8px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.toggle-transcript:hover {
-    background: #e9ecef;
-}
-
-.transcript-content {
-    padding: 15px;
-    max-height: 150px;
-    overflow-y: auto;
-}
-
-.transcript-item {
-    margin-bottom: 10px;
-    padding: 8px 12px;
-    background: #f8f9fa;
-    border-radius: 6px;
-    font-size: 13px;
-}
-
-.transcript-item .time {
-    color: #666;
-    font-size: 11px;
-    margin-right: 8px;
-}
-
-.transcript-item .speaker {
-    font-weight: 600;
-    margin-right: 8px;
-}
-
-.transcript-item .speaker.customer {
-    color: #005BAC;
-}
-
-.transcript-item .speaker.operator {
-    color: #28a745;
-}
+/* トランスクリプトウィンドウ（削除済み） */
 
 /* ログメッセージエリア */
 .log-message-area {
@@ -899,20 +833,21 @@ body {
 
 .tab-buttons {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* 1行で表示 */
     background: #f8f9fa;
     border-bottom: 1px solid #e1e5e9;
     overflow-x: auto;
     flex-shrink: 0; /* タブボタン領域は縮小しない */
-    min-height: 60px; /* タブボタンの最小高さを確保 */
+    min-height: 50px; /* タブボタンの高さを少し縮小 */
+    white-space: nowrap; /* テキストの折り返しを防ぐ */
 }
 
 .tab-button {
     background: none;
     border: none;
-    padding: 12px 18px;
+    padding: 10px 14px; /* パディングを少し縮小 */
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px; /* フォントサイズを少し縮小 */
     font-weight: 500;
     color: #64748b;
     transition: all 0.2s ease;
@@ -920,6 +855,9 @@ body {
     border-bottom: 3px solid transparent;
     position: relative;
     overflow: hidden;
+    width: 140px; /* 固定幅を設定して統一 */
+    flex-shrink: 0; /* 縮小を防ぐ */
+    text-align: center; /* テキストを中央揃え */
 }
 
 .tab-button::before {
@@ -960,7 +898,7 @@ body {
     flex: 1;
     overflow: hidden;
     position: relative;
-    height: calc(100% - 60px); /* タブボタン分の高さを除く */
+    height: calc(100% - 50px); /* タブボタン分の高さを除く（調整後） */
 }
 
 .tab-content {
@@ -1234,7 +1172,20 @@ body {
     color: #721c24;
 }
 
-/* 未収管理タブ */
+/* 未収管理セクション（統合後） */
+.unpaid-management-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e1e5e9;
+}
+
+.unpaid-management-section h4 {
+    margin-bottom: 20px;
+    color: #005BAC;
+    font-weight: 600;
+    font-size: 18px;
+}
+
 .unpaid-summary {
     margin-bottom: 25px;
 }
@@ -2251,14 +2202,15 @@ body {
     }
     
     .tab-buttons {
-        flex-wrap: wrap;
+        flex-wrap: nowrap; /* 1行を維持 */
+        overflow-x: auto;
     }
     
     .tab-button {
-        flex: 1 1 auto;
-        min-width: 120px;
-        font-size: 12px;
-        padding: 10px 12px;
+        flex-shrink: 0;
+        width: 120px; /* 固定幅に変更 */
+        font-size: 11px;
+        padding: 8px 10px;
     }
     
     .customer-card {
@@ -2362,9 +2314,9 @@ body {
     }
     
     .tab-button {
-        padding: 8px 10px;
-        font-size: 11px;
-        min-width: 80px;
+        padding: 6px 8px;
+        font-size: 10px;
+        width: 100px; /* 固定幅に変更 */
     }
 }
 
@@ -2954,19 +2906,15 @@ select:focus {
 .faq-button:hover { background: #e9eef3 !important; }
 
 /* 3) 余白/角丸縮小・フラット化（代表要素） */
-.transcript-window,
 .summary-window,
 .alert-panel,
 .shared-info-panel {
     margin: 12px !important;
     border-radius: 6px !important;
 }
-.transcript-header,
 .summary-header,
 .alert-header,
 .shared-info-header { padding: 8px 12px !important; font-size: 12px !important; }
-.transcript-content { padding: 10px 12px !important; max-height: 140px !important; }
-.transcript-item { padding: 6px 10px !important; margin-bottom: 8px !important; font-size: 12px !important; }
 .log-message-area { padding: 12px !important; }
 .message-entry { padding: 8px 10px !important; border-radius: 6px !important; margin-bottom: 10px !important; }
 
@@ -2984,12 +2932,23 @@ select:focus {
     box-shadow: none !important; 
     height: 520px !important; /* ダークモードでも固定高さ */
 }
-.tab-buttons { background: #fff !important; }
-.tab-button { padding: 10px 14px !important; font-size: 13px !important; }
+.tab-buttons { 
+    background: #fff !important; 
+    flex-wrap: nowrap !important; /* 1行で表示 */
+    overflow-x: auto !important;
+}
+.tab-button { 
+    padding: 8px 12px !important; 
+    font-size: 12px !important; 
+    width: 130px !important; /* 固定幅に変更 */
+    flex-shrink: 0 !important;
+    text-align: center !important; /* テキストを中央揃え */
+}
 .tab-button:hover { background: #f5f7fa !important; }
 .tab-content { 
     padding: 16px !important; 
     overflow-y: auto !important;
+    height: calc(100% - 50px) !important; /* タブボタン分の高さを除く（調整後） */
     /* ダークモード用スクロールバー */
     scrollbar-width: thin;
     scrollbar-color: #666 #333;
