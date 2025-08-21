@@ -181,20 +181,69 @@
                 
                 <div class="tabs-container" id="tabsContainer" style="display: none;">
                     <div class="tab-buttons" id="tabButtons">
-                        <button class="tab-button active" data-tab="billing-history">💰 請求履歴</button>
+                        <button class="tab-button active" data-tab="overview">📊 概要</button>
+                        <button class="tab-button" data-tab="billing-history">💰 請求履歴</button>
                         <button class="tab-button" data-tab="unpaid-management">⚠️ 未収管理</button>
                         <button class="tab-button" data-tab="contract-service">📋 契約・サービス</button>
                         <button class="tab-button" data-tab="restore-power">⚡ 再点申込</button>
                         <button class="tab-button" data-tab="simulation">🧮 使用量計算～料金計算</button>
+                        <button class="tab-button" data-tab="change-plan">🔄 契約変更</button>
                         <button class="tab-button" data-tab="termination">🚪 契約廃止</button>
                         <button class="tab-button" data-tab="interaction-history">📝 対応履歴</button>
                     </div>
                     
                     <div class="tab-contents">
-
+                        <!-- 顧客概要タブ -->
+                        <div class="tab-content active" id="overview">
+                            <h3>👤 顧客概要</h3>
+                            <div class="overview-grid">
+                                <div class="overview-card">
+                                    <h4>基本情報</h4>
+                                    <table>
+                                        <tr><td>顧客ID</td><td id="customerId">CUST-2025-0001</td></tr>
+                                        <tr><td>契約ID</td><td>CTR-09-1234-5678</td></tr>
+                                        <tr><td>顧客名</td><td>田中 太郎</td></tr>
+                                        <tr><td>電話番号</td><td>092-123-4567</td></tr>
+                                        <tr><td>メールアドレス</td><td>tanaka@example.com</td></tr>
+                                        <tr><td>住所</td><td>福岡県福岡市博多区博多駅前1-1-1</td></tr>
+                                    </table>
+                                </div>
+                                <div class="overview-card">
+                                    <h4>契約状況</h4>
+                                    <table>
+                                        <tr><td>契約状態</td><td><span class="status-active">有効</span></td></tr>
+                                        <tr><td>現在のプラン</td><td id="currentPlan">ナイト・セレクト</td></tr>
+                                        <tr><td>契約開始日</td><td>2020/10/01</td></tr>
+                                        <tr><td>更新日</td><td>2024/10/01</td></tr>
+                                        <tr><td>請求アンペア</td><td>40A</td></tr>
+                                    </table>
+                                </div>
+                                <div class="overview-card">
+                                    <h4>使用量・料金</h4>
+                                    <div class="usage-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-label">当月使用量</span>
+                                            <span class="stat-value" id="currentUsage">220 kWh</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-label">当月請求額</span>
+                                            <span class="stat-value" id="currentBill">¥7,980</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-label">未収金額</span>
+                                            <span class="stat-value" id="unpaidAmount">¥15,430</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-label">未収月数</span>
+                                            <span class="stat-value" id="unpaidMonths">3ヶ月</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
                         <!-- 請求履歴タブ -->
-                        <div class="tab-content active" id="billing-history">
+                        <div class="tab-content" id="billing-history">
                             <h3>💰 請求履歴</h3>
                             <div class="billing-summary">
                                 <div class="summary-card">
@@ -357,107 +406,6 @@
                                         <div class="stat-item">
                                             <span class="stat-label">直近使用量</span>
                                             <span class="stat-value">220 kWh</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- 契約変更セクション -->
-                                <div class="detail-section">
-                                    <h4>🔄 契約変更</h4>
-                                    <div class="contract-change-section">
-                                        <div class="form-section">
-                                            <h5>1. 変更申込受付</h5>
-                                            <div class="change-request">
-                                                <div class="request-item">
-                                                    <span class="label">変更種別:</span>
-                                                    <span class="value">プラン変更・アンペア変更</span>
-                                                </div>
-                                                <div class="request-item">
-                                                    <span class="label">申込日時:</span>
-                                                    <span class="value">2025/08/06 10:15</span>
-                                                </div>
-                                                <div class="request-item">
-                                                    <span class="label">希望変更内容:</span>
-                                                    <span class="value">レギュラープラン + 50A</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-section">
-                                            <h5>2. 変更可否・影響範囲の審査</h5>
-                                            <div class="change-review">
-                                                <table>
-                                                    <tr><td>現在プラン</td><td>ナイト・セレクト 40A</td><td>¥7,980/月</td></tr>
-                                                    <tr><td>変更後プラン</td><td>レギュラー 50A</td><td>¥9,400/月</td></tr>
-                                                    <tr><td>料金差額</td><td>+¥1,420/月</td><td>+¥17,040/年</td></tr>
-                                                    <tr><td>工事要否</td><td>アンペア変更工事</td><td>¥3,300</td></tr>
-                                                </table>
-                                                <div class="review-result">
-                                                    <span class="status-approved">✓ 変更可能</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-section">
-                                            <h5>3. システム上の契約情報更新</h5>
-                                            <div class="system-update">
-                                                <div class="update-step">
-                                                    <span class="step-number">✓</span>
-                                                    <span class="step-text">契約マスタ更新完了</span>
-                                                </div>
-                                                <div class="update-step">
-                                                    <span class="step-number">✓</span>
-                                                    <span class="step-text">料金プラン設定完了</span>
-                                                </div>
-                                                <div class="update-step">
-                                                    <span class="step-number">✓</span>
-                                                    <span class="step-text">アンペア容量更新完了</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-section">
-                                            <h5>4. 新料金計算設定</h5>
-                                            <div class="new-rate-setting" id="planComparison">
-                                                <div class="rate-calc">
-                                                    <div class="calc-item">
-                                                        <span class="calc-label">新基本料金 (50A):</span>
-                                                        <span class="calc-value">¥3,000</span>
-                                                    </div>
-                                                    <div class="calc-item">
-                                                        <span class="calc-label">従量料金単価:</span>
-                                                        <span class="calc-value">¥29.1/kWh</span>
-                                                    </div>
-                                                    <div class="calc-item">
-                                                        <span class="calc-label">差額請求:</span>
-                                                        <span class="calc-value">¥1,420/月</span>
-                                                    </div>
-                                                    <div class="calc-item">
-                                                        <span class="calc-label">適用開始:</span>
-                                                        <span class="calc-value">2025/09/01</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-section">
-                                            <h5>5. 顧客への変更完了通知</h5>
-                                            <div class="change-result">
-                                                <div class="result-card success">
-                                                    <h6>✅ 契約変更完了</h6>
-                                                    <div class="result-details">
-                                                        <p><strong>変更ID:</strong> CHG-20250806-0001</p>
-                                                        <p><strong>変更日時:</strong> 2025/08/06 10:15</p>
-                                                        <p><strong>新契約内容:</strong> レギュラー 50A</p>
-                                                        <p><strong>適用開始:</strong> 2025/09/01</p>
-                                                        <p><strong>通知方法:</strong> 変更後契約書 + メール通知</p>
-                                                    </div>
-                                                </div>
-                                                <div class="action-buttons">
-                                                    <button class="action-btn" id="confirmPlanChange">契約変更実行</button>
-                                                    <button class="action-btn">変更通知送信</button>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -748,7 +696,106 @@
                             </div>
                         </div>
                         
-
+                        <!-- 契約変更タブ -->
+                        <div class="tab-content" id="change-plan">
+                            <h3>🔄 契約変更</h3>
+                            <div class="plan-change-form">
+                                <div class="form-section">
+                                    <h4>1. 変更申込受付</h4>
+                                    <div class="change-request">
+                                        <div class="request-item">
+                                            <span class="label">変更種別:</span>
+                                            <span class="value">プラン変更・アンペア変更</span>
+                                        </div>
+                                        <div class="request-item">
+                                            <span class="label">申込日時:</span>
+                                            <span class="value">2025/08/06 10:15</span>
+                                        </div>
+                                        <div class="request-item">
+                                            <span class="label">希望変更内容:</span>
+                                            <span class="value">レギュラープラン + 50A</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>2. 変更可否・影響範囲の審査</h4>
+                                    <div class="change-review">
+                                        <table>
+                                            <tr><td>現在プラン</td><td>ナイト・セレクト 40A</td><td>¥7,980/月</td></tr>
+                                            <tr><td>変更後プラン</td><td>レギュラー 50A</td><td>¥9,400/月</td></tr>
+                                            <tr><td>料金差額</td><td>+¥1,420/月</td><td>+¥17,040/年</td></tr>
+                                            <tr><td>工事要否</td><td>アンペア変更工事</td><td>¥3,300</td></tr>
+                                        </table>
+                                        <div class="review-result">
+                                            <span class="status-approved">✓ 変更可能</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>3. システム上の契約情報更新</h4>
+                                    <div class="system-update">
+                                        <div class="update-step">
+                                            <span class="step-number">✓</span>
+                                            <span class="step-text">契約マスタ更新完了</span>
+                                        </div>
+                                        <div class="update-step">
+                                            <span class="step-number">✓</span>
+                                            <span class="step-text">料金プラン設定完了</span>
+                                        </div>
+                                        <div class="update-step">
+                                            <span class="step-number">✓</span>
+                                            <span class="step-text">アンペア容量更新完了</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>4. 新料金計算設定</h4>
+                                    <div class="new-rate-setting" id="planComparison">
+                                        <div class="rate-calc">
+                                            <div class="calc-item">
+                                                <span class="calc-label">新基本料金 (50A):</span>
+                                                <span class="calc-value">¥3,000</span>
+                                            </div>
+                                            <div class="calc-item">
+                                                <span class="calc-label">従量料金単価:</span>
+                                                <span class="calc-value">¥29.1/kWh</span>
+                                            </div>
+                                            <div class="calc-item">
+                                                <span class="calc-label">差額請求:</span>
+                                                <span class="calc-value">¥1,420/月</span>
+                                            </div>
+                                            <div class="calc-item">
+                                                <span class="calc-label">適用開始:</span>
+                                                <span class="calc-value">2025/09/01</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>5. 顧客への変更完了通知</h4>
+                                    <div class="change-result">
+                                        <div class="result-card success">
+                                            <h5>✅ 契約変更完了</h5>
+                                            <div class="result-details">
+                                                <p><strong>変更ID:</strong> CHG-20250806-0001</p>
+                                                <p><strong>変更日時:</strong> 2025/08/06 10:15</p>
+                                                <p><strong>新契約内容:</strong> レギュラー 50A</p>
+                                                <p><strong>適用開始:</strong> 2025/09/01</p>
+                                                <p><strong>通知方法:</strong> 変更後契約書 + メール通知</p>
+                                            </div>
+                                        </div>
+                                        <div class="action-buttons">
+                                            <button class="action-btn" id="confirmPlanChange">契約変更実行</button>
+                                            <button class="action-btn">変更通知送信</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
                         <!-- 契約廃止タブ -->
                         <div class="tab-content" id="termination">

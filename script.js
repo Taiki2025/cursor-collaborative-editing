@@ -20,7 +20,7 @@ const elements = {
     voiceButton: document.getElementById('voiceButton'),
     faqButton: document.getElementById('faqButton'),
     
-    // 通話ログ関連（transcript機能追加）
+    // 通話ログ関連
     transcriptToggle: document.getElementById('transcriptToggle'),
     transcriptContent: document.getElementById('transcriptContent'),
     logMessageArea: document.getElementById('logMessageArea'),
@@ -88,23 +88,93 @@ async function initializeApp() {
 // キーワードデータの読み込み
 async function loadKeywords() {
     try {
+        // 外部ファイルの読み込みを試行（CORSエラー対策のためコメントアウト）
+        // const response = await fetch('dummy_data_v2.json');
+        // const data = await response.json();
+        // keywords = data.keywords || [];
+        
+        // 直接データを埋め込み（CORSエラー回避）
         keywords = [
-            { "scenario": "RESTORE_POWER", "trigger": "再開", "bot_prompt": "サービス再開のお申込みですね。契約番号をお願いします。" },
-            { "scenario": "RESTORE_POWER", "trigger": "再点", "bot_prompt": "再点申込の手続きをご案内します。契約番号をお願いします。" },
-            { "scenario": "RESTORE_POWER", "trigger": "利用再開", "bot_prompt": "サービス再開のお申込みですね。過去の契約履歴を確認いたします。" },
-            { "scenario": "USAGE_CALCULATION", "trigger": "使用量", "bot_prompt": "使用量計算について詳しくご説明いたします。契約番号をお願いします。" },
-            { "scenario": "USAGE_CALCULATION", "trigger": "料金計算", "bot_prompt": "料金計算の詳細をご案内します。契約番号をお願いします。" },
-            { "scenario": "USAGE_CALCULATION", "trigger": "計算方法", "bot_prompt": "料金の計算方法についてご説明いたします。" },
-            { "scenario": "BILLING_MANAGEMENT", "trigger": "請求書", "bot_prompt": "請求書の発行状況を確認いたします。契約番号をお願いします。" },
-            { "scenario": "BILLING_MANAGEMENT", "trigger": "未収", "bot_prompt": "未収金についてのご相談ですね。債権管理状況を確認いたします。" },
-            { "scenario": "BILLING_MANAGEMENT", "trigger": "支払い", "bot_prompt": "お支払いについてのご相談ですね。入金状況を確認いたします。" },
-            { "scenario": "CONTRACT_CHANGE", "trigger": "契約変更", "bot_prompt": "契約変更の手続きをご案内します。変更内容をお聞かせください。" },
-            { "scenario": "CONTRACT_CHANGE", "trigger": "プラン変更", "bot_prompt": "プラン変更のご相談ですね。現在の契約内容と変更希望を確認いたします。" },
-            { "scenario": "CONTRACT_CHANGE", "trigger": "住所変更", "bot_prompt": "住所変更の手続きをご案内します。契約番号をお願いします。" },
-            { "scenario": "CONTRACT_CHANGE", "trigger": "オプション追加", "bot_prompt": "オプション追加のご相談ですね。変更可否を審査いたします。" },
-            { "scenario": "CONTRACT_TERMINATION", "trigger": "解約", "bot_prompt": "契約廃止のお申出ですね。解約条件を確認いたします。" },
-            { "scenario": "CONTRACT_TERMINATION", "trigger": "契約廃止", "bot_prompt": "契約廃止の手続きをご案内します。解約理由をお聞かせください。" },
-            { "scenario": "CONTRACT_TERMINATION", "trigger": "契約終了", "bot_prompt": "契約終了のお手続きですね。最終精算についてご案内いたします。" }
+            {
+                "scenario": "RESTORE_POWER",
+                "trigger": "再開",
+                "bot_prompt": "サービス再開のお申込みですね。契約番号をお願いします。"
+            },
+            {
+                "scenario": "RESTORE_POWER",
+                "trigger": "再点",
+                "bot_prompt": "再点申込の手続きをご案内します。契約番号をお願いします。"
+            },
+            {
+                "scenario": "RESTORE_POWER",
+                "trigger": "利用再開",
+                "bot_prompt": "サービス再開のお申込みですね。過去の契約履歴を確認いたします。"
+            },
+            {
+                "scenario": "USAGE_CALCULATION",
+                "trigger": "使用量",
+                "bot_prompt": "使用量計算について詳しくご説明いたします。契約番号をお願いします。"
+            },
+            {
+                "scenario": "USAGE_CALCULATION",
+                "trigger": "料金計算",
+                "bot_prompt": "料金計算の詳細をご案内します。契約番号をお願いします。"
+            },
+            {
+                "scenario": "USAGE_CALCULATION",
+                "trigger": "計算方法",
+                "bot_prompt": "料金の計算方法についてご説明いたします。"
+            },
+            {
+                "scenario": "BILLING_MANAGEMENT",
+                "trigger": "請求書",
+                "bot_prompt": "請求書の発行状況を確認いたします。契約番号をお願いします。"
+            },
+            {
+                "scenario": "BILLING_MANAGEMENT",
+                "trigger": "未収",
+                "bot_prompt": "未収金についてのご相談ですね。債権管理状況を確認いたします。"
+            },
+            {
+                "scenario": "BILLING_MANAGEMENT",
+                "trigger": "支払い",
+                "bot_prompt": "お支払いについてのご相談ですね。入金状況を確認いたします。"
+            },
+            {
+                "scenario": "CONTRACT_CHANGE",
+                "trigger": "契約変更",
+                "bot_prompt": "契約変更の手続きをご案内します。変更内容をお聞かせください。"
+            },
+            {
+                "scenario": "CONTRACT_CHANGE",
+                "trigger": "プラン変更",
+                "bot_prompt": "プラン変更のご相談ですね。現在の契約内容と変更希望を確認いたします。"
+            },
+            {
+                "scenario": "CONTRACT_CHANGE",
+                "trigger": "住所変更",
+                "bot_prompt": "住所変更の手続きをご案内します。契約番号をお願いします。"
+            },
+            {
+                "scenario": "CONTRACT_CHANGE",
+                "trigger": "オプション追加",
+                "bot_prompt": "オプション追加のご相談ですね。変更可否を審査いたします。"
+            },
+            {
+                "scenario": "CONTRACT_TERMINATION",
+                "trigger": "解約",
+                "bot_prompt": "契約廃止のお申出ですね。解約条件を確認いたします。"
+            },
+            {
+                "scenario": "CONTRACT_TERMINATION",
+                "trigger": "契約廃止",
+                "bot_prompt": "契約廃止の手続きをご案内します。解約理由をお聞かせください。"
+            },
+            {
+                "scenario": "CONTRACT_TERMINATION",
+                "trigger": "契約終了",
+                "bot_prompt": "契約終了のお手続きですね。最終精算についてご案内いたします。"
+            }
         ];
         console.log('キーワードデータ読み込み完了:', keywords.length, '件');
     } catch (error) {
@@ -115,6 +185,12 @@ async function loadKeywords() {
 // シナリオデータの読み込み
 async function loadScenarios() {
     try {
+        // 外部ファイルの読み込みを試行（CORSエラー対策のためコメントアウト）
+        // const response = await fetch('dummy_data_v2.json');
+        // const data = await response.json();
+        // scenarios = data.scenarios || [];
+        
+        // 直接データを埋め込み（CORSエラー回避）
         scenarios = [
             {
                 "code": "RESTORE_POWER",
@@ -122,38 +198,126 @@ async function loadScenarios() {
                 "icon": "⚡",
                 "transcript": [
                     { "timestamp": "14:00:01", "speaker": "顧客", "text": "もしもし、電気が止まってしまったんですが…" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "電力供給停止のご相談ですね。契約番号をお聞かせください。" },
-                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "契約番号は CUST-2025-0001 です。引っ越しの関係で…" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "新住所と利用開始日を確認させていただきます。" },
-                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "福岡県福岡市中央区天神2-2-2で、8月15日からお願いします。" },
-                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "承知いたしました。新規契約手続きを開始いたします。" }
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "申し訳ございません。電気が止まっているとのことですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
+                    { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
+                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
+                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "現在のご住所もお聞かせください。" },
+                    { "timestamp": "14:00:22", "speaker": "顧客", "text": "福岡県福岡市博多区博多駅前1-1-1です。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "お客様情報を検索いたします。停電の原因を確認いたします。" },
+                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "確認いたしました。未収金額¥15,430がございます。お支払い確認後に再開可能です。" },
+                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "分割での支払いは可能でしょうか？" },
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "はい、3回分割でしたら可能です。再開希望日はいかがいたしますか？" },
+                    { "timestamp": "14:00:45", "speaker": "顧客", "text": "明日の午後1時からお願いします。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "承知いたします。8月12日13時から電気を再開いたします。分割払い設定も完了しました。" },
+                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "予約ID：RES-20250812-0001で確定いたします。" },
+                    { "timestamp": "14:01:00", "speaker": "顧客", "text": "ありがとうございます。助かりました。" },
+                    { "timestamp": "14:01:05", "speaker": "オペレーター", "text": "ありがとうございました。再開後のご利用をお待ちしております。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:10", "summary": "顧客からの電力再点申込相談" },
-                    { "time": "14:00:20", "summary": "契約番号 CUST-2025-0001 確認完了" },
-                    { "time": "14:00:30", "summary": "新住所：福岡県福岡市中央区天神2-2-2" },
-                    { "time": "14:00:40", "summary": "利用開始日：2025年8月15日設定" },
-                    { "time": "14:00:50", "summary": "新規契約手続き開始" }
+                    { "time": "14:00:25", "summary": "顧客情報検索・停電原因確認開始" },
+                    { "time": "14:00:30", "summary": "未収金¥15,430確認・支払い条件調整" },
+                    { "time": "14:00:40", "summary": "3回分割払い承認・再開日程調整" },
+                    { "time": "14:00:50", "summary": "再開設定完了：2025/08/12 13:00より供給再開" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "restore-power", "tabName": "再点申込", "delay": 3000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "newAddress", "description": "新住所確認", "duration": 2000, "delay": 1000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "startDate", "description": "利用開始日確認", "duration": 2000, "delay": 1000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmNewContract", "description": "新規契約実行", "delay": 2000 }
+                    // Phase 1: 顧客情報の段階的入力（顧客の発言と同時にリアルタイム入力）
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
+                    },
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchAddress", 
+                        "value": "福岡県福岡市博多区博多駅前1-1-1", 
+                        "description": "顧客住所をリアルタイム入力",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 2: 顧客検索実行（8番目の会話「お客様情報を検索いたします」と同時）
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 15000
+                    },
+                    
+                    // Phase 3: 未収管理タブで未収確認（9番目の会話「未収金額確認」と同時）
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "unpaid-management", 
+                        "tabName": "未収管理",
+                        "description": "未収金額確認",
+                        "delay": 19000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "unpaidAmount", 
+                        "description": "未収金額¥15,430を確認",
+                        "duration": 2000,
+                        "delay": 20000
+                    },
+                    
+                    // Phase 4: 分割払い設定（10番目の会話「分割での支払いは可能でしょうか」の後）
+                    { 
+                        "type": "SELECT_OPTION", 
+                        "selector": "#paymentMethod", 
+                        "value": "installment", 
+                        "description": "分割払い設定",
+                        "delay": 23000
+                    },
+                    
+                    // Phase 5: 再点申込タブに移動（11番目の会話「再開希望日は」と同時）
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "restore-power", 
+                        "tabName": "再点申込",
+                        "description": "再点申込画面に移動",
+                        "delay": 25000
+                    },
+                    
+                    // Phase 6: 再開日時設定（12番目の会話「明日の午後1時」の後）
+                    { 
+                        "type": "INPUT_DATA", 
+                        "field": "restoreDate", 
+                        "value": "2025-08-12", 
+                        "description": "再開日設定",
+                        "delay": 27000
+                    },
+                    { 
+                        "type": "INPUT_DATA", 
+                        "field": "restoreTime", 
+                        "value": "13:00", 
+                        "description": "再開時刻設定",
+                        "delay": 28000
+                    },
+                    
+                    // Phase 7: 再開手続き実行（13番目の会話「再開いたします」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "confirmRestore", 
+                        "description": "電気再開手続き実行",
+                        "delay": 30000
+                    }
                 ],
                 "aiGuidance": [
-                    {
-                        "trigger": "tab_switch_restore-power",
-                        "message": "再点申込の手続きを開始します。新住所と利用開始日を確認してください。",
-                        "options": ["新住所を入力", "利用開始日を選択", "契約審査実行"]
-                    },
-                    {
-                        "trigger": "click_confirmNewContract",
-                        "message": "新規契約手続きが完了しました。顧客に開通予定日を案内してください。",
-                        "options": ["開通通知送信", "契約書作成", "手続き完了報告"]
-                    }
+                    { "trigger": "scenario_start", "message": "電気が止まっているとのご連絡です。停電対応の手順を開始しますか？", "options": ["はい", "いいえ"] },
+                    { "trigger": "customer_identified", "message": "顧客情報が確認できました。未収金の確認を行いますか？", "options": ["はい", "いいえ"] },
+                    { "trigger": "unpaid_found", "message": "未収金¥15,430が確認されました。分割払いでの対応を提案しますか？", "options": ["分割払い提案", "一括払い要求", "その他"] },
+                    { "trigger": "payment_arranged", "message": "支払い条件が決まりました。再開日時を調整してください。", "options": ["日時調整", "即時再開", "後日連絡"] },
+                    { "trigger": "restore_ready", "message": "再開手続きの準備が完了しました。実行してよろしいですか？", "options": ["実行", "保留", "確認"] },
+                    { "trigger": "process_complete", "message": "電気再開手続きが完了しました。顧客への通知を行ってください。", "options": ["通知送信", "完了"] }
                 ]
             },
             {
@@ -161,38 +325,106 @@ async function loadScenarios() {
                 "name": "使用量計算～料金計算",
                 "icon": "🧮",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "今月の使用量計算について確認したいのですが" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "使用量計算についてご案内いたします。契約番号をお聞かせください。" },
-                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "CUST-2025-0001です。計算方法が知りたくて…" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "スマートメーターのデータを確認いたします。220kWhのご使用量ですね。" },
-                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "料金の内訳も詳しく教えてください。" },
-                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "基本料金と従量料金に分けてご説明いたします。" }
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "今月の料金計算について詳しく教えてください" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。料金計算の詳細をご説明いたします。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
+                    { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
+                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
+                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "お客様情報を検索いたします。スマートメーターから使用量データを収集中です。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "7月分の使用量は220kWhでした。前月比で15kWh減少しています。" },
+                    { "timestamp": "14:00:35", "speaker": "オペレーター", "text": "ナイト・セレクトプランで計算いたします。基本料金¥2,400、従量料金¥5,580です。" },
+                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "異常値チェックも完了し、エラーはありませんでした。" },
+                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "最終的な請求額は¥7,980となります。詳細な内訳をお送りいたします。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:10", "summary": "使用量計算・料金計算の問い合わせ" },
-                    { "time": "14:00:20", "summary": "契約番号 CUST-2025-0001 確認、メーターデータ収集開始" },
-                    { "time": "14:00:30", "summary": "使用量220kWh確認、プラン条件確認" },
-                    { "time": "14:00:40", "summary": "料金内訳説明：基本¥2,400 + 従量¥5,580" },
-                    { "time": "14:00:50", "summary": "請求データ生成完了" }
+                    { "time": "14:00:15", "summary": "利用ログ・メーター情報の収集開始" },
+                    { "time": "14:00:25", "summary": "使用量220kWh確認、料金プランマッチング実施" },
+                    { "time": "14:00:35", "summary": "ナイト・セレクト適用：基本¥2,400＋従量¥5,580" },
+                    { "time": "14:00:45", "summary": "課金エラー検知・異常値チェック完了" },
+                    { "time": "14:00:55", "summary": "請求データ生成完了：¥7,980" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "simulation", "tabName": "使用量計算～料金計算", "delay": 3000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "usageInput", "description": "使用量データ確認", "duration": 2000, "delay": 1000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "calculationProcess", "description": "料金計算過程表示", "duration": 3000, "delay": 1000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "calculateBill", "description": "請求データ生成", "delay": 2000 }
-                ],
-                "aiGuidance": [
-                    {
-                        "trigger": "tab_switch_simulation",
-                        "message": "使用量計算システムにアクセスしました。メーターデータを確認してください。",
-                        "options": ["使用量を確認", "プラン情報を表示", "計算を開始"]
+                    // Phase 1: 顧客情報の段階的入力
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
                     },
-                    {
-                        "trigger": "click_calculateBill",
-                        "message": "料金計算が完了しました。請求データが生成されています。",
-                        "options": ["内訳を説明", "請求書発行", "顧客に通知"]
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    
+                    // Phase 2: 顧客検索実行
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 3: 契約・サービスタブで料金プラン確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "contract-service", 
+                        "tabName": "契約・サービス",
+                        "description": "料金プラン確認",
+                        "delay": 17000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "currentPlan", 
+                        "description": "ナイト・セレクトプランを確認",
+                        "duration": 2000,
+                        "delay": 18000
+                    },
+                    
+                    // Phase 4: 料金シミュレーションタブに移動
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "simulation", 
+                        "tabName": "料金シミュレーション",
+                        "description": "料金計算画面に移動",
+                        "delay": 22000
+                    },
+                    
+                    // Phase 5: 使用量データ入力（7番目の会話「220kWh」と同時）
+                    { 
+                        "type": "INPUT_DATA", 
+                        "field": "usageInput", 
+                        "value": "220", 
+                        "description": "使用量220kWh入力",
+                        "delay": 25000
+                    },
+                    
+                    // Phase 6: 料金計算実行（8番目の会話「計算いたします」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "calculateBill", 
+                        "description": "料金計算処理実行",
+                        "delay": 35000
+                    },
+                    
+                    // Phase 7: 請求履歴タブで結果確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "billing-history", 
+                        "tabName": "請求履歴",
+                        "description": "計算結果確認",
+                        "delay": 50000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "currentBill", 
+                        "description": "請求額¥7,980確認",
+                        "duration": 2000,
+                        "delay": 51000
                     }
                 ]
             },
@@ -201,18 +433,21 @@ async function loadScenarios() {
                 "name": "請求・未収管理",
                 "icon": "💰",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "請求書が届いていないのですが…" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "請求書の発行状況を確認いたします。契約番号をお聞かせください。" },
-                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "CUST-2025-0001です。未収があると聞いたのですが…" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "未収金額¥15,430が3ヶ月分ございます。分割払いも可能です。" },
-                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "分割でお願いします。3回払いでできますか？" },
-                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "3回分割で設定いたします。債権管理帳票を更新いたします。" }
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "未払いの請求について相談したいのですが" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。未収金のご相談ですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
+                    { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
+                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
+                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "お客様情報を検索いたします。請求書の発行状況を確認いたします。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "確認いたしました。¥15,430の未入金が3ヶ月分ございます。" },
+                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "分割での支払いは可能でしょうか？" },
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "はい、3回分割でのお支払いが可能です。催促状の送付も停止いたします。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "分割払い設定を完了いたします。債権管理システムも更新いたします。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:10", "summary": "請求書未着問い合わせ" },
-                    { "time": "14:00:20", "summary": "契約番号確認、請求・未収状況調査" },
-                    { "time": "14:00:30", "summary": "未収金額¥15,430（3ヶ月分）確認" },
-                    { "time": "14:00:40", "summary": "分割払い（3回）設定" },
+                    { "time": "14:00:15", "summary": "請求書発行状況確認：郵送・Web請求書発行済み" },
+                    { "time": "14:00:25", "summary": "入金確認・差額チェック：未入金¥15,430検出" },
+                    { "time": "14:00:40", "summary": "分割払い条件調整、催促状送付停止" },
                     { "time": "14:00:50", "summary": "債権管理帳票更新完了" }
                 ],
                 "alerts": [
@@ -225,23 +460,76 @@ async function loadScenarios() {
                 ],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "billing-history", "tabName": "請求履歴", "delay": 3000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentBill", "description": "請求書発行状況確認", "duration": 2000, "delay": 1000 },
-                    { "type": "SWITCH_TAB", "tabId": "unpaid-management", "tabName": "未収管理", "delay": 2000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidAmount", "description": "未入金額確認", "duration": 2000, "delay": 1000 },
-                    { "type": "SELECT_OPTION", "selector": "#paymentMethod", "value": "installment", "description": "分割払い設定", "delay": 1000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmPayment", "description": "債権管理帳票更新", "delay": 2000 }
-                ],
-                "aiGuidance": [
-                    {
-                        "trigger": "tab_switch_billing-history",
-                        "message": "請求履歴を確認中です。未収金額があります。",
-                        "options": ["未収管理画面へ", "支払い方法変更", "督促状況確認"]
+                    // Phase 1: 顧客情報の段階的入力
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
                     },
-                    {
-                        "trigger": "click_confirmPayment",
-                        "message": "分割払い設定が完了しました。債権管理帳票が更新されています。",
-                        "options": ["支払計画通知", "督促停止設定", "顧客フォロー"]
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    
+                    // Phase 2: 顧客検索実行
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 3: 請求履歴タブで発行状況確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "billing-history", 
+                        "tabName": "請求履歴",
+                        "description": "請求書発行状況確認",
+                        "delay": 17000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "currentBill", 
+                        "description": "請求書発行状況を確認",
+                        "duration": 2000,
+                        "delay": 18000
+                    },
+                    
+                    // Phase 4: 未収管理タブで未収金確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "unpaid-management", 
+                        "tabName": "未収管理",
+                        "description": "未収金額確認",
+                        "delay": 22000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "unpaidAmount", 
+                        "description": "未収金¥15,430を確認",
+                        "duration": 2000,
+                        "delay": 25000
+                    },
+                    
+                    // Phase 5: 分割払い設定（8番目の会話「分割での支払いは」の後）
+                    { 
+                        "type": "SELECT_OPTION", 
+                        "selector": "#paymentMethod", 
+                        "value": "installment", 
+                        "description": "分割払い設定",
+                        "delay": 35000
+                    },
+                    
+                    // Phase 6: 債権管理更新（9番目の会話「債権管理システムも更新」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "confirmPayment", 
+                        "description": "債権管理帳票更新実行",
+                        "delay": 50000
                     }
                 ]
             },
@@ -250,37 +538,96 @@ async function loadScenarios() {
                 "name": "契約変更",
                 "icon": "🔄",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "プランを変更したいのですが…" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "契約変更のご相談ですね。現在のプランと変更希望をお聞かせください。" },
-                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "ナイト・セレクトからレギュラープランに変えたいです。アンペアも50Aに。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "変更可否を確認いたします。料金差額とアンペア工事費が発生します。" },
-                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "金額はいくらぐらいになりますか？" },
-                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "月額¥1,420増、工事費¥3,300となります。変更手続きを進めますか？" }
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "契約内容を変更したいのですが" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。契約変更のご相談ですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
+                    { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
+                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。プランとアンペア数を変更したいです。" },
+                    { "timestamp": "14:00:20", "speaker": "オペレーター", "text": "お客様情報を検索いたします。変更可否と影響範囲を審査いたします。" },
+                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "レギュラープラン50Aへの変更で、月額¥1,420の増額になります。" },
+                    { "timestamp": "14:00:40", "speaker": "顧客", "text": "はい、お願いします。" },
+                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "システム上の契約情報を更新します。" },
+                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "新料金計算設定完了。変更完了通知を送付いたします。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:10", "summary": "契約変更申込：プラン変更・アンペア変更" },
-                    { "time": "14:00:20", "summary": "変更内容：ナイト・セレクト40A → レギュラー50A" },
-                    { "time": "14:00:30", "summary": "変更可否審査：変更可能、料金差額・工事費確認" },
-                    { "time": "14:00:40", "summary": "料金影響：+¥1,420/月、工事費¥3,300" },
-                    { "time": "14:00:50", "summary": "契約変更手続き承認待ち" }
+                    { "time": "14:00:20", "summary": "変更申込受付：プラン・アンペア変更希望" },
+                    { "time": "14:00:30", "summary": "変更可否・影響範囲審査：レギュラー50A、+¥1,420/月" },
+                    { "time": "14:00:45", "summary": "システム契約情報更新実行" },
+                    { "time": "14:00:55", "summary": "新料金計算設定・変更完了通知送付" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス", "delay": 3000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "planComparison", "description": "プラン比較確認", "duration": 3000, "delay": 1000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmPlanChange", "description": "契約変更実行", "delay": 2000 }
-                ],
-                "aiGuidance": [
-                    {
-                        "trigger": "tab_switch_contract-service",
-                        "message": "契約変更システムにアクセスしました。変更内容を確認してください。",
-                        "options": ["変更可否確認", "料金影響確認", "変更実行"]
+                    // Phase 1: 顧客情報の段階的入力
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
                     },
-                    {
-                        "trigger": "click_confirmPlanChange",
-                        "message": "契約変更が完了しました。変更通知を顧客に送信してください。",
-                        "options": ["変更通知送信", "契約書更新", "手続き完了報告"]
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    
+                    // Phase 2: 顧客検索実行
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 3: 契約・サービスタブで現在の契約確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "contract-service", 
+                        "tabName": "契約・サービス",
+                        "description": "現在の契約内容確認",
+                        "delay": 17000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "currentPlan", 
+                        "description": "現在のナイト・セレクトプランを確認",
+                        "duration": 2000,
+                        "delay": 20000
+                    },
+                    
+                    // Phase 4: 契約変更タブに移動
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "change-plan", 
+                        "tabName": "契約変更",
+                        "description": "契約変更画面に移動",
+                        "delay": 25000
+                    },
+                    
+                    // Phase 5: 新プラン選択（7番目の会話「レギュラープラン50A」と同時）
+                    { 
+                        "type": "SELECT_OPTION", 
+                        "selector": "#newPlan", 
+                        "value": "regular", 
+                        "description": "レギュラープラン選択",
+                        "delay": 30000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "planComparison", 
+                        "description": "変更影響範囲確認：+¥1,420/月",
+                        "duration": 2000,
+                        "delay": 32000
+                    },
+                    
+                    // Phase 6: 契約変更実行（9番目の会話「システム上の契約情報を更新」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "confirmPlanChange", 
+                        "description": "契約変更手続き実行",
+                        "delay": 45000
                     }
                 ]
             },
@@ -289,41 +636,97 @@ async function loadScenarios() {
                 "name": "契約廃止",
                 "icon": "🚪",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "引っ越しのため契約を廃止したいのですが…" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "契約廃止のお手続きですね。廃止理由と希望日をお聞かせください。" },
-                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "引っ越しで、7月31日で廃止したいです。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "解約条件を確認いたします。違約金等はございません。" },
-                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "最終の精算はどうなりますか？" },
-                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "7月分の精算¥7,093となります。解約手続きを開始いたします。" }
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "契約を完全に終了したいのですが" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "解約のお申出ですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
+                    { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
+                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
+                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "お客様情報を検索いたします。解約条件を確認いたします。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "確認いたしました。最低利用期間と違約金はございません。" },
+                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "7月31日で終了でお願いします。" },
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "承知いたします。最終請求の精算と解約手続きを進めます。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "解約手続き完了いたします。解約証明書を送付いたします。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:10", "summary": "契約廃止申込：引っ越しに伴う解約" },
-                    { "time": "14:00:20", "summary": "廃止理由：引っ越し、希望廃止日：2025/07/31" },
-                    { "time": "14:00:30", "summary": "解約条件確認：違約金なし、解約可能" },
-                    { "time": "14:00:40", "summary": "最終精算額：¥7,093（7月分）" },
-                    { "time": "14:00:50", "summary": "解約手続き開始、完了通知準備" }
+                    { "time": "14:00:15", "summary": "解約申請受付：契約終了希望" },
+                    { "time": "14:00:25", "summary": "解約条件確認：最低利用期間・違約金なし" },
+                    { "time": "14:00:35", "summary": "解約日設定：2025/07/31" },
+                    { "time": "14:00:40", "summary": "最終精算請求・機器返却手配" },
+                    { "time": "14:00:50", "summary": "解約完了通知・証明書送付手配" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス", "delay": 3000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "契約状況確認", "duration": 2000, "delay": 1000 },
-                    { "type": "SWITCH_TAB", "tabId": "termination", "tabName": "契約廃止", "delay": 2000 },
-                    { "type": "SELECT_OPTION", "selector": "#terminationReason", "value": "moving", "description": "廃止理由設定", "delay": 1000 },
-                    { "type": "INPUT_DATA", "field": "terminationDate", "value": "2025-07-31", "description": "解約日設定", "delay": 1000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "finalBill", "description": "最終精算額確認", "duration": 2000, "delay": 1000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmTermination", "description": "解約手続き実行", "delay": 2000 }
-                ],
-                "aiGuidance": [
-                    {
-                        "trigger": "tab_switch_termination",
-                        "message": "契約廃止システムにアクセスしました。解約条件を確認してください。",
-                        "options": ["解約条件確認", "最終精算確認", "手続き実行"]
+                    // Phase 1: 顧客情報の段階的入力
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
                     },
-                    {
-                        "trigger": "click_confirmTermination",
-                        "message": "契約廃止手続きが完了しました。解約証明書を発行してください。",
-                        "options": ["解約証明書発行", "完了通知送信", "手続き完了報告"]
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    
+                    // Phase 2: 顧客検索実行
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 3: 契約・サービスタブで契約状況確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "contract-service", 
+                        "tabName": "契約・サービス",
+                        "description": "契約状況確認",
+                        "delay": 17000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "contractStatus", 
+                        "description": "有効な契約を確認",
+                        "duration": 2000,
+                        "delay": 18000
+                    },
+                    
+                    // Phase 4: 契約廃止タブに移動（6番目の会話「解約条件を確認」と同時）
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "termination", 
+                        "tabName": "契約廃止",
+                        "description": "解約条件確認画面に移動",
+                        "delay": 25000
+                    },
+                    
+                    // Phase 5: 解約日設定（8番目の会話「7月31日で終了」の後）
+                    { 
+                        "type": "INPUT_DATA", 
+                        "field": "terminationDate", 
+                        "value": "2025-07-31", 
+                        "description": "解約日設定",
+                        "delay": 35000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "finalBill", 
+                        "description": "最終精算額確認",
+                        "duration": 2000,
+                        "delay": 37000
+                    },
+                    
+                    // Phase 6: 解約手続き実行（10番目の会話「解約手続き完了」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "confirmTermination", 
+                        "description": "解約手続き実行",
+                        "delay": 50000
                     }
                 ]
             }
@@ -371,669 +774,396 @@ function setupEventListeners() {
     // 音声入力
     elements.voiceButton.addEventListener('click', handleVoiceInput);
     
-    // FAQ表示
-    elements.faqButton.addEventListener('click', () => {
-        elements.faqModal.style.display = 'flex';
-    });
-    
-    elements.closeFaqModal.addEventListener('click', () => {
-        elements.faqModal.style.display = 'none';
-    });
-    
-    // モーダル外クリックで閉じる
+    // FAQモーダル
+    elements.faqButton.addEventListener('click', openFaqModal);
+    elements.closeFaqModal.addEventListener('click', closeFaqModal);
     elements.faqModal.addEventListener('click', (e) => {
         if (e.target === elements.faqModal) {
-            elements.faqModal.style.display = 'none';
+            closeFaqModal();
         }
     });
     
-    // デモモードトグル
-    elements.demoModeToggle.addEventListener('change', toggleDemoMode);
+    // トランスクリプト切り替え
+    elements.transcriptToggle.addEventListener('click', toggleTranscript);
     
-    // シナリオボタン
+    // デモモード
+    elements.demoModeToggle.addEventListener('change', toggleDemoMode);
+    elements.demoToggle.addEventListener('click', toggleDemoMode);
+    
+    // シナリオ選択
     elements.scenarioButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const scenario = button.dataset.scenario;
-            selectScenario(scenario);
+            selectScenario(button.dataset.scenario);
+        });
+    });
+    
+    // 再点申込スロット選択
+    elements.slotButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            selectTimeSlot(button);
+        });
+    });
+    
+    // FAQアイテムクリック
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const question = item.querySelector('.faq-question').textContent;
+            elements.chatInput.value = question;
+            closeFaqModal();
         });
     });
     
     // 顧客検索関連
-    elements.searchCustomerBtn.addEventListener('click', searchCustomer);
-    elements.clearSearchBtn.addEventListener('click', clearSearch);
-    elements.newSearchBtn.addEventListener('click', newSearch);
+    elements.searchCustomerBtn.addEventListener('click', handleCustomerSearch);
+    elements.clearSearchBtn.addEventListener('click', clearCustomerSearch);
+    elements.newSearchBtn.addEventListener('click', showCustomerSearch);
     
-    // 検索フィールドでのEnterキー
-    [elements.searchName, elements.searchPhone, elements.searchAddress].forEach(input => {
-        if (input) {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    searchCustomer();
-                }
-            });
-        }
+    // Enterキーで検索実行
+    elements.searchName.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleCustomerSearch();
     });
-    
-    // 新しく追加：transcript機能のイベントリスナー
-    if (elements.transcriptToggle) {
-        elements.transcriptToggle.addEventListener('click', toggleTranscript);
-    }
-    
-    // 各種ボタンのイベントリスナー
-    setupFormEventListeners();
-}
-
-// transcript表示/非表示トグル（新しく追加された機能）
-function toggleTranscript() {
-    if (elements.transcriptContent) {
-        const isVisible = elements.transcriptContent.style.display !== 'none';
-        elements.transcriptContent.style.display = isVisible ? 'none' : 'block';
-        elements.transcriptToggle.textContent = isVisible ? '▼' : '▲';
-    }
+    elements.searchPhone.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleCustomerSearch();
+    });
+    elements.searchAddress.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleCustomerSearch();
+    });
 }
 
 // 初期状態の設定
 function setupInitialState() {
-    // 初期画面：顧客検索画面を表示
+    // 顧客検索画面を表示、詳細画面は非表示
     showCustomerSearch();
     
-    // デモモードをオフにする
+    // 初期メッセージを表示
+    addChatMessage('bot', 'こんにちは！九州電力のAIアシスタントです。お客様情報を検索してから対応を開始いたします。', '14:00', {
+        type: 'ai_greeting',
+        scenario: null
+    });
+    
+    // 初期通話ログをクリア（停電対応の自動設定を防ぐ）
+    elements.logMessageArea.innerHTML = '';
+    elements.summaryContent.textContent = 'お客様情報の検索をお待ちしています';
+    
+    // デモモードは初期状態では無効
     demoMode = false;
-    elements.demoModeToggle.checked = false;
-    if (elements.scenarioSelector) {
-        elements.scenarioSelector.style.display = 'none';
-    }
+    currentScenario = null;
     
-    // 初期のAIメッセージ表示
-    setTimeout(() => {
-        addBotMessage("こんにちは！九州電力のAIアシスタントです。何かお手伝いできることはありますか？");
-    }, 1000);
-}
-
-// 顧客検索画面表示
-function showCustomerSearch() {
-    // 顧客検索画面を表示、情報画面を非表示
-    elements.customerSearch.style.display = 'block';
-    elements.customerInfo.style.display = 'none';
-    elements.tabsContainer.style.display = 'none';
+    // シナリオ選択パネルを非表示
+    elements.scenarioSelector.style.display = 'none';
     
-    // 検索フィールドをクリア
-    elements.searchName.value = '';
-    elements.searchPhone.value = '';
-    elements.searchAddress.value = '';
-}
-
-// 顧客検索実行
-function searchCustomer() {
-    const name = elements.searchName.value.trim();
-    const phone = elements.searchPhone.value.trim();
-    const address = elements.searchAddress.value.trim();
+    // アラートと共有事項をクリア
+    elements.alertPanel.style.display = 'none';
+    elements.sharedInfoPanel.style.display = 'none';
+    elements.alertContent.innerHTML = '';
+    elements.sharedInfoContent.innerHTML = '';
     
-    // 検索条件チェック
-    if (!name && !phone && !address) {
-        alert('検索条件を入力してください');
-        return;
-    }
-    
-    // 検索中の表示
-    showSearchProgress();
-    
-    // 模擬検索処理（実際はAPIコール）
-    setTimeout(() => {
-        showCustomerInfo();
-        hideSearchProgress();
-        
-        // 検索成功後、タブを表示し、billing-historyタブをアクティブにする（概要タブ削除対応）
-        elements.tabsContainer.style.display = 'block';
-        switchToTab('billing-history');
-        
-        // AIメッセージ
-        addBotMessage("顧客情報を表示しました。ご用件についてお聞かせください。");
-    }, 2000);
-}
-
-// 顧客情報表示
-function showCustomerInfo() {
-    // 顧客情報を表示
-    elements.customerSearch.style.display = 'none';
-    elements.customerInfo.style.display = 'block';
-    
-    // 検索結果で顧客情報を更新（実際のデータに置き換え）
-    const customerData = {
-        furigana: "ヤマダ タロウ",
-        fullName: "山田 太郎",
-        customerId: "CUST-2025-0001",
-        phone: elements.searchPhone.value || "092-123-4567",
-        email: "tanaka@example.com",
-        address: elements.searchAddress.value || "福岡県福岡市博多区博多駅前1-1-1",
-        supplyId: "09-1234-1234-1234-0000-0000",
-        contractType: "電気",
-        plan: "ナイト・セレクト",
-        paymentMethod: "口座振替",
-        contractPeriod: "4年10か月"
-    };
-    
-    // 各フィールドに値を設定
-    document.getElementById('customerFurigana').textContent = customerData.furigana;
-    document.getElementById('customerFullName').textContent = customerData.fullName;
-    document.getElementById('customerId').textContent = customerData.customerId;
-    document.getElementById('customerPhoneDisplay').textContent = customerData.phone;
-    document.getElementById('customerEmail').textContent = customerData.email;
-    document.getElementById('customerAddressDisplay').textContent = customerData.address;
-    document.getElementById('customerSupplyId').textContent = customerData.supplyId;
-    document.getElementById('customerContractType').textContent = customerData.contractType;
-    document.getElementById('customerPlan').textContent = customerData.plan;
-    document.getElementById('customerPaymentMethod').textContent = customerData.paymentMethod;
-    document.getElementById('customerContractPeriod').textContent = customerData.contractPeriod;
-}
-
-// 検索中プログレス表示
-function showSearchProgress() {
-    // 簡単なローディング表示
-    elements.searchCustomerBtn.textContent = '検索中...';
-    elements.searchCustomerBtn.disabled = true;
-}
-
-// 検索中プログレス非表示
-function hideSearchProgress() {
-    elements.searchCustomerBtn.textContent = '🔍 顧客検索';
-    elements.searchCustomerBtn.disabled = false;
-}
-
-// 検索クリア
-function clearSearch() {
-    elements.searchName.value = '';
-    elements.searchPhone.value = '';
-    elements.searchAddress.value = '';
-}
-
-// 新規検索
-function newSearch() {
-    showCustomerSearch();
-}
-
-// タブ切り替え
-function switchToTab(tabId) {
-    // すべてのタブボタンからactiveクラスを削除
-    document.querySelectorAll('.tab-button').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    // すべてのタブコンテンツからactiveクラスを削除
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    
-    // 指定されたタブボタンとコンテンツにactiveクラスを追加
-    const tabButton = document.querySelector(`[data-tab="${tabId}"]`);
-    const tabContent = document.getElementById(tabId);
-    
-    if (tabButton && tabContent) {
-        tabButton.classList.add('active');
-        tabContent.classList.add('active');
-    }
-}
-
-// 各種フォームイベントリスナーの設定
-function setupFormEventListeners() {
-    // 再点申込関連
-    const confirmNewContractBtn = document.getElementById('confirmNewContract');
-    if (confirmNewContractBtn) {
-        confirmNewContractBtn.addEventListener('click', () => {
-            executeNewContractProcess();
-        });
-    }
-    
-    // 使用量計算関連
-    const calculateBillBtn = document.getElementById('calculateBill');
-    if (calculateBillBtn) {
-        calculateBillBtn.addEventListener('click', () => {
-            executeBillCalculation();
-        });
-    }
-    
-    // 未収管理関連
-    const confirmPaymentBtn = document.getElementById('confirmPayment');
-    if (confirmPaymentBtn) {
-        confirmPaymentBtn.addEventListener('click', () => {
-            executePaymentConfirmation();
-        });
-    }
-    
-    // 契約変更関連
-    const confirmPlanChangeBtn = document.getElementById('confirmPlanChange');
-    if (confirmPlanChangeBtn) {
-        confirmPlanChangeBtn.addEventListener('click', () => {
-            executePlanChange();
-        });
-    }
-    
-    // 契約廃止関連
-    const confirmTerminationBtn = document.getElementById('confirmTermination');
-    if (confirmTerminationBtn) {
-        confirmTerminationBtn.addEventListener('click', () => {
-            executeContractTermination();
-        });
-    }
-}
-
-// 新規契約手続き実行
-function executeNewContractProcess() {
-    const steps = [
-        { elementId: 'contractCreateStatus', text: '処理中...', delay: 1000 },
-        { elementId: 'contractCreateStatus', text: '完了', delay: 0 },
-        { elementId: 'supplyPointStatus', text: '処理中...', delay: 1000 },
-        { elementId: 'supplyPointStatus', text: '完了', delay: 0 },
-        { elementId: 'scheduleStatus', text: '処理中...', delay: 1000 },
-        { elementId: 'scheduleStatus', text: '完了', delay: 0 }
-    ];
-    
-    executeSteps(steps, () => {
-        // 完了後の処理
-        document.getElementById('contractResultTitle').textContent = '✅ 新規契約手続き完了';
-        document.getElementById('newContractId').textContent = 'CONT-20250815-0001';
-        document.getElementById('newSupplyPoint').textContent = '09-5678-5678-5678-0001-0001';
-        
-        addBotMessage("新規契約手続きが完了しました。開通予定日は2025年8月15日です。");
-    });
-}
-
-// 請求データ生成実行
-function executeBillCalculation() {
-    const usageValue = document.getElementById('usageInput').value || 220;
-    
-    const steps = [
-        { elementId: 'collectionStatus', text: '処理中...', delay: 500 },
-        { elementId: 'collectionStatus', text: '完了', delay: 0 },
-        { elementId: 'basicFeeStatus', text: '計算中...', delay: 500 },
-        { elementId: 'basicFeeStatus', text: '完了', delay: 0 },
-        { elementId: 'usageFeeStatus', text: '計算中...', delay: 500 },
-        { elementId: 'usageFeeStatus', text: '完了', delay: 0 },
-        { elementId: 'usageFeeValue', text: `¥${(usageValue * 25.4).toLocaleString()}`, delay: 0 },
-        { elementId: 'discountStatus', text: '計算中...', delay: 500 },
-        { elementId: 'discountStatus', text: '完了', delay: 0 },
-        { elementId: 'totalStatus', text: '計算中...', delay: 500 },
-        { elementId: 'totalStatus', text: '完了', delay: 0 },
-        { elementId: 'totalValue', text: `¥${(2400 + usageValue * 25.4).toLocaleString()}`, delay: 0 }
-    ];
-    
-    executeSteps(steps, () => {
-        // エラーチェック処理
-        setTimeout(() => {
-            updateErrorCheck('usageCheck', '正常');
-            updateErrorCheck('calculationCheck', '正常');
-            updateErrorCheck('planCheck', '正常');
-            
-            // 請求データ生成
-            setTimeout(() => {
-                document.getElementById('billingResultTitle').textContent = '✅ 請求データ生成完了';
-                document.getElementById('billingId').textContent = 'BILL-202507-0001';
-                document.getElementById('finalBillAmount').textContent = `¥${(2400 + usageValue * 25.4).toLocaleString()}`;
-                document.getElementById('auditLog').textContent = 'AUD-202507-0001';
-                document.getElementById('generationStatus').textContent = '完了';
-                
-                addBotMessage("料金計算が完了しました。請求データを生成いたします。");
-            }, 2000);
-        }, 1000);
-    });
-}
-
-// エラーチェック結果更新
-function updateErrorCheck(checkId, result) {
-    const iconElement = document.getElementById(checkId + 'Icon');
-    const resultElement = document.getElementById(checkId + 'Result');
-    
-    if (iconElement && resultElement) {
-        iconElement.textContent = result === '正常' ? '✅' : '❌';
-        resultElement.textContent = result;
-    }
-}
-
-// 支払い確認実行
-function executePaymentConfirmation() {
-    addBotMessage("分割払い設定を実行します。債権管理帳票を更新いたします。");
-    
-    setTimeout(() => {
-        addBotMessage("分割払い設定が完了しました。3回払いで設定されています。");
-    }, 2000);
-}
-
-// プラン変更実行
-function executePlanChange() {
-    addBotMessage("契約変更手続きを実行します。システム更新を開始いたします。");
-    
-    setTimeout(() => {
-        addBotMessage("契約変更が完了しました。レギュラープラン50Aに変更されました。");
-    }, 3000);
-}
-
-// 契約廃止実行
-function executeContractTermination() {
-    addBotMessage("契約廃止手続きを実行します。解約処理を開始いたします。");
-    
-    setTimeout(() => {
-        addBotMessage("契約廃止手続きが完了しました。解約証明書を発行いたします。");
-    }, 3000);
-}
-
-// ステップ実行ヘルパー関数
-function executeSteps(steps, callback) {
-    let currentStep = 0;
-    
-    function executeNextStep() {
-        if (currentStep >= steps.length) {
-            if (callback) callback();
-            return;
-        }
-        
-        const step = steps[currentStep];
-        
-        setTimeout(() => {
-            const element = document.getElementById(step.elementId);
-            if (element) {
-                element.textContent = step.text;
-                
-                // スタイル更新
-                if (step.text === '完了') {
-                    element.style.color = '#28a745';
-                } else if (step.text.includes('処理中') || step.text.includes('計算中')) {
-                    element.style.color = '#ffc107';
-                }
-            }
-            
-            currentStep++;
-            executeNextStep();
-        }, step.delay);
-    }
-    
-    executeNextStep();
-}
-
-// チャットメッセージ送信
-function sendChatMessage() {
-    const message = elements.chatInput.value.trim();
-    if (!message) return;
-    
-    // ユーザーメッセージを追加
-    addUserMessage(message);
-    
-    // 入力フィールドをクリア
-    elements.chatInput.value = '';
-    
-    // ボット応答を生成
-    setTimeout(() => {
-        generateBotResponse(message);
-    }, 1000);
-}
-
-// ユーザーメッセージ追加
-function addUserMessage(message) {
-    const messageElement = document.createElement('div');
-    messageElement.className = 'message-bubble user';
-    messageElement.innerHTML = `
-        <div class="message-content">${message}</div>
-        <div class="message-timestamp">${getCurrentTime()}</div>
-    `;
-    elements.messageArea.appendChild(messageElement);
-    scrollToBottom();
-}
-
-// ボットメッセージ追加
-function addBotMessage(message) {
-    const messageElement = document.createElement('div');
-    messageElement.className = 'message-bubble bot';
-    messageElement.innerHTML = `
-        <div class="message-content">${message}</div>
-        <div class="message-timestamp">${getCurrentTime()}</div>
-    `;
-    elements.messageArea.appendChild(messageElement);
-    scrollToBottom();
-}
-
-// ボット応答生成
-function generateBotResponse(userMessage) {
-    // キーワードマッチング
-    const matchedKeyword = keywords.find(keyword => 
-        userMessage.includes(keyword.trigger)
-    );
-    
-    if (matchedKeyword) {
-        addBotMessage(matchedKeyword.bot_prompt);
-        
-        // 該当シナリオがある場合はAIガイダンスを表示
-        const scenario = scenarios.find(s => s.code === matchedKeyword.scenario);
-        if (scenario && demoMode) {
-            setTimeout(() => {
-                showAIGuidance({
-                    message: `${scenario.name}のシナリオを開始します。`,
-                    options: ["シナリオ実行", "詳細確認", "キャンセル"]
-                });
-            }, 1000);
-        }
-    } else {
-        // デフォルト応答
-        const defaultResponses = [
-            "申し訳ございませんが、詳しい内容をお聞かせください。",
-            "お困りの内容について、もう少し詳しく教えていただけますか？",
-            "どのようなお手続きでしょうか？契約番号をお聞かせください。"
-        ];
-        
-        const randomResponse = defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
-        addBotMessage(randomResponse);
-    }
-}
-
-// 現在時刻取得
-function getCurrentTime() {
-    const now = new Date();
-    const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-}
-
-// メッセージエリアのスクロール
-function scrollToBottom() {
-    elements.messageArea.scrollTop = elements.messageArea.scrollHeight;
-}
-
-// 音声入力ハンドラー
-function handleVoiceInput() {
-    // Web Speech API の実装（ブラウザサポート要確認）
-    if ('webkitSpeechRecognition' in window) {
-        const recognition = new webkitSpeechRecognition();
-        recognition.lang = 'ja-JP';
-        recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            elements.chatInput.value = transcript;
-        };
-        recognition.start();
-    } else {
-        addBotMessage("音声入力はサポートされていません。");
-    }
-}
-
-// デモモード切り替え
-function toggleDemoMode() {
-    demoMode = elements.demoModeToggle.checked;
-    
-    if (demoMode) {
-        // デモモード有効化
-        elements.scenarioSelector.style.display = 'block';
-        elements.statusIndicator.textContent = '● デモモード';
-        elements.statusIndicator.style.color = '#ff6b35';
-        addBotMessage("デモモードが有効になりました。シナリオを選択してください。");
-    } else {
-        // デモモード無効化
-        elements.scenarioSelector.style.display = 'none';
-        elements.statusIndicator.textContent = '● 接続中';
-        elements.statusIndicator.style.color = '#28a745';
-        stopScenario();
-        addBotMessage("デモモードが無効になりました。");
-    }
+    // デモモード説明メッセージを削除（ユーザーは既にデモであることを認識しているため）
 }
 
 // シナリオ選択
 function selectScenario(scenarioCode) {
-    // シナリオボタンのアクティブ状態更新
-    elements.scenarioButtons.forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.scenario === scenarioCode) {
-            btn.classList.add('active');
-        }
-    });
+    console.log('シナリオ選択:', scenarioCode);
     
-    // 選択されたシナリオを取得
+    // 現在のシナリオ再生を停止
+    stopScenarioPlayback();
+    
+    // すべてのシナリオボタンからアクティブクラスを削除
+    elements.scenarioButtons.forEach(btn => btn.classList.remove('active'));
+    
+    // 選択されたシナリオボタンにアクティブクラスを追加
+    const selectedButton = document.querySelector(`[data-scenario="${scenarioCode}"]`);
+    if (selectedButton) {
+        selectedButton.classList.add('active');
+    }
+    
+    // シナリオデータを取得
     currentScenario = scenarios.find(s => s.code === scenarioCode);
-    if (!currentScenario) return;
+    if (!currentScenario) {
+        console.error('シナリオが見つかりません:', scenarioCode);
+        return;
+    }
     
-    // シナリオ実行
+    console.log('選択されたシナリオ:', currentScenario);
+    
+    // 通話ログをクリア
+    elements.logMessageArea.innerHTML = '';
+    
+    // 要約をリセット
+    elements.summaryContent.textContent = 'シナリオ開始: ' + currentScenario.name;
+    
+    // アラートと共有事項をクリア
+    elements.alertPanel.style.display = 'none';
+    elements.sharedInfoPanel.style.display = 'none';
+    elements.alertContent.innerHTML = '';
+    elements.sharedInfoContent.innerHTML = '';
+    
+    // シナリオ開始メッセージを追加
+    addCallLogMessage({
+        timestamp: "14:00:00",
+        speaker: "システム",
+        text: `シナリオ開始: ${currentScenario.name}`
+    });
+    
+    // AIからシナリオ開始の案内を追加（より簡潔に）
+    const now = formatTime(new Date());
+    addChatMessage('bot', `${currentScenario.name}のシナリオを開始します。`, now, {
+        type: 'ai_scenario_start',
+        scenario: scenarioCode
+    });
+    
+    // AIガイダンスを開始
+    if (currentScenario.aiGuidance && currentScenario.aiGuidance.length > 0) {
+        setTimeout(() => {
+            const firstGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'scenario_start');
+            if (firstGuidance) {
+                showAIGuidance(firstGuidance);
+            }
+        }, 2000);
+    }
+    
+    // デモモード中なら即座にシナリオ再生開始
+    if (demoMode) {
+        setTimeout(() => {
+            startScenarioPlayback();
+        }, 500);
+    }
+}
+
+// シナリオ再生開始
+function startScenarioPlayback() {
+    if (!currentScenario) {
+        console.error('シナリオが設定されていません');
+        return;
+    }
+    
+    if (!demoMode) {
+        console.log('デモモードが無効です');
+        return;
+    }
+    
+    console.log('シナリオ再生開始:', currentScenario.name);
+    
+    let messageIndex = 0;
+    let summaryIndex = 0;
+    let alertIndex = 0;
+    let sharedInfoIndex = 0;
     operatorActionIndex = 0;
-    addBotMessage(`${currentScenario.name}のシナリオを開始します。`);
     
-    // AIガイダンス表示
-    setTimeout(() => {
-        showAIGuidance({
-            message: `${currentScenario.name}のシナリオが開始されました。オペレーター操作を開始します。`,
-            options: ["操作開始", "一時停止", "スキップ"]
+    // メッセージ表示インターバル
+    const messageInterval = setInterval(() => {
+        if (!demoMode) {
+            clearInterval(messageInterval);
+            return;
+        }
+        
+        if (messageIndex < currentScenario.transcript.length) {
+            const message = currentScenario.transcript[messageIndex];
+            console.log('メッセージ追加:', message);
+            addCallLogMessage(message);
+            messageIndex++;
+        } else {
+            console.log('メッセージ再生完了');
+            clearInterval(messageInterval);
+        }
+    }, 2000);
+    
+    // 要約更新インターバル
+    const summaryInterval = setInterval(() => {
+        if (!demoMode) {
+            clearInterval(summaryInterval);
+            return;
+        }
+        
+        if (currentScenario.summaryUpdates && summaryIndex < currentScenario.summaryUpdates.length) {
+            const summary = currentScenario.summaryUpdates[summaryIndex];
+            console.log('要約更新:', summary);
+            updateSummary(summary.summary);
+            summaryIndex++;
+        } else {
+            clearInterval(summaryInterval);
+        }
+    }, 8000);
+    
+    // アラート表示インターバル
+    const alertInterval = setInterval(() => {
+        if (!demoMode) {
+            clearInterval(alertInterval);
+            return;
+        }
+        
+        if (currentScenario.alerts && alertIndex < currentScenario.alerts.length) {
+            const alert = currentScenario.alerts[alertIndex];
+            console.log('アラート表示:', alert);
+            showAlert(alert);
+            alertIndex++;
+        } else {
+            clearInterval(alertInterval);
+        }
+    }, 10000);
+    
+    // 共有事項表示インターバル
+    const sharedInfoInterval = setInterval(() => {
+        if (!demoMode) {
+            clearInterval(sharedInfoInterval);
+            return;
+        }
+        
+        if (currentScenario.sharedInfo && sharedInfoIndex < currentScenario.sharedInfo.length) {
+            const sharedInfo = currentScenario.sharedInfo[sharedInfoIndex];
+            console.log('共有事項表示:', sharedInfo);
+            showSharedInfo(sharedInfo);
+            sharedInfoIndex++;
+        } else {
+            clearInterval(sharedInfoInterval);
+        }
+    }, 12000);
+    
+    // オペレーター動作シミュレーション（delayに基づく個別スケジューリング）
+    if (currentScenario.operatorActions) {
+        currentScenario.operatorActions.forEach((action, index) => {
+            if (!demoMode) return;
+            
+            const actionDelay = action.delay || (index * 3000); // delayが指定されていない場合は従来の3秒間隔
+            
+            setTimeout(() => {
+                if (!demoMode) return; // 実行時にもdemoModeをチェック
+                
+                console.log('オペレーター動作実行:', action);
+                executeOperatorAction(action);
+            }, actionDelay);
         });
-    }, 1000);
+    }
     
-    // シナリオ実行開始
-    setTimeout(() => {
-        executeScenario();
-    }, 3000);
-}
-
-// シナリオ実行
-function executeScenario() {
-    if (!currentScenario || !demoMode) return;
-    
-    // 通話ログ追加
-    addCallLogMessages();
-    
-    // 要約更新
-    updateSummary();
-    
-    // アラート表示
-    showAlerts();
-    
-    // オペレーター操作実行
-    executeOperatorActions();
-}
-
-// 通話ログメッセージ追加
-function addCallLogMessages() {
-    if (!currentScenario.transcript) return;
-    
-    currentScenario.transcript.forEach((item, index) => {
-        setTimeout(() => {
-            addCallLogMessage(item);
-        }, index * 2000);
-    });
-}
-
-// 通話ログメッセージ追加（個別）
-function addCallLogMessage(logItem) {
-    const logMessage = document.createElement('div');
-    logMessage.className = `log-message ${logItem.speaker === '顧客' ? 'customer' : 'operator'}`;
-    logMessage.innerHTML = `
-        <div class="log-timestamp">${logItem.timestamp}</div>
-        <div class="log-speaker">${logItem.speaker}:</div>
-        <div class="log-text">${logItem.text}</div>
-    `;
-    
-    elements.logMessageArea.appendChild(logMessage);
-    elements.logMessageArea.scrollTop = elements.logMessageArea.scrollHeight;
-}
-
-// 要約更新
-function updateSummary() {
-    if (!currentScenario.summaryUpdates) return;
-    
-    currentScenario.summaryUpdates.forEach((update, index) => {
-        setTimeout(() => {
-            elements.summaryContent.textContent = update.summary;
-        }, index * 3000);
-    });
+    // インターバルIDを保存
+    window.scenarioIntervals = {
+        message: messageInterval,
+        summary: summaryInterval,
+        alert: alertInterval,
+        sharedInfo: sharedInfoInterval,
+        operatorAction: operatorActionInterval
+    };
 }
 
 // アラート表示
-function showAlerts() {
-    if (!currentScenario.alerts || currentScenario.alerts.length === 0) return;
-    
-    currentScenario.alerts.forEach((alert, index) => {
-        setTimeout(() => {
-            showAlert(alert);
-        }, index * 5000);
-    });
-}
-
-// アラート表示（個別）
 function showAlert(alert) {
     elements.alertPanel.style.display = 'block';
-    elements.alertContent.innerHTML = `
-        <div class="alert-message ${alert.severity.toLowerCase()}">
-            <strong>${alert.type}:</strong> ${alert.message}
-        </div>
-        <div class="alert-timestamp">${alert.timestamp}</div>
-    `;
     
-    // 5秒後に非表示
+    const alertItem = document.createElement('div');
+    alertItem.classList.add('alert-item');
+    
+    const alertType = document.createElement('div');
+    alertType.classList.add('alert-type');
+    alertType.textContent = getAlertTypeText(alert.type);
+    
+    const alertMessage = document.createElement('div');
+    alertMessage.classList.add('alert-message');
+    alertMessage.textContent = alert.message;
+    
+    alertItem.appendChild(alertType);
+    alertItem.appendChild(alertMessage);
+    elements.alertContent.appendChild(alertItem);
+    
+    // アニメーション
     setTimeout(() => {
-        elements.alertPanel.style.display = 'none';
-    }, 5000);
+        alertItem.style.opacity = '1';
+        alertItem.style.transform = 'translateY(0)';
+    }, 10);
 }
 
-// オペレーター操作実行
-function executeOperatorActions() {
-    if (!currentScenario.operatorActions) return;
+// 共有事項表示
+function showSharedInfo(sharedInfo) {
+    elements.sharedInfoPanel.style.display = 'block';
     
-    currentScenario.operatorActions.forEach((action, index) => {
-        setTimeout(() => {
-            executeOperatorAction(action);
-        }, (index + 1) * (action.delay || 4000));
-    });
+    const sharedItem = document.createElement('div');
+    sharedItem.classList.add('shared-item');
+    
+    const sharedType = document.createElement('div');
+    sharedType.classList.add('shared-type');
+    sharedType.textContent = getSharedInfoTypeText(sharedInfo.type);
+    
+    const sharedMessage = document.createElement('div');
+    sharedMessage.classList.add('shared-message');
+    sharedMessage.textContent = sharedInfo.message;
+    
+    sharedItem.appendChild(sharedType);
+    sharedItem.appendChild(sharedMessage);
+    elements.sharedInfoContent.appendChild(sharedItem);
+    
+    // アニメーション
+    setTimeout(() => {
+        sharedItem.style.opacity = '1';
+        sharedItem.style.transform = 'translateY(0)';
+    }, 10);
 }
 
-// オペレーター操作実行（個別）
+// アラートタイプテキスト取得
+function getAlertTypeText(type) {
+    const typeMap = {
+        'HARASSMENT': 'パワハラ検知',
+        'SEXUAL_HARASSMENT': 'セクハラ検知',
+        'MISSING_INFO': '伝達漏れ検知',
+        'UNPAID_ALERT': '未収金アラート'
+    };
+    return typeMap[type] || type;
+}
+
+// 共有事項タイプテキスト取得
+function getSharedInfoTypeText(type) {
+    const typeMap = {
+        'MISSING_INFO': '伝達漏れ',
+        'IMPORTANT_INFO': '重要情報',
+        'FOLLOW_UP': 'フォローアップ'
+    };
+    return typeMap[type] || type;
+}
+
+// オペレーター動作実行
 function executeOperatorAction(action) {
-    console.log('オペレーター操作:', action.type, action);
-    
-    // 作業進行状況を表示
-    showOperatorProgress(action.description || action.type);
+    // 進行状況を表示
+    showOperatorProgress(action.description);
     
     switch (action.type) {
         case 'SWITCH_TAB':
-            switchToTab(action.tabId);
-            addOperatorActionLog(`${action.tabName || action.tabId}タブに切り替え`);
-            
-            // AIガイダンス表示チェック
-            maybePushAISuggestionForAction('tab_switch_' + action.tabId);
+            switchTab(action.tabId);
+            addOperatorActionLog(`タブ切り替え: ${action.tabName}`);
             break;
-            
-        case 'HIGHLIGHT_FIELD':
-            highlightField(action.fieldId, action.duration || 3000);
-            addOperatorActionLog(`${action.fieldId}フィールドをハイライト`);
-            break;
-            
-        case 'CLICK_BUTTON':
-            simulateButtonClick(action.buttonId);
-            addOperatorActionLog(`${action.buttonId}ボタンをクリック`);
-            
-            // AIガイダンス表示チェック
-            maybePushAISuggestionForAction('click_' + action.buttonId);
-            break;
-            
-        case 'SELECT_OPTION':
-            simulateSelectOption(action.selector, action.value);
-            addOperatorActionLog(`${action.selector}で${action.value}を選択`);
-            break;
-            
         case 'INPUT_DATA':
-            simulateInputData(action.field, action.value);
-            addOperatorActionLog(`${action.field}に${action.value}を入力`);
+            inputCustomerData(action.field, action.value);
+            addOperatorActionLog(`データ入力: ${action.field} = ${action.value}`);
+            break;
+        case 'SELECT_OPTION':
+            selectOption(action.selector, action.value);
+            addOperatorActionLog(`選択: ${action.description}`);
+            break;
+        case 'CLICK_BUTTON':
+            clickButton(action.buttonId, action.description);
+            addOperatorActionLog(`ボタンクリック: ${action.description}`);
+            break;
+        case 'SCROLL_TO':
+            scrollToElement(action.elementId);
+            addOperatorActionLog(`スクロール: ${action.description}`);
+            break;
+        case 'HIGHLIGHT_FIELD':
+            highlightField(action.fieldId, action.duration);
+            addOperatorActionLog(`フィールドハイライト: ${action.description}`);
+            break;
+        case 'CUSTOMER_SEARCH':
+            performCustomerSearch(action.name, action.phone, action.address);
+            addOperatorActionLog(`顧客検索: ${action.description}`);
+            break;
+        case 'INPUT_SEARCH_FIELD':
+            inputSearchField(action.field, action.value);
+            addOperatorActionLog(`検索フィールド入力: ${action.description}`);
+            break;
+        case 'CLICK_SEARCH_BUTTON':
+            clickSearchButton();
+            addOperatorActionLog(`検索実行: ${action.description}`);
             break;
     }
+
+    // 操作に応じたAI提案を追加
+    maybePushAISuggestionForAction(action);
     
     // 進行状況を非表示
     setTimeout(() => {
@@ -1062,157 +1192,1344 @@ function hideOperatorProgress() {
     }
 }
 
-// オペレーター動作ログ追加（本番では非表示）
+// オペレーター動作ログ追加
 function addOperatorActionLog(description) {
-    // 実際の画面では作業ログは表示しない
-    console.log('オペレーター作業:', description);
+    const logArea = document.getElementById('logMessageArea');
+    if (logArea) {
+        const logEntry = document.createElement('div');
+        logEntry.classList.add('log-entry', 'operator-action');
+        logEntry.innerHTML = `
+            <span class="log-time">${formatTime(new Date())}</span>
+            <span class="log-speaker">オペレーター</span>
+            <span class="log-text">${description}</span>
+        `;
+        logArea.appendChild(logEntry);
+        logArea.scrollTop = logArea.scrollHeight;
+    }
+}
+
+// タブ切り替え
+function switchTab(tabId) {
+    // タブボタンとタブコンテンツを取得
+    const tabButton = document.querySelector(`[data-tab="${tabId}"]`);
+    const tabContent = document.getElementById(tabId);
+    
+    if (tabButton && tabContent) {
+        // タブボタンにハイライト効果を追加
+        tabButton.classList.add('operator-switching');
+        
+        setTimeout(() => {
+            // すべてのタブボタンからactiveクラスを削除
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // すべてのタブコンテンツからactiveクラスを削除
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 選択されたタブボタンとコンテンツにactiveクラスを追加
+            tabButton.classList.add('active');
+            tabContent.classList.add('active');
+            
+            setTimeout(() => {
+                tabButton.classList.remove('operator-switching');
+            }, 1000);
+        }, 500);
+    }
+}
+
+// 顧客データ入力
+function inputCustomerData(field, value) {
+    const inputElement = document.getElementById(field);
+    if (inputElement) {
+        // 共通のタイピング関数を使用
+        typeIntoField(inputElement, value, 100).then(() => {
+            // タイピング完了後の処理
+            setTimeout(() => {
+                inputElement.classList.remove('operator-action-highlight');
+            }, 700);
+        });
+    }
+}
+
+// オプション選択
+function selectOption(selector, value) {
+    const selectElement = document.querySelector(selector);
+    if (selectElement) {
+        selectElement.classList.add('operator-action-highlight');
+        selectElement.focus();
+        selectElement.value = value;
+        
+        // changeイベントを発火
+        const event = new Event('change', { bubbles: true });
+        selectElement.dispatchEvent(event);
+        
+        setTimeout(() => {
+            selectElement.classList.remove('operator-action-highlight');
+            selectElement.blur();
+        }, 1000);
+    }
+}
+
+// ボタンクリック
+function clickButton(buttonId, description) {
+    const button = document.getElementById(buttonId);
+    if (button) {
+        button.classList.add('button-click-effect');
+        setTimeout(() => {
+            button.classList.remove('button-click-effect');
+            
+            // calculateBillボタンの場合は料金計算処理を実行
+            if (buttonId === 'calculateBill') {
+                executeCalculationProcess();
+            } else if (buttonId === 'confirmNewContract') {
+                executeNewContractProcess();
+            } else {
+                button.click();
+            }
+        }, 200);
+    }
+}
+
+// 新規契約手続き処理の実行
+function executeNewContractProcess() {
+    console.log('新規契約手続きを開始します');
+    
+    // 1. 契約データ作成
+    const contractCreateStatus = document.getElementById('contractCreateStatus');
+    if (contractCreateStatus) {
+        contractCreateStatus.textContent = '処理中...';
+        contractCreateStatus.style.color = '#856404';
+    }
+    
+    setTimeout(() => {
+        if (contractCreateStatus) {
+            contractCreateStatus.textContent = '完了';
+            contractCreateStatus.style.color = '#155724';
+        }
+        
+        // 2. 供給地点特定番号発行
+        const supplyPointStatus = document.getElementById('supplyPointStatus');
+        if (supplyPointStatus) {
+            supplyPointStatus.textContent = '処理中...';
+            supplyPointStatus.style.color = '#856404';
+        }
+        
+        setTimeout(() => {
+            if (supplyPointStatus) {
+                supplyPointStatus.textContent = '完了';
+                supplyPointStatus.style.color = '#155724';
+            }
+            
+            // 3. スケジュール設定
+            const scheduleStatus = document.getElementById('scheduleStatus');
+            if (scheduleStatus) {
+                scheduleStatus.textContent = '処理中...';
+                scheduleStatus.style.color = '#856404';
+            }
+            
+            setTimeout(() => {
+                if (scheduleStatus) {
+                    scheduleStatus.textContent = '完了';
+                    scheduleStatus.style.color = '#155724';
+                }
+                
+                // 4. 結果表示更新
+                updateNewContractResult();
+            }, 1000);
+        }, 1500);
+    }, 1000);
+}
+
+// 新規契約結果の更新
+function updateNewContractResult() {
+    const contractResultTitle = document.getElementById('contractResultTitle');
+    const newContractId = document.getElementById('newContractId');
+    const newSupplyPoint = document.getElementById('newSupplyPoint');
+    
+    if (contractResultTitle) {
+        contractResultTitle.textContent = '✅ 新規契約手続き完了';
+    }
+    
+    if (newContractId) {
+        newContractId.textContent = 'CTR-2025-0815-001';
+    }
+    
+    if (newSupplyPoint) {
+        newSupplyPoint.textContent = '09-5678-5678-5678-0000-0001';
+    }
+}
+
+// 要素までスクロール
+function scrollToElement(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.classList.add('scroll-target');
+        setTimeout(() => {
+            element.classList.remove('scroll-target');
+        }, 2000);
+    }
 }
 
 // フィールドハイライト
-function highlightField(fieldId, duration = 3000) {
-    const element = document.getElementById(fieldId);
-    if (!element) return;
+function highlightField(fieldId, duration = 2000) {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.classList.add('field-highlight');
+        setTimeout(() => {
+            field.classList.remove('field-highlight');
+        }, duration);
+    }
+}
+
+// チャットメッセージ送信
+function sendChatMessage() {
+    const message = elements.chatInput.value.trim();
+    if (!message) return;
     
-    element.classList.add('highlight');
+    const now = new Date();
+    const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    
+    // ユーザーメッセージを追加
+    addChatMessage('user', message, time, {
+        type: 'operator_chat',
+        scenario: currentScenario ? currentScenario.code : undefined
+    });
+    elements.chatInput.value = '';
+    
+    // キーワードトリガーチェック
+    const triggeredKeyword = checkKeywordTrigger(message);
+    
+    // ボット応答を生成
     setTimeout(() => {
-        element.classList.remove('highlight');
-    }, duration);
+        const botResponse = generateBotResponse(message, triggeredKeyword);
+        addChatMessage('bot', botResponse, time, {
+            type: 'ai_response',
+            linkedTo: 'operator_chat',
+            scenario: currentScenario ? currentScenario.code : undefined
+        });
+    }, 500);
 }
 
-// ボタンクリックシミュレーション
-function simulateButtonClick(buttonId) {
-    const button = document.getElementById(buttonId);
-    if (button) {
-        button.classList.add('clicked');
-        setTimeout(() => {
-            button.classList.remove('clicked');
-        }, 1000);
+// キーワードトリガーチェック
+function checkKeywordTrigger(message) {
+    return keywords.find(keyword => 
+        message.toLowerCase().includes(keyword.trigger.toLowerCase())
+    );
+}
+
+// ボット応答生成
+function generateBotResponse(message, triggeredKeyword) {
+    if (triggeredKeyword) {
+        console.log('キーワードトリガー:', triggeredKeyword);
+        return triggeredKeyword.bot_prompt;
+    }
+    
+    // デフォルト応答
+    const defaultResponses = {
+        "再点申込の手順を教えて": "1. 契約番号入力 → 2. 未収確認 → 3. 再点日選択 → 4. 予約実行",
+        "使用量計算の方法を教えて": "契約番号を入力いただければ、使用量と料金の詳細をお調べいたします。",
+        "料金計算の仕組みを教えて": "基本料金と従量料金の合計で計算されます。詳細は契約番号をお聞かせください。",
+        "今回の請求額はいくら？": "2025年7月分は¥7,980（支払期限：08/20）",
+        "未収金の支払い方法を教えて": "分割払いも可能です。契約番号をお聞かせください。",
+        "プラン変更後の試算を比較して": "レギュラー: ¥9,200/月(+¥1,220)、デイタイム: ¥10,500/月(+¥2,520)",
+        "契約変更の手続きを教えて": "現在のプランと希望プランをお聞かせください。契約番号も必要です。",
+        "契約廃止の手続きを教えて": "廃止理由と希望日をお聞かせください。契約番号も必要です。",
+        "廃止手続きPDFを取れる？": "[ダウンロード](https://chatgpt.com/reports/termination/CTR-09-1234-5678.pdf)",
+        "停電": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。",
+        "電気が止まった": "停電とのことですので、再点申込の手順をご案内します。契約番号をお願いします。",
+        "再点": "再点申込の手順をご案内します。契約番号をお願いします。",
+        "使用量": "使用量の確認ですね。契約番号をお願いします。",
+        "料金": "料金の確認ですね。契約番号をお願いします。",
+        "計算": "料金計算のご相談ですね。契約番号をお願いします。",
+        "請求": "請求額の確認ですね。契約番号をお願いします。",
+        "支払い": "支払いについてのご相談ですね。契約番号をお願いします。",
+        "未収": "未収金についてのご相談ですね。契約番号をお願いします。",
+        "プラン": "プラン変更のご相談ですね。現在のプランと希望プランをお聞かせください。",
+        "契約変更": "契約変更の手続きをご案内します。変更内容をお聞かせください。",
+        "解約": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。",
+        "廃止": "契約廃止のご相談ですね。廃止理由と希望日をお聞かせください。"
+    };
+    
+    // メッセージに含まれるキーワードをチェック
+    for (const [keyword, response] of Object.entries(defaultResponses)) {
+        if (message.toLowerCase().includes(keyword.toLowerCase())) {
+            console.log('キーワードマッチ:', keyword);
+            return response;
+        }
+    }
+    
+    return "申し訳ありません、その質問にはお答えできません。別の方法でお手伝いできることはありますか？";
+}
+
+// チャットメッセージ追加
+function addChatMessage(sender, text, time, meta = {}) {
+    // チャット履歴へ保存（タイムライン紐づけ情報付き）
+    chatHistory.push({ sender, text, time, meta });
+
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message-bubble', sender);
+    
+    const messageContent = document.createElement('div');
+    messageContent.classList.add('message-content');
+    messageContent.textContent = text;
+    
+    const timestamp = document.createElement('div');
+    timestamp.classList.add('message-timestamp');
+    timestamp.textContent = time;
+    
+    messageContainer.appendChild(messageContent);
+    messageContainer.appendChild(timestamp);
+    
+    elements.messageArea.appendChild(messageContainer);
+    
+    // アニメーション
+    setTimeout(() => {
+        messageContainer.classList.add('show');
+    }, 10);
+    
+    // 自動スクロール
+    elements.messageArea.scrollTop = elements.messageArea.scrollHeight;
+}
+
+// 音声入力処理
+function handleVoiceInput() {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'ja-JP';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        recognition.onstart = () => {
+            elements.voiceButton.style.background = '#ff6b6b';
+        };
+        
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            elements.chatInput.value = transcript;
+        };
+        
+        recognition.onend = () => {
+            elements.voiceButton.style.background = '#005BAC';
+        };
+        
+        recognition.start();
+    } else {
+        alert('音声入力はお使いのブラウザではサポートされていません。');
     }
 }
 
-// セレクトオプション選択シミュレーション
-function simulateSelectOption(selector, value) {
-    const selectElement = document.querySelector(selector);
-    if (selectElement) {
-        selectElement.value = value;
-        selectElement.classList.add('highlight');
-        setTimeout(() => {
-            selectElement.classList.remove('highlight');
-        }, 2000);
+// FAQモーダルを開く
+function openFaqModal() {
+    elements.faqModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+// FAQモーダルを閉じる
+function closeFaqModal() {
+    elements.faqModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// トランスクリプト切り替え
+function toggleTranscript() {
+    const isVisible = elements.transcriptContent.style.display !== 'none';
+    elements.transcriptContent.style.display = isVisible ? 'none' : 'block';
+    elements.transcriptToggle.textContent = isVisible ? '▲' : '▼';
+}
+
+// デモモード切り替え
+function toggleDemoMode() {
+    demoMode = !demoMode;
+    elements.demoModeToggle.checked = demoMode;
+    elements.demoToggle.textContent = demoMode ? 'デモ停止' : 'デモモード';
+    
+    console.log('デモモード切り替え:', demoMode);
+    
+    // シナリオ選択パネルを表示/非表示
+    if (demoMode) {
+        elements.scenarioSelector.style.display = 'block';
+        // デモモード開始時はシナリオを自動選択しない
+        // ユーザーが手動でシナリオを選択するまで待機
+        currentScenario = null;
+        elements.logMessageArea.innerHTML = '';
+        elements.summaryContent.textContent = 'デモモード開始 - シナリオを選択してください';
+        elements.alertPanel.style.display = 'none';
+        elements.sharedInfoPanel.style.display = 'none';
+        elements.alertContent.innerHTML = '';
+        elements.sharedInfoContent.innerHTML = '';
+        
+        // シナリオボタンからアクティブクラスを削除
+        elements.scenarioButtons.forEach(btn => btn.classList.remove('active'));
+    } else {
+        elements.scenarioSelector.style.display = 'none';
+        stopScenarioPlayback();
+        
+        // デモモード終了時のクリーンアップ
+        currentScenario = null;
+        elements.logMessageArea.innerHTML = '';
+        elements.summaryContent.textContent = 'デモモード終了';
+        elements.alertPanel.style.display = 'none';
+        elements.sharedInfoPanel.style.display = 'none';
+        elements.alertContent.innerHTML = '';
+        elements.sharedInfoContent.innerHTML = '';
+        
+        // シナリオボタンからアクティブクラスを削除
+        elements.scenarioButtons.forEach(btn => btn.classList.remove('active'));
     }
 }
 
-// データ入力シミュレーション
-function simulateInputData(fieldId, value) {
+// シナリオ再生停止
+function stopScenarioPlayback() {
+    if (window.scenarioIntervals) {
+        Object.values(window.scenarioIntervals).forEach(interval => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        });
+        window.scenarioIntervals = null;
+    }
+    
+    // オペレーター進行状況を非表示
+    hideOperatorProgress();
+    
+    console.log('シナリオ再生停止');
+}
+
+// 通話ログメッセージ追加
+function addCallLogMessage(message) {
+    const messageEntry = document.createElement('div');
+    messageEntry.classList.add('message-entry');
+    messageEntry.classList.add(message.speaker === '顧客' ? 'customer' : 'operator');
+    
+    const timestamp = document.createElement('span');
+    timestamp.classList.add('timestamp');
+    timestamp.textContent = message.timestamp;
+    
+    const speaker = document.createElement('span');
+    speaker.classList.add('speaker-label');
+    speaker.textContent = message.speaker + ': ';
+    
+    const text = document.createElement('span');
+    text.classList.add('message-text');
+    text.textContent = message.text;
+    
+    messageEntry.appendChild(timestamp);
+    messageEntry.appendChild(speaker);
+    messageEntry.appendChild(text);
+    
+    elements.logMessageArea.appendChild(messageEntry);
+    
+    // アニメーション
+    setTimeout(() => {
+        messageEntry.classList.add('show');
+    }, 10);
+    
+    // 自動スクロール
+    elements.logMessageArea.scrollTop = elements.logMessageArea.scrollHeight;
+    
+    // キーワードトリガーチェック
+    if (message.speaker === '顧客') {
+        const triggeredKeyword = checkKeywordTrigger(message.text);
+        if (triggeredKeyword) {
+            setTimeout(() => {
+                addChatMessage('bot', triggeredKeyword.bot_prompt, message.timestamp, {
+                    type: 'ai_response',
+                    linkedTo: 'transcript',
+                    scenario: currentScenario ? currentScenario.code : undefined,
+                    transcriptTimestamp: message.timestamp
+                });
+            }, 1000);
+        }
+    }
+}
+
+// 要約更新
+function updateSummary(summary) {
+    elements.summaryContent.textContent = summary;
+    elements.summaryWindow.classList.add('highlight');
+    
+    setTimeout(() => {
+        elements.summaryWindow.classList.remove('highlight');
+    }, 3000);
+}
+
+// 初期通話ログ表示
+function addInitialCallLog() {
+    const initialMessages = [
+        { timestamp: "14:00:01", speaker: "顧客", text: "もしもし、電気が止まってしまったんですが…" },
+        { timestamp: "14:00:05", speaker: "オペレーター", text: "申し訳ありません。契約番号をお願いします。" },
+        { timestamp: "14:00:12", speaker: "顧客", text: "CTR-09-1234-5678です。" },
+        { timestamp: "14:00:15", speaker: "オペレーター", text: "未収¥15,430、最終入金2025/05/20です。" }
+    ];
+    
+    initialMessages.forEach(message => {
+        addCallLogMessage(message);
+    });
+}
+
+// 時間スロット選択
+function selectTimeSlot(selectedButton) {
+    // すべてのスロットボタンからアクティブクラスを削除
+    elements.slotButtons.forEach(btn => btn.classList.remove('active'));
+    
+    // 選択されたボタンにアクティブクラスを追加
+    selectedButton.classList.add('active');
+    
+    // 予約結果を更新
+    const selectedTime = selectedButton.dataset.time;
+    updateReservationResult(selectedTime);
+}
+
+// 予約結果更新
+function updateReservationResult(selectedTime) {
+    const resultCard = document.querySelector('.result-card');
+    if (resultCard) {
+        const details = resultCard.querySelector('.result-details');
+        if (details) {
+            const timeElement = details.querySelector('p:nth-child(2)');
+            if (timeElement) {
+                timeElement.innerHTML = `<strong>予約日時:</strong> 2025年8月12日 ${selectedTime}`;
+            }
+        }
+    }
+}
+
+// ユーティリティ関数
+function formatTime(date) {
+    return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// 操作内容に基づくオペレーターの質問とAI回答を生成
+function maybePushAISuggestionForAction(action) {
+    if (!currentScenario) return;
+    const now = formatTime(new Date());
+
+    // オペレーターが質問 → AIが回答する自然な流れを演出
+    setTimeout(() => {
+        if (currentScenario.code === 'RESTORE_POWER') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'unpaid-management') {
+                // オペレーターの質問
+                addChatMessage('user', '未収管理タブを確認していますが、支払い条件はどうすればいいですか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                // AIの回答
+                setTimeout(() => {
+                    addChatMessage('bot', '未収金額¥15,430が3ヶ月分あります。分割払い（3回）を選択することで再開可能です。初回¥5,143をご案内ください。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+            if (action.type === 'SELECT_OPTION' && action.selector === '#paymentMethod' && action.value === 'installment') {
+                addChatMessage('user', '分割払いを設定しました。次のステップは？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '✅ 分割払い設定完了です。再点申込タブで最終確認を行い、サービス再開設定を実行してください。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1200);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmRestore') {
+                addChatMessage('user', '再開設定を実行しました。通知関連はどうしますか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '🎉 再開設定完了です。顧客への通知送信とSLA記録を実施してください。メール・SMSで完了通知が送られます。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+
+        if (currentScenario.code === 'USAGE_CALCULATION') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'simulation') {
+                addChatMessage('user', '料金シミュレーションタブで使用量を確認中です。220kWhは適正ですか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '220kWhは前月235kWhと比較して適正値です。ナイト・セレクトプランで基本料金¥2,400＋従量料金¥5,580で計算されます。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1100);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'calculateBill') {
+                addChatMessage('user', '料金計算を実行しました。結果に問題はありませんか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '💰 計算結果は¥7,980です。異常値チェックも完了しており、請求データ生成に問題ありません。監査ログも生成済みです。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+
+        if (currentScenario.code === 'BILLING_MANAGEMENT') {
+            if (action.type === 'HIGHLIGHT_FIELD' && action.fieldId === 'unpaidAmount') {
+                addChatMessage('user', '未収金額を確認しています。どのような対応が適切ですか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '⚠️ 未収¥15,430（3ヶ月分）です。分割払い3回での支払いを提案し、催促状送付を停止することをお勧めします。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1200);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmPayment') {
+                addChatMessage('user', '支払い方法を確認しました。債権管理の更新は完了していますか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '✅ 債権管理帳票の更新が完了しました。催促状送付停止と分割払い設定が適用されています。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+
+        if (currentScenario.code === 'CONTRACT_CHANGE') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'change-plan') {
+                addChatMessage('user', '契約変更タブで確認中です。レギュラー50Aへの変更影響は？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', 'レギュラー50Aへの変更で月額+¥1,420（年間+¥17,040）となります。アンペア変更工事費¥3,300が別途発生します。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1100);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmPlanChange') {
+                addChatMessage('user', '契約変更を実行しました。顧客への通知はどうしますか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '🔄 変更完了です。変更後契約書PDFの生成とメール通知を送付してください。適用開始は2025/09/01からです。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+
+        if (currentScenario.code === 'CONTRACT_TERMINATION') {
+            if (action.type === 'SWITCH_TAB' && action.tabId === 'termination') {
+                addChatMessage('user', '契約廃止タブを確認中です。解約条件に問題はありませんか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '解約条件を確認しました。最低利用期間・違約金はありません。2025/07/31での解約が可能です。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1200);
+            }
+            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmTermination') {
+                addChatMessage('user', '解約手続きを実行しました。証明書の発行はどうしますか？', now, {
+                    type: 'operator_question',
+                    linkedTo: 'operator_action',
+                    scenario: currentScenario.code,
+                    action
+                });
+                setTimeout(() => {
+                    addChatMessage('bot', '🚪 解約手続き完了です。解約証明書PDFを即時発行し、顧客へ送付してください。最終精算書は8/5に送付予定です。', now, {
+                        type: 'ai_response',
+                        linkedTo: 'operator_question',
+                        scenario: currentScenario.code,
+                        action
+                    });
+                }, 1000);
+            }
+        }
+    }, 1500); // 1.5秒遅延でオペレーターが操作を確認してから質問する流れを演出
+}
+
+// シナリオ別にチャット履歴を取得
+function getChatHistoryByScenario(code) {
+    return chatHistory.filter(entry => (entry.meta && entry.meta.scenario) === code);
+}
+
+// チャット履歴の統計情報を取得
+function getChatStatistics() {
+    const stats = {
+        total: chatHistory.length,
+        byType: {},
+        byScenario: {},
+        withTimeline: 0
+    };
+    
+    chatHistory.forEach(entry => {
+        // タイプ別統計
+        const type = entry.meta?.type || 'unknown';
+        stats.byType[type] = (stats.byType[type] || 0) + 1;
+        
+        // シナリオ別統計
+        const scenario = entry.meta?.scenario || 'no_scenario';
+        stats.byScenario[scenario] = (stats.byScenario[scenario] || 0) + 1;
+        
+        // タイムライン紐づけ有無
+        if (entry.meta?.linkedTo) {
+            stats.withTimeline++;
+        }
+    });
+    
+    return stats;
+}
+
+// デバッグ用：チャット履歴をコンソールに出力
+function debugChatHistory() {
+    console.log('=== チャット履歴デバッグ ===');
+    console.log('総メッセージ数:', chatHistory.length);
+    console.log('統計情報:', getChatStatistics());
+    console.log('履歴詳細:', chatHistory);
+    
+    if (currentScenario) {
+        console.log('現在のシナリオのチャット:', getChatHistoryByScenario(currentScenario.code));
+    }
+}
+
+// 料金計算処理の実行
+function executeCalculationProcess() {
+    console.log('料金計算処理を開始します');
+    
+    // 1. データ収集状況の更新
+    const collectionStatus = document.getElementById('collectionStatus');
+    if (collectionStatus) {
+        collectionStatus.textContent = '収集中...';
+        collectionStatus.style.color = '#856404';
+    }
+    
+    setTimeout(() => {
+        if (collectionStatus) {
+            collectionStatus.textContent = '収集完了';
+            collectionStatus.style.color = '#155724';
+        }
+        
+        // 2. 段階的な計算処理
+        executeCalculationSteps();
+    }, 1000);
+}
+
+// 段階的な計算処理の実行
+function executeCalculationSteps() {
+    const steps = [
+        { id: 'basicFeeStep', statusId: 'basicFeeStatus', delay: 800 },
+        { id: 'usageFeeStep', statusId: 'usageFeeStatus', delay: 1000 },
+        { id: 'discountStep', statusId: 'discountStatus', delay: 600 },
+        { id: 'totalStep', statusId: 'totalStatus', delay: 800 }
+    ];
+    
+    let currentStep = 0;
+    
+    function processNextStep() {
+        if (currentStep >= steps.length) {
+            // 全ステップ完了後にエラーチェックを実行
+            executeErrorCheck();
+            return;
+        }
+        
+        const step = steps[currentStep];
+        const stepElement = document.getElementById(step.id);
+        const statusElement = document.getElementById(step.statusId);
+        
+        if (stepElement && statusElement) {
+            // 処理中状態
+            stepElement.classList.add('processing');
+            statusElement.textContent = '計算中...';
+            statusElement.classList.add('processing');
+            
+            setTimeout(() => {
+                // 完了状態
+                stepElement.classList.remove('processing');
+                stepElement.classList.add('completed');
+                statusElement.textContent = '完了';
+                statusElement.classList.remove('processing');
+                statusElement.classList.add('completed');
+                
+                currentStep++;
+                setTimeout(processNextStep, 300);
+            }, step.delay);
+        } else {
+            currentStep++;
+            processNextStep();
+        }
+    }
+    
+    processNextStep();
+}
+
+// エラーチェック処理の実行
+function executeErrorCheck() {
+    const checks = [
+        { id: 'usageCheck', iconId: 'usageCheckIcon', resultId: 'usageCheckResult', delay: 600 },
+        { id: 'calculationCheck', iconId: 'calculationCheckIcon', resultId: 'calculationCheckResult', delay: 800 },
+        { id: 'planCheck', iconId: 'planCheckIcon', resultId: 'planCheckResult', delay: 500 }
+    ];
+    
+    let currentCheck = 0;
+    
+    function processNextCheck() {
+        if (currentCheck >= checks.length) {
+            // 全チェック完了後に請求データ生成を実行
+            generateBillingData();
+            return;
+        }
+        
+        const check = checks[currentCheck];
+        const checkElement = document.getElementById(check.id);
+        const iconElement = document.getElementById(check.iconId);
+        const resultElement = document.getElementById(check.resultId);
+        
+        if (checkElement && iconElement && resultElement) {
+            // 処理中状態
+            checkElement.classList.add('processing');
+            iconElement.textContent = '🔄';
+            resultElement.textContent = 'チェック中';
+            
+            setTimeout(() => {
+                // 完了状態
+                checkElement.classList.remove('processing');
+                checkElement.classList.add('completed');
+                iconElement.textContent = '✅';
+                resultElement.textContent = '正常';
+                
+                currentCheck++;
+                setTimeout(processNextCheck, 200);
+            }, check.delay);
+        } else {
+            currentCheck++;
+            processNextCheck();
+        }
+    }
+    
+    processNextCheck();
+}
+
+// 請求データ生成処理の実行
+function generateBillingData() {
+    const billingResult = document.getElementById('billingResult');
+    const billingResultTitle = document.getElementById('billingResultTitle');
+    const generationStatus = document.getElementById('generationStatus');
+    const billingId = document.getElementById('billingId');
+    const finalBillAmount = document.getElementById('finalBillAmount');
+    const auditLog = document.getElementById('auditLog');
+    
+    if (billingResult && generationStatus) {
+        // 生成中状態
+        billingResult.classList.add('processing');
+        billingResultTitle.textContent = '📄 請求データ生成中...';
+        generationStatus.textContent = '生成中...';
+        generationStatus.classList.add('processing');
+        
+        setTimeout(() => {
+            // 完了状態
+            billingResult.classList.remove('processing');
+            billingResult.classList.add('completed');
+            billingResultTitle.textContent = '📄 請求データ生成完了';
+            generationStatus.textContent = '生成完了';
+            generationStatus.classList.remove('processing');
+            generationStatus.classList.add('completed');
+            
+            // データ更新
+            if (billingId) billingId.textContent = 'BILL-202507-0001';
+            if (finalBillAmount) finalBillAmount.textContent = '¥7,980';
+            if (auditLog) auditLog.textContent = '生成済み';
+        }, 1500);
+    }
+}
+
+// グローバルに公開（ブラウザコンソールから利用可能）
+window.chatHistory = chatHistory;
+window.getChatHistoryByScenario = getChatHistoryByScenario;
+window.getChatStatistics = getChatStatistics;
+window.debugChatHistory = debugChatHistory;
+window.executeCalculationProcess = executeCalculationProcess;
+
+// エラーハンドリング
+window.addEventListener('error', (event) => {
+    console.error('JavaScriptエラー:', event.error);
+});
+
+// パフォーマンス監視
+if ('performance' in window) {
+    window.addEventListener('load', () => {
+        const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+        console.log(`ページ読み込み時間: ${loadTime}ms`);
+    });
+}
+
+// アクセシビリティ対応
+document.addEventListener('keydown', (e) => {
+    // ESCキーでモーダルを閉じる
+    if (e.key === 'Escape' && elements.faqModal.style.display === 'block') {
+        closeFaqModal();
+    }
+    
+    // Tabキーでフォーカス管理
+    if (e.key === 'Tab') {
+        const focusableElements = document.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+        
+        if (e.shiftKey && document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+        }
+    }
+});
+
+// レスポンシブ対応
+window.addEventListener('resize', debounce(() => {
+    // 画面サイズ変更時の処理
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        // モバイル用の調整
+        document.body.classList.add('mobile');
+    } else {
+        document.body.classList.remove('mobile');
+    }
+}, 250));
+
+// 顧客検索機能
+function handleCustomerSearch() {
+    const name = elements.searchName.value.trim();
+    const phone = elements.searchPhone.value.trim();
+    const address = elements.searchAddress.value.trim();
+    
+    // 最低1つの項目が入力されているかチェック
+    if (!name && !phone && !address) {
+        addChatMessage('bot', '検索条件を入力してください。氏名、電話番号、住所のいずれかを入力してください。', formatTime(new Date()), {
+            type: 'ai_error',
+            scenario: null
+        });
+        return;
+    }
+    
+    // 検索実行をチャットに表示
+    const searchConditions = [];
+    if (name) searchConditions.push(`氏名: ${name}`);
+    if (phone) searchConditions.push(`電話番号: ${phone}`);
+    if (address) searchConditions.push(`住所: ${address}`);
+    
+    addChatMessage('bot', `お客様情報を検索しています...\n検索条件: ${searchConditions.join(', ')}`, formatTime(new Date()), {
+        type: 'ai_search',
+        scenario: null
+    });
+    
+    // 検索処理をシミュレート
+    setTimeout(() => {
+        // 顧客情報を表示
+        showCustomerInfo(name, phone, address);
+        
+        // 検索完了メッセージ
+        addChatMessage('bot', 'お客様情報が見つかりました。詳細情報を表示いたします。', formatTime(new Date()), {
+            type: 'ai_search_complete',
+            scenario: null
+        });
+        
+        // 通話ログに検索アクションを追加
+        addCallLogMessage({
+            timestamp: formatTime(new Date()),
+            speaker: "オペレーター",
+            text: `顧客検索実行: ${searchConditions.join(', ')}`
+        });
+        
+        // 要約更新
+        elements.summaryContent.textContent = `顧客情報確認完了: ${name || phone || address}`;
+    }, 1500);
+}
+
+function clearCustomerSearch() {
+    elements.searchName.value = '';
+    elements.searchPhone.value = '';
+    elements.searchAddress.value = '';
+    elements.searchName.focus();
+}
+
+function showCustomerSearch() {
+    // 顧客検索画面を表示、詳細画面を非表示
+    elements.customerSearch.style.display = 'block';
+    elements.customerInfo.style.display = 'none';
+    elements.tabsContainer.style.display = 'none';
+    
+    // 検索フィールドをクリア
+    clearCustomerSearch();
+    
+    // 概要タブをアクティブにリセット
+    switchTab('overview');
+}
+
+function showCustomerInfo(searchName, searchPhone, searchAddress) {
+    // 顧客情報を更新（実際のシステムでは検索結果から取得）
+    const customerData = {
+        furigana: searchName ? 'ヤマダ タロウ' : 'タナカ ハナコ',
+        fullName: searchName || '田中 花子',
+        customerId: 'CUST-2025-0001',
+        phone: searchPhone || '092-123-4567',
+        email: 'tanaka@example.com',
+        address: searchAddress || '福岡県福岡市博多区博多駅前1-1-1',
+        supplyId: '09-1234-1234-1234-0000-0000',
+        contractType: '電気',
+        plan: 'ナイト・セレクト',
+        paymentMethod: '口座振替',
+        contractPeriod: '4年10か月'
+    };
+    
+    // 表示要素を更新
+    document.getElementById('customerFurigana').textContent = customerData.furigana;
+    document.getElementById('customerFullName').textContent = customerData.fullName;
+    document.getElementById('customerId').textContent = customerData.customerId;
+    document.getElementById('customerPhoneDisplay').textContent = customerData.phone;
+    document.getElementById('customerEmail').textContent = customerData.email;
+    document.getElementById('customerAddressDisplay').textContent = customerData.address;
+    document.getElementById('customerSupplyId').textContent = customerData.supplyId;
+    document.getElementById('customerContractType').textContent = customerData.contractType;
+    document.getElementById('customerPlan').textContent = customerData.plan;
+    document.getElementById('customerPaymentMethod').textContent = customerData.paymentMethod;
+    document.getElementById('customerContractPeriod').textContent = customerData.contractPeriod;
+    
+    // 画面切り替え
+    elements.customerSearch.style.display = 'none';
+    elements.customerInfo.style.display = 'block';
+    elements.tabsContainer.style.display = 'block';
+    
+    // タブコンテンツ内の顧客情報も更新
+    updateTabCustomerInfo(customerData);
+}
+
+function updateTabCustomerInfo(customerData) {
+    // 概要タブの顧客情報を更新
+    const overviewElements = {
+        customerId: document.querySelectorAll('#customerId'),
+        customerName: document.querySelectorAll('td:contains("田中 太郎")'),
+        customerPhone: document.querySelectorAll('td:contains("092-123-4567")'),
+        customerEmail: document.querySelectorAll('td:contains("tanaka@example.com")'),
+        customerAddress: document.querySelectorAll('td:contains("福岡県福岡市博多区博多駅前1-1-1")')
+    };
+    
+    // すべてのcustomerIdを更新
+    overviewElements.customerId.forEach(el => {
+        if (el) el.textContent = customerData.customerId;
+    });
+}
+
+// オペレーター動作での顧客検索実行（レガシー対応：一括入力）
+function performCustomerSearch(name, phone, address) {
+    console.log('レガシー顧客検索実行:', { name, phone, address });
+    
+    // 新しいリアルタイム入力方式では、この関数は使用されない
+    // 既存のシナリオとの互換性のために残している
+    
+    // タイピングアニメーション付きで順次入力
+    const typingPromises = [];
+    
+    if (name) {
+        typingPromises.push(typeIntoField(elements.searchName, name, 100));
+    }
+    
+    if (phone) {
+        typingPromises.push(
+            new Promise(resolve => {
+                setTimeout(() => {
+                    typeIntoField(elements.searchPhone, phone, 100).then(resolve);
+                }, name ? 500 : 0); // 名前入力後0.5秒待機
+            })
+        );
+    }
+    
+    if (address) {
+        typingPromises.push(
+            new Promise(resolve => {
+                setTimeout(() => {
+                    typeIntoField(elements.searchAddress, address, 100).then(resolve);
+                }, (name ? 500 : 0) + (phone ? 500 : 0)); // 前の入力完了後0.5秒待機
+            })
+        );
+    }
+    
+    // 全ての入力完了後に検索実行
+    Promise.all(typingPromises).then(() => {
+        setTimeout(() => {
+            // 検索ボタンをハイライト
+            elements.searchCustomerBtn.classList.add('button-click-effect');
+            
+            setTimeout(() => {
+                // 検索実行
+                handleCustomerSearch();
+                
+                // ハイライト解除
+                setTimeout(() => {
+                    elements.searchName.classList.remove('operator-action-highlight');
+                    elements.searchPhone.classList.remove('operator-action-highlight');
+                    elements.searchAddress.classList.remove('operator-action-highlight');
+                    elements.searchCustomerBtn.classList.remove('button-click-effect');
+                }, 1000);
+            }, 500);
+        }, 500); // 全入力完了後0.5秒待機
+    });
+}
+
+// 検索フィールドへの個別入力（リアルタイム）
+function inputSearchField(fieldId, value) {
     const inputElement = document.getElementById(fieldId);
     if (inputElement) {
-        inputElement.value = value;
-        inputElement.classList.add('highlight');
-        setTimeout(() => {
-            inputElement.classList.remove('highlight');
-        }, 2000);
+        // タイピングアニメーション実行
+        typeIntoField(inputElement, value, 120).then(() => {
+            // タイピング完了後の処理
+            setTimeout(() => {
+                inputElement.classList.remove('operator-action-highlight');
+            }, 700);
+        });
+        
+        console.log(`検索フィールド入力: ${fieldId} = ${value}`);
     }
 }
 
-// AIガイダンス表示判定
-function maybePushAISuggestionForAction(trigger) {
+// 検索ボタンクリック
+function clickSearchButton() {
+    if (elements.searchCustomerBtn) {
+        // ボタンをハイライト
+        elements.searchCustomerBtn.classList.add('button-click-effect');
+        
+        setTimeout(() => {
+            // 検索実行
+            handleCustomerSearch();
+            
+            // ハイライト解除
+            setTimeout(() => {
+                elements.searchCustomerBtn.classList.remove('button-click-effect');
+            }, 1000);
+        }, 500);
+        
+        console.log('検索ボタンクリック実行');
+    }
+}
+
+// 共通のタイピングアニメーション関数
+function typeIntoField(inputElement, value, delay = 100) {
+    return new Promise((resolve) => {
+        if (!inputElement) {
+            resolve();
+            return;
+        }
+        
+        // フィールドをハイライト
+        inputElement.classList.add('operator-action-highlight');
+        inputElement.focus();
+        
+        // 既存の値をクリア
+        inputElement.value = '';
+        
+        let currentValue = '';
+        let charIndex = 0;
+        
+        const typeInterval = setInterval(() => {
+            if (charIndex < value.length) {
+                currentValue += value[charIndex];
+                inputElement.value = currentValue;
+                inputElement.classList.add('typing-animation');
+                charIndex++;
+                
+                // 特定フィールドの関連表示更新
+                if (inputElement.id === 'usageInput') {
+                    const usageDisplay = document.getElementById('usageDisplay');
+                    if (usageDisplay) {
+                        usageDisplay.textContent = currentValue;
+                    }
+                }
+            } else {
+                clearInterval(typeInterval);
+                
+                // タイピング完了時の処理
+                setTimeout(() => {
+                    inputElement.classList.remove('typing-animation');
+                    inputElement.blur();
+                    resolve();
+                }, 300);
+            }
+        }, delay);
+    });
+}
+
+// AIガイダンス機能
+function showAIGuidance(guidance) {
+    const now = formatTime(new Date());
+    
+    // ガイダンスメッセージを表示
+    addChatMessage('bot', guidance.message, now, {
+        type: 'ai_guidance',
+        trigger: guidance.trigger,
+        scenario: currentScenario ? currentScenario.code : null
+    });
+    
+    // 選択肢ボタンを追加
+    if (guidance.options && guidance.options.length > 0) {
+        setTimeout(() => {
+            addGuidanceOptions(guidance.options, guidance.trigger);
+        }, 500);
+    }
+}
+
+function addGuidanceOptions(options, trigger) {
+    const messageArea = elements.messageArea;
+    const optionsContainer = document.createElement('div');
+    optionsContainer.classList.add('guidance-options');
+    
+    options.forEach(option => {
+        const optionButton = document.createElement('button');
+        optionButton.classList.add('guidance-option-btn');
+        optionButton.textContent = option;
+        optionButton.addEventListener('click', () => {
+            handleGuidanceSelection(option, trigger);
+            optionsContainer.remove();
+        });
+        optionsContainer.appendChild(optionButton);
+    });
+    
+    messageArea.appendChild(optionsContainer);
+    messageArea.scrollTop = messageArea.scrollHeight;
+}
+
+function handleGuidanceSelection(selectedOption, trigger) {
+    const now = formatTime(new Date());
+    
+    // 選択結果をチャットに表示
+    addChatMessage('user', `選択: ${selectedOption}`, now, {
+        type: 'guidance_selection',
+        trigger: trigger,
+        scenario: currentScenario ? currentScenario.code : null
+    });
+    
+    // 次のガイダンスステップを実行
+    processGuidanceFlow(selectedOption, trigger);
+}
+
+function processGuidanceFlow(selectedOption, trigger) {
     if (!currentScenario || !currentScenario.aiGuidance) return;
     
-    const guidance = currentScenario.aiGuidance.find(g => g.trigger === trigger);
-    if (guidance) {
-        setTimeout(() => {
-            showAIGuidance(guidance);
-        }, 1000);
+    const now = formatTime(new Date());
+    let nextGuidance = null;
+    
+    switch (trigger) {
+        case 'scenario_start':
+            if (selectedOption === 'はい') {
+                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'customer_identified');
+            }
+            break;
+        case 'customer_identified':
+            if (selectedOption === 'はい') {
+                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'existing_customer');
+            }
+            break;
+        case 'existing_customer':
+            if (selectedOption === '住所を確認') {
+                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'address_confirmed');
+            }
+            break;
+        case 'address_confirmed':
+            if (selectedOption === '開始日を確認') {
+                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'new_contract_ready');
+            }
+            break;
+        case 'new_contract_ready':
+            if (selectedOption === '契約実行') {
+                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'old_contract_check');
+            }
+            break;
+        case 'old_contract_check':
+            if (selectedOption === '解約必要') {
+                addChatMessage('bot', '旧住所の解約手続きも同時に進めてください。手続き完了です。', now, {
+                    type: 'ai_guidance',
+                    scenario: currentScenario.code
+                });
+                return;
+            }
+            break;
     }
-}
-
-// AIガイダンス表示
-function showAIGuidance(guidance) {
-    const guidancePanel = document.createElement('div');
-    guidancePanel.className = 'ai-guidance-panel';
-    guidancePanel.innerHTML = `
-        <div class="guidance-header">
-            <span class="guidance-icon">🤖</span>
-            <span class="guidance-title">AIガイダンス</span>
-            <button class="guidance-close" onclick="this.parentElement.parentElement.remove()">×</button>
-        </div>
-        <div class="guidance-content">
-            <p>${guidance.message}</p>
-            ${guidance.options ? `
-                <div class="guidance-options">
-                    ${guidance.options.map(option => `
-                        <button class="guidance-option" onclick="selectGuidanceOption('${option}', '${guidance.trigger}')">${option}</button>
-                    `).join('')}
-                </div>
-            ` : ''}
-        </div>
-    `;
     
-    document.body.appendChild(guidancePanel);
-    
-    // 10秒後に自動削除
-    setTimeout(() => {
-        if (guidancePanel.parentElement) {
-            guidancePanel.remove();
-        }
-    }, 10000);
-}
-
-// ガイダンスオプション選択
-function selectGuidanceOption(selectedOption, trigger) {
-    // ガイダンスパネルを削除
-    const panels = document.querySelectorAll('.ai-guidance-panel');
-    panels.forEach(panel => panel.remove());
-    
-    // 選択されたオプションに基づく処理
-    addBotMessage(`「${selectedOption}」を選択されました。処理を実行します。`);
-    
-    // より詳細なガイダンスフローがある場合
-    const nextGuidance = getNextGuidanceFlow(selectedOption, trigger);
     if (nextGuidance) {
         setTimeout(() => {
             showAIGuidance(nextGuidance);
         }, 1000);
     }
-    
-    console.log(`ガイダンスフロー処理: ${selectedOption} (trigger: ${trigger}) - 自動システムにより管理`);
-}
-
-// 次のガイダンスフロー取得
-function getNextGuidanceFlow(selectedOption, trigger) {
-    // 実際の実装では、より複雑なフロー管理を行う
-    // ここでは簡単なサンプルフローを提供
-    const followUpGuidances = {
-        'シナリオ実行': {
-            message: 'シナリオの実行を継続します。次のステップに進んでください。',
-            options: ['続行', '一時停止', '詳細表示']
-        },
-        '続行': {
-            message: 'シナリオが正常に実行されています。',
-            options: []
-        }
-    };
-    
-    return followUpGuidances[selectedOption];
-}
-
-// シナリオ停止
-function stopScenario() {
-    currentScenario = null;
-    operatorActionIndex = 0;
-    
-    // すべてのハイライトを削除
-    document.querySelectorAll('.highlight').forEach(el => {
-        el.classList.remove('highlight');
-    });
-    
-    // 進行状況を非表示
-    hideOperatorProgress();
-    
-    // AIガイダンスパネルを削除
-    document.querySelectorAll('.ai-guidance-panel').forEach(panel => {
-        panel.remove();
-    });
 }
 
 // 初期化完了メッセージ
