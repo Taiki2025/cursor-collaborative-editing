@@ -197,28 +197,28 @@ async function loadScenarios() {
                 "name": "再点申込",
                 "icon": "⚡",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "新しい場所で電気を使いたいのですが…" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。引っ越しに伴う電気利用のお申込みですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "もしもし、電気が止まってしまったんですが…" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "申し訳ございません。電気が止まっているとのことですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
                     { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
                     { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
                     { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
                     { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "現在のご住所もお聞かせください。" },
                     { "timestamp": "14:00:22", "speaker": "顧客", "text": "福岡県福岡市博多区博多駅前1-1-1です。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "お客様情報を検索いたします。引っ越し先での電気利用に関する手続きを進めます。" },
-                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "新しい利用場所の住所をお聞かせください。" },
-                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "福岡県福岡市中央区天神2-2-2のマンションです。" },
-                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "利用開始希望日はいつでしょうか？" },
-                    { "timestamp": "14:00:45", "speaker": "顧客", "text": "8月15日からお願いします。" },
-                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "承知いたします。8月15日から電気がご利用いただけるよう手続きいたします。" },
-                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "ところで、現在の利用場所での電気利用契約について、まだ解約手続きがお済みでないようですが、こちらのお電話で合わせて対応できますが、いかがいたしますか？" },
-                    { "timestamp": "14:01:00", "speaker": "顧客", "text": "じゃあ、それも今お願いしようかな。" },
-                    { "timestamp": "14:01:05", "speaker": "オペレーター", "text": "承知いたします。解約手続きも進めさせていただきます。ありがとうございました。" }
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "お客様情報を検索いたします。停電の原因を確認いたします。" },
+                    { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "確認いたしました。未収金額¥15,430がございます。お支払い確認後に再開可能です。" },
+                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "分割での支払いは可能でしょうか？" },
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "はい、3回分割でしたら可能です。再開希望日はいかがいたしますか？" },
+                    { "timestamp": "14:00:45", "speaker": "顧客", "text": "明日の午後1時からお願いします。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "承知いたします。8月12日13時から電気を再開いたします。分割払い設定も完了しました。" },
+                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "予約ID：RES-20250812-0001で確定いたします。" },
+                    { "timestamp": "14:01:00", "speaker": "顧客", "text": "ありがとうございます。助かりました。" },
+                    { "timestamp": "14:01:05", "speaker": "オペレーター", "text": "ありがとうございました。再開後のご利用をお待ちしております。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:25", "summary": "顧客情報検索・引っ越しに伴う再点申込受付開始" },
-                    { "time": "14:00:35", "summary": "新住所確認：福岡県福岡市中央区天神2-2-2" },
-                    { "time": "14:00:50", "summary": "利用開始日設定：2025/08/15から電気利用可能" },
-                    { "time": "14:01:00", "summary": "旧住所解約手続きも同時対応で完了" }
+                    { "time": "14:00:25", "summary": "顧客情報検索・停電原因確認開始" },
+                    { "time": "14:00:30", "summary": "未収金¥15,430確認・支払い条件調整" },
+                    { "time": "14:00:40", "summary": "3回分割払い承認・再開日程調整" },
+                    { "time": "14:00:50", "summary": "再開設定完了：2025/08/12 13:00より供給再開" }
                 ],
                 "alerts": [],
                 "sharedInfo": [],
@@ -229,113 +229,95 @@ async function loadScenarios() {
                         "field": "searchName", 
                         "value": "山田太郎", 
                         "description": "顧客氏名をリアルタイム入力",
-                        "timing": "dialog_3_customer_name",
-                        "delay": 5000  // 3番目の会話「山田太郎です」表示(4秒) + 1秒後に入力開始
+                        "delay": 5000
                     },
                     { 
                         "type": "INPUT_SEARCH_FIELD", 
                         "field": "searchPhone", 
                         "value": "092-123-4567", 
                         "description": "顧客電話番号をリアルタイム入力",
-                        "timing": "dialog_5_customer_phone",
-                        "delay": 9000  // 5番目の会話「092-123-4567です」表示(8秒) + 1秒後に入力開始
+                        "delay": 9000
                     },
                     { 
                         "type": "INPUT_SEARCH_FIELD", 
                         "field": "searchAddress", 
                         "value": "福岡県福岡市博多区博多駅前1-1-1", 
                         "description": "顧客住所をリアルタイム入力",
-                        "timing": "dialog_7_customer_address",
-                        "delay": 13000  // 7番目の会話「福岡県福岡市博多区...」表示(12秒) + 1秒後に入力開始
+                        "delay": 13000
                     },
                     
-                    // Phase 2: 本人確認完了後の顧客検索実行 (8番目の会話「お客様情報を検索いたします」と同時)
+                    // Phase 2: 顧客検索実行（8番目の会話「お客様情報を検索いたします」と同時）
                     { 
                         "type": "CLICK_SEARCH_BUTTON", 
                         "description": "顧客情報検索実行",
-                        "timing": "dialog_8_search_execution",
-                        "delay": 15000  // 8番目の会話表示(14秒) + 1秒後に検索実行
+                        "delay": 15000
                     },
+                    
+                    // Phase 3: 未収管理タブで未収確認（9番目の会話「未収金額確認」と同時）
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "unpaid-management", 
+                        "tabName": "未収管理",
+                        "description": "未収金額確認",
+                        "delay": 19000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "unpaidAmount", 
+                        "description": "未収金額¥15,430を確認",
+                        "duration": 2000,
+                        "delay": 20000
+                    },
+                    
+                    // Phase 4: 分割払い設定（10番目の会話「分割での支払いは可能でしょうか」の後）
+                    { 
+                        "type": "SELECT_OPTION", 
+                        "selector": "#paymentMethod", 
+                        "value": "installment", 
+                        "description": "分割払い設定",
+                        "delay": 23000
+                    },
+                    
+                    // Phase 5: 再点申込タブに移動（11番目の会話「再開希望日は」と同時）
                     { 
                         "type": "SWITCH_TAB", 
                         "tabId": "restore-power", 
                         "tabName": "再点申込",
                         "description": "再点申込画面に移動",
-                        "timing": "after_search_complete",
-                        "delay": 17000  // 検索完了後に再点申込画面準備
+                        "delay": 25000
                     },
                     
-                    // Phase 4: 新住所回答後に入力 (10番目の会話「福岡県福岡市中央区天神...」の後)
+                    // Phase 6: 再開日時設定（12番目の会話「明日の午後1時」の後）
                     { 
                         "type": "INPUT_DATA", 
-                        "field": "newAddress", 
-                        "value": "福岡県福岡市中央区天神2-2-2", 
-                        "description": "新住所をシステムに入力",
-                        "timing": "dialog_10_new_address_provided",
-                        "delay": 19500  // 10番目の会話表示(18秒) + 1.5秒後に入力開始
+                        "field": "restoreDate", 
+                        "value": "2025-08-12", 
+                        "description": "再開日設定",
+                        "delay": 27000
                     },
-                    
-                    // Phase 5: 開始日回答後に設定 (12番目の会話「8月15日からお願いします」の後)
                     { 
                         "type": "INPUT_DATA", 
-                        "field": "startDate", 
-                        "value": "2025-08-15", 
-                        "description": "利用開始日をシステムに設定",
-                        "timing": "dialog_12_start_date_provided",
-                        "delay": 23500  // 12番目の会話表示(22秒) + 1.5秒後に設定
+                        "field": "restoreTime", 
+                        "value": "13:00", 
+                        "description": "再開時刻設定",
+                        "delay": 28000
                     },
                     
-                    // Phase 6: 手続き確認時に契約実行 (13番目の会話「手続きいたします」と同時)
+                    // Phase 7: 再開手続き実行（13番目の会話「再開いたします」と同時）
                     { 
                         "type": "CLICK_BUTTON", 
-                        "buttonId": "confirmNewContract", 
-                        "description": "新規契約手続き実行",
-                        "timing": "dialog_13_procedure_confirm",
-                        "delay": 25000  // 13番目の会話表示(24秒) + 1秒後に実行
-                    },
-                    
-                    // Phase 7: 解約提案時に現在契約確認 (14番目の会話「現在の利用場所での解約は」と同時)
-                    { 
-                        "type": "SWITCH_TAB", 
-                        "tabId": "contract-service", 
-                        "tabName": "契約・サービス",
-                        "description": "現在の契約状況を確認",
-                        "timing": "dialog_14_termination_proposal",
-                        "delay": 27000  // 14番目の会話表示(26秒) + 1秒後に確認
-                    },
-                    
-                    // Phase 8: 顧客同意後に解約手続き (15番目の会話「それも今お願いしようかな」の後)
-                    { 
-                        "type": "SWITCH_TAB", 
-                        "tabId": "termination", 
-                        "tabName": "契約廃止",
-                        "description": "解約手続き画面に移動",
-                        "timing": "dialog_15_customer_agrees",
-                        "delay": 29500  // 15番目の会話表示(28秒) + 1.5秒後に移動
-                    },
-                    { 
-                        "type": "INPUT_DATA", 
-                        "field": "terminationDate", 
-                        "value": "2025-08-14", 
-                        "description": "旧住所解約日設定（新契約前日）",
-                        "timing": "termination_date_input",
-                        "delay": 31500  // 解約画面移動後2秒で日付設定
-                    },
-                    { 
-                        "type": "CLICK_BUTTON", 
-                        "buttonId": "confirmTermination", 
-                        "description": "解約手続き実行",
-                        "timing": "termination_execution",
-                        "delay": 33500  // 解約日設定後2秒で実行
+                        "buttonId": "confirmRestore", 
+                        "description": "電気再開手続き実行",
+                        "delay": 30000
                     }
                 ],
                 "aiGuidance": [
-                    { "trigger": "scenario_start", "message": "会話内容から「再点の申込」と理解しました。再点の処理に移ってよろしいですか？", "options": ["はい", "いいえ"] },
-                    { "trigger": "customer_identified", "message": "顧客は特定できましたか？", "options": ["はい", "いいえ"] },
-                    { "trigger": "existing_customer", "message": "既存の顧客であると理解しました。まずは新規利用契約の確認フローを進めてください。", "guidance": "新住所を確認してください", "options": ["住所を確認", "住所不明"] },
-                    { "trigger": "address_confirmed", "message": "新住所が確認できました。次に利用開始日を確認してください。", "options": ["開始日を確認", "開始日未定"] },
-                    { "trigger": "new_contract_ready", "message": "新規契約手続きの準備が整いました。契約を実行してください。", "options": ["契約実行", "保留"] },
-                    { "trigger": "old_contract_check", "message": "旧住所の契約状況を確認してください。解約手続きが必要な場合があります。", "options": ["解約必要", "解約済み", "確認中"] }
+                    { "trigger": "scenario_start", "message": "電気が止まっているとのご連絡です。停電対応の手順を開始しますか？", "options": ["はい", "いいえ"] },
+                    { "trigger": "customer_identified", "message": "顧客情報が確認できました。未収金の確認を行いますか？", "options": ["はい", "いいえ"] },
+                    { "trigger": "unpaid_found", "message": "未収金¥15,430が確認されました。分割払いでの対応を提案しますか？", "options": ["分割払い提案", "一括払い要求", "その他"] },
+                    { "trigger": "payment_arranged", "message": "支払い条件が決まりました。再開日時を調整してください。", "options": ["日時調整", "即時再開", "後日連絡"] },
+                    { "trigger": "restore_ready", "message": "再開手続きの準備が完了しました。実行してよろしいですか？", "options": ["実行", "保留", "確認"] },
+                    { "trigger": "process_complete", "message": "電気再開手続きが完了しました。顧客への通知を行ってください。", "options": ["通知送信", "完了"] }
                 ]
             },
             {
@@ -344,15 +326,15 @@ async function loadScenarios() {
                 "icon": "🧮",
                 "transcript": [
                     { "timestamp": "14:00:01", "speaker": "顧客", "text": "今月の料金計算について詳しく教えてください" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。料金計算の詳細をご説明いたします。ご本人確認をさせていただきます。お名前をお聞かせください。" },
                     { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
                     { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
                     { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
-                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "お客様情報を検索いたします。利用ログとメーター情報を収集します。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "7月分の使用量は220kWhです。料金プランとのマッチングを行います。" },
-                    { "timestamp": "14:00:35", "speaker": "オペレーター", "text": "ナイト・セレクトプラン適用で基本料金¥2,400、従量料金¥5,580です。" },
-                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "異常値チェック完了、請求データを生成いたします。" },
-                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "合計¥7,980の請求データが完成しました。" }
+                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "お客様情報を検索いたします。スマートメーターから使用量データを収集中です。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "7月分の使用量は220kWhでした。前月比で15kWh減少しています。" },
+                    { "timestamp": "14:00:35", "speaker": "オペレーター", "text": "ナイト・セレクトプランで計算いたします。基本料金¥2,400、従量料金¥5,580です。" },
+                    { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "異常値チェックも完了し、エラーはありませんでした。" },
+                    { "timestamp": "14:00:55", "speaker": "オペレーター", "text": "最終的な請求額は¥7,980となります。詳細な内訳をお送りいたします。" }
                 ],
                 "summaryUpdates": [
                     { "time": "14:00:15", "summary": "利用ログ・メーター情報の収集開始" },
@@ -364,16 +346,86 @@ async function loadScenarios() {
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "CUSTOMER_SEARCH", "name": "山田太郎", "phone": "092-123-4567", "address": "", "description": "顧客情報検索実行", "delay": 35000 },
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要", "delay": 37000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000, "delay": 39000 },
-                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス", "delay": 49000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentPlan", "description": "料金プランを確認", "duration": 2000, "delay": 51000 },
-                    { "type": "SWITCH_TAB", "tabId": "simulation", "tabName": "料金シミュレーション", "delay": 69000 },
-                    { "type": "INPUT_DATA", "field": "usageInput", "value": "220", "description": "使用量データ入力", "delay": 71000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "calculateBill", "description": "料金計算実行", "delay": 89000 },
-                    { "type": "SWITCH_TAB", "tabId": "billing-history", "tabName": "請求履歴", "delay": 91000 },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentBill", "description": "生成された請求データ確認", "duration": 2000, "delay": 93000 }
+                    // Phase 1: 顧客情報の段階的入力
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
+                    },
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    
+                    // Phase 2: 顧客検索実行
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 3: 契約・サービスタブで料金プラン確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "contract-service", 
+                        "tabName": "契約・サービス",
+                        "description": "料金プラン確認",
+                        "delay": 17000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "currentPlan", 
+                        "description": "ナイト・セレクトプランを確認",
+                        "duration": 2000,
+                        "delay": 18000
+                    },
+                    
+                    // Phase 4: 料金シミュレーションタブに移動
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "simulation", 
+                        "tabName": "料金シミュレーション",
+                        "description": "料金計算画面に移動",
+                        "delay": 22000
+                    },
+                    
+                    // Phase 5: 使用量データ入力（7番目の会話「220kWh」と同時）
+                    { 
+                        "type": "INPUT_DATA", 
+                        "field": "usageInput", 
+                        "value": "220", 
+                        "description": "使用量220kWh入力",
+                        "delay": 25000
+                    },
+                    
+                    // Phase 6: 料金計算実行（8番目の会話「計算いたします」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "calculateBill", 
+                        "description": "料金計算処理実行",
+                        "delay": 35000
+                    },
+                    
+                    // Phase 7: 請求履歴タブで結果確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "billing-history", 
+                        "tabName": "請求履歴",
+                        "description": "計算結果確認",
+                        "delay": 50000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "currentBill", 
+                        "description": "請求額¥7,980確認",
+                        "duration": 2000,
+                        "delay": 51000
+                    }
                 ]
             },
             {
@@ -382,15 +434,15 @@ async function loadScenarios() {
                 "icon": "💰",
                 "transcript": [
                     { "timestamp": "14:00:01", "speaker": "顧客", "text": "未払いの請求について相談したいのですが" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。未収金のご相談ですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
                     { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
                     { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
                     { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "請求書発行状況を確認します。郵送とWeb請求書を発行済みです。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "入金確認の結果、¥15,430の未入金がございます。" },
+                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "お客様情報を検索いたします。請求書の発行状況を確認いたします。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "確認いたしました。¥15,430の未入金が3ヶ月分ございます。" },
                     { "timestamp": "14:00:35", "speaker": "顧客", "text": "分割での支払いは可能でしょうか？" },
-                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "はい、3回分割が可能です。催促状の送付を停止いたします。" },
-                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "分割払い設定完了です。債権管理帳票を更新いたします。" }
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "はい、3回分割でのお支払いが可能です。催促状の送付も停止いたします。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "分割払い設定を完了いたします。債権管理システムも更新いたします。" }
                 ],
                 "summaryUpdates": [
                     { "time": "14:00:15", "summary": "請求書発行状況確認：郵送・Web請求書発行済み" },
@@ -408,15 +460,77 @@ async function loadScenarios() {
                 ],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
-                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
-                    { "type": "SWITCH_TAB", "tabId": "billing-history", "tabName": "請求履歴" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentBill", "description": "請求書発行状況確認", "duration": 2000 },
-                    { "type": "SWITCH_TAB", "tabId": "unpaid-management", "tabName": "未収管理" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "unpaidAmount", "description": "未入金額確認", "duration": 2000 },
-                    { "type": "SELECT_OPTION", "selector": "#paymentMethod", "value": "installment", "description": "分割払い設定" },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmPayment", "description": "債権管理帳票更新" }
+                    // Phase 1: 顧客情報の段階的入力
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
+                    },
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    
+                    // Phase 2: 顧客検索実行
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 3: 請求履歴タブで発行状況確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "billing-history", 
+                        "tabName": "請求履歴",
+                        "description": "請求書発行状況確認",
+                        "delay": 17000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "currentBill", 
+                        "description": "請求書発行状況を確認",
+                        "duration": 2000,
+                        "delay": 18000
+                    },
+                    
+                    // Phase 4: 未収管理タブで未収金確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "unpaid-management", 
+                        "tabName": "未収管理",
+                        "description": "未収金額確認",
+                        "delay": 22000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "unpaidAmount", 
+                        "description": "未収金¥15,430を確認",
+                        "duration": 2000,
+                        "delay": 25000
+                    },
+                    
+                    // Phase 5: 分割払い設定（8番目の会話「分割での支払いは」の後）
+                    { 
+                        "type": "SELECT_OPTION", 
+                        "selector": "#paymentMethod", 
+                        "value": "installment", 
+                        "description": "分割払い設定",
+                        "delay": 35000
+                    },
+                    
+                    // Phase 6: 債権管理更新（9番目の会話「債権管理システムも更新」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "confirmPayment", 
+                        "description": "債権管理帳票更新実行",
+                        "delay": 50000
+                    }
                 ]
             },
             {
@@ -425,11 +539,11 @@ async function loadScenarios() {
                 "icon": "🔄",
                 "transcript": [
                     { "timestamp": "14:00:01", "speaker": "顧客", "text": "契約内容を変更したいのですが" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。ご本人確認をさせていただきます。お名前をお聞かせください。" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。契約変更のご相談ですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
                     { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
                     { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
                     { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。プランとアンペア数を変更したいです。" },
-                    { "timestamp": "14:00:20", "speaker": "オペレーター", "text": "変更可否と影響範囲を審査いたします。少々お待ちください。" },
+                    { "timestamp": "14:00:20", "speaker": "オペレーター", "text": "お客様情報を検索いたします。変更可否と影響範囲を審査いたします。" },
                     { "timestamp": "14:00:30", "speaker": "オペレーター", "text": "レギュラープラン50Aへの変更で、月額¥1,420の増額になります。" },
                     { "timestamp": "14:00:40", "speaker": "顧客", "text": "はい、お願いします。" },
                     { "timestamp": "14:00:45", "speaker": "オペレーター", "text": "システム上の契約情報を更新します。" },
@@ -444,15 +558,77 @@ async function loadScenarios() {
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
-                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
-                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "currentPlan", "description": "現在の契約内容確認", "duration": 2000 },
-                    { "type": "SWITCH_TAB", "tabId": "change-plan", "tabName": "契約変更" },
-                    { "type": "SELECT_OPTION", "selector": "#newPlan", "value": "regular", "description": "新プラン選択" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "planComparison", "description": "変更影響範囲確認", "duration": 2000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmPlanChange", "description": "契約情報更新実行" }
+                    // Phase 1: 顧客情報の段階的入力
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
+                    },
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    
+                    // Phase 2: 顧客検索実行
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 3: 契約・サービスタブで現在の契約確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "contract-service", 
+                        "tabName": "契約・サービス",
+                        "description": "現在の契約内容確認",
+                        "delay": 17000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "currentPlan", 
+                        "description": "現在のナイト・セレクトプランを確認",
+                        "duration": 2000,
+                        "delay": 20000
+                    },
+                    
+                    // Phase 4: 契約変更タブに移動
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "change-plan", 
+                        "tabName": "契約変更",
+                        "description": "契約変更画面に移動",
+                        "delay": 25000
+                    },
+                    
+                    // Phase 5: 新プラン選択（7番目の会話「レギュラープラン50A」と同時）
+                    { 
+                        "type": "SELECT_OPTION", 
+                        "selector": "#newPlan", 
+                        "value": "regular", 
+                        "description": "レギュラープラン選択",
+                        "delay": 30000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "planComparison", 
+                        "description": "変更影響範囲確認：+¥1,420/月",
+                        "duration": 2000,
+                        "delay": 32000
+                    },
+                    
+                    // Phase 6: 契約変更実行（9番目の会話「システム上の契約情報を更新」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "confirmPlanChange", 
+                        "description": "契約変更手続き実行",
+                        "delay": 45000
+                    }
                 ]
             },
             {
@@ -465,11 +641,11 @@ async function loadScenarios() {
                     { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
                     { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
                     { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
-                    { "timestamp": "14:00:15", "speaker": "オペレーター", "text": "解約条件を確認します。最低利用期間と違約金はございません。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "解約日設定およびシステム停止手続きを行います。" },
+                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "お客様情報を検索いたします。解約条件を確認いたします。" },
+                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "確認いたしました。最低利用期間と違約金はございません。" },
                     { "timestamp": "14:00:35", "speaker": "顧客", "text": "7月31日で終了でお願いします。" },
-                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "最終請求の精算と機器返却の手配をいたします。" },
-                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "解約完了通知と解約証明書を送付いたします。" }
+                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "承知いたします。最終請求の精算と解約手続きを進めます。" },
+                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "解約手続き完了いたします。解約証明書を送付いたします。" }
                 ],
                 "summaryUpdates": [
                     { "time": "14:00:15", "summary": "解約申請受付：契約終了希望" },
@@ -481,16 +657,77 @@ async function loadScenarios() {
                 "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    { "type": "SWITCH_TAB", "tabId": "overview", "tabName": "顧客概要" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "customerId", "description": "契約番号確認", "duration": 2000 },
-                    { "type": "INPUT_DATA", "field": "customerId", "value": "CTR-09-1234-5678" },
-                    { "type": "SWITCH_TAB", "tabId": "contract-service", "tabName": "契約・サービス" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "contractStatus", "description": "契約状況確認", "duration": 2000 },
-                    { "type": "SWITCH_TAB", "tabId": "termination", "tabName": "契約廃止" },
-                    { "type": "SELECT_OPTION", "selector": "#terminationReason", "value": "moving", "description": "廃止理由設定" },
-                    { "type": "INPUT_DATA", "field": "terminationDate", "value": "2025-07-31", "description": "解約日設定" },
-                    { "type": "HIGHLIGHT_FIELD", "fieldId": "finalBill", "description": "最終精算額確認", "duration": 2000 },
-                    { "type": "CLICK_BUTTON", "buttonId": "confirmTermination", "description": "解約手続き実行" }
+                    // Phase 1: 顧客情報の段階的入力
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchName", 
+                        "value": "山田太郎", 
+                        "description": "顧客氏名をリアルタイム入力",
+                        "delay": 5000
+                    },
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchPhone", 
+                        "value": "092-123-4567", 
+                        "description": "顧客電話番号をリアルタイム入力",
+                        "delay": 9000
+                    },
+                    
+                    // Phase 2: 顧客検索実行
+                    { 
+                        "type": "CLICK_SEARCH_BUTTON", 
+                        "description": "顧客情報検索実行",
+                        "delay": 13000
+                    },
+                    
+                    // Phase 3: 契約・サービスタブで契約状況確認
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "contract-service", 
+                        "tabName": "契約・サービス",
+                        "description": "契約状況確認",
+                        "delay": 17000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "contractStatus", 
+                        "description": "有効な契約を確認",
+                        "duration": 2000,
+                        "delay": 18000
+                    },
+                    
+                    // Phase 4: 契約廃止タブに移動（6番目の会話「解約条件を確認」と同時）
+                    { 
+                        "type": "SWITCH_TAB", 
+                        "tabId": "termination", 
+                        "tabName": "契約廃止",
+                        "description": "解約条件確認画面に移動",
+                        "delay": 25000
+                    },
+                    
+                    // Phase 5: 解約日設定（8番目の会話「7月31日で終了」の後）
+                    { 
+                        "type": "INPUT_DATA", 
+                        "field": "terminationDate", 
+                        "value": "2025-07-31", 
+                        "description": "解約日設定",
+                        "delay": 35000
+                    },
+                    { 
+                        "type": "HIGHLIGHT_FIELD", 
+                        "fieldId": "finalBill", 
+                        "description": "最終精算額確認",
+                        "duration": 2000,
+                        "delay": 37000
+                    },
+                    
+                    // Phase 6: 解約手続き実行（10番目の会話「解約手続き完了」と同時）
+                    { 
+                        "type": "CLICK_BUTTON", 
+                        "buttonId": "confirmTermination", 
+                        "description": "解約手続き実行",
+                        "delay": 50000
+                    }
                 ]
             }
         ];
@@ -621,13 +858,7 @@ function setupInitialState() {
     elements.alertContent.innerHTML = '';
     elements.sharedInfoContent.innerHTML = '';
     
-    // デモモード説明をチャットに追加
-    setTimeout(() => {
-        addChatMessage('bot', 'デモモードを有効にすると、様々なシナリオの通話・操作を再現できます。右上の「デモモード」ボタンをクリックしてお試しください。', '14:00', {
-            type: 'ai_instruction',
-            scenario: null
-        });
-    }, 2000);
+    // デモモード説明メッセージを削除（ユーザーは既にデモであることを認識しているため）
 }
 
 // シナリオ選択
@@ -674,9 +905,9 @@ function selectScenario(scenarioCode) {
         text: `シナリオ開始: ${currentScenario.name}`
     });
     
-    // AIからシナリオ開始の案内を追加
+    // AIからシナリオ開始の案内を追加（より簡潔に）
     const now = formatTime(new Date());
-    addChatMessage('bot', `${currentScenario.name}のシナリオを開始します。このシナリオでは、通話ログ、オペレーター操作、AI応答が連動して表示されます。`, now, {
+    addChatMessage('bot', `${currentScenario.name}のシナリオを開始します。`, now, {
         type: 'ai_scenario_start',
         scenario: scenarioCode
     });
