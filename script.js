@@ -273,15 +273,15 @@ async function loadScenarios() {
                     { 
                         "type": "INPUT_DATA", 
                         "field": "startDate", 
-                        "value": "2025/8/15", 
+                        "value": "2025-08-15", 
                         "delay": 22500
                     },
                     
                     // Phase 6: 契約プラン確認
                     { 
-                        "type": "INPUT_DATA", 
-                        "field": "contractPlan", 
-                        "value": "レギュラー", 
+                        "type": "SELECT_OPTION", 
+                        "selector": "#contractPlan", 
+                        "value": "regular", 
                         "delay": 28500
                     },
                     
@@ -295,11 +295,11 @@ async function loadScenarios() {
                 ],
                 "aiGuidance": [
                     { "trigger": "scenario_start", "message": "シナリオ開始：引越し先での新規電気利用契約申込", "options": [] },
-                    { "trigger": "restore_intent", "message": "会話内容より「再点」の意図を検知。「再点」のフローに沿って手順を提示してよろしいですか？", "options": [] },
-                    { "trigger": "operator_confirm", "message": "まずはお客様照会のため情報を確認してください。氏名・電話番号・住所", "options": ["確認完了"] },
-                    { "trigger": "customer_verified", "message": "お客様確認完了。続いて「再点」タブにて新住所、利用開始日、プランの変更有無について確認してください。", "options": ["確認中"] },
-                    { "trigger": "restore_complete", "message": "再点の申し込み受付作業完了。", "options": ["完了"] },
-                    { "trigger": "termination_alert", "message": "このお客様は元契約の廃止申込がされていません！解約申込もこの電話対応で可能である旨確認してください。", "options": [] },
+                    { "trigger": "restore_intent", "message": "会話内容より「再点」の意図を検知。\n「再点」のフローに沿って手順を提示してよろしいですか？", "options": [] },
+                    { "trigger": "operator_confirm", "message": "まずはお客様照会のため以下の情報を確認してください。\n氏名・電話番号・住所", "options": [] },
+                    { "trigger": "customer_verified", "message": "お客様確認完了。続いて「再点」タブにて新住所、利用開始日、プランの変更有無について確認してください。", "options": [] },
+                    { "trigger": "restore_complete", "message": "再点の申し込み受付作業完了。", "options": [] },
+                    { "trigger": "termination_alert", "message": "**このお客様は元契約の廃止申込がされていません！**\n解約申込もこの電話対応で可能である旨確認してください。", "options": [] },
                     { "trigger": "termination_start", "message": "廃止の手続きを進めます。", "options": [] }
                 ]
             },
@@ -406,95 +406,86 @@ async function loadScenarios() {
                 "name": "請求・未収管理",
                 "icon": "💰",
                 "transcript": [
-                    { "timestamp": "14:00:01", "speaker": "顧客", "text": "未払いの請求について相談したいのですが" },
-                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "承知いたします。未収金のご相談ですね。ご本人確認をさせていただきます。お名前をお聞かせください。" },
-                    { "timestamp": "14:00:10", "speaker": "顧客", "text": "山田太郎です。" },
-                    { "timestamp": "14:00:12", "speaker": "オペレーター", "text": "お電話番号もお聞かせください。" },
-                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "092-123-4567です。" },
-                    { "timestamp": "14:00:18", "speaker": "オペレーター", "text": "お客様情報を検索いたします。請求書の発行状況を確認いたします。" },
-                    { "timestamp": "14:00:25", "speaker": "オペレーター", "text": "確認いたしました。¥15,430の未入金が3ヶ月分ございます。" },
-                    { "timestamp": "14:00:35", "speaker": "顧客", "text": "分割での支払いは可能でしょうか？" },
-                    { "timestamp": "14:00:40", "speaker": "オペレーター", "text": "はい、3回分割でのお支払いが可能です。催促状の送付も停止いたします。" },
-                    { "timestamp": "14:00:50", "speaker": "オペレーター", "text": "分割払い設定を完了いたします。債権管理システムも更新いたします。" }
+                    { "timestamp": "14:00:03", "speaker": "顧客", "text": "すみません！電気が止まってしまったのですが、停電でしょうか？" },
+                    { "timestamp": "14:00:05", "speaker": "オペレーター", "text": "はい、オペレーターの鈴木が承ります。ご不便をおかけしてしまい申し訳ございません。ご本人様確認をさせていただきます。お名前をフルネームでお答えいただけますでしょうか。" },
+                    { "timestamp": "14:00:07", "speaker": "顧客", "text": "山田太郎です。" },
+                    { "timestamp": "14:00:09", "speaker": "オペレーター", "text": "山田太郎さまでございますね。続きまして、ご利用のお電話番号をお願いいたします。" },
+                    { "timestamp": "14:00:11", "speaker": "顧客", "text": "092-123-4567です。" },
+                    { "timestamp": "14:00:13", "speaker": "オペレーター", "text": "はい、092-123-4567ですね。最後に、現在電気利用の契約をしているご住所につきましてもお願いいたします。" },
+                    { "timestamp": "14:00:15", "speaker": "顧客", "text": "福岡県福岡市博多区博多駅前1-1-1です。" },
+                    { "timestamp": "14:00:17", "speaker": "オペレーター", "text": "はい、福岡県福岡市博多区博多駅前1-1-1ですね。ありがとうございます。" },
+                    { "timestamp": "14:00:19", "speaker": "オペレーター", "text": "お客様の確認が取れました。電気供給が止まっているとのことですので、原因を確認させていただきます。" },
+                    { "timestamp": "14:00:21", "speaker": "顧客", "text": "はい、お願いします。" },
+                    { "timestamp": "14:00:23", "speaker": "オペレーター", "text": "現在のところ、お住いのエリアにおける停電発生の報告はございません。山田さまのお支払い状況も確認させていただきます。" },
+                    { "timestamp": "14:00:25", "speaker": "顧客", "text": "お願いします。" },
+                    { "timestamp": "14:00:27", "speaker": "オペレーター", "text": "2025年7月分につきまして、お支払いの確認が取れていないものがございます。今回の供給停止につきましてはこちらが原因と想定されます。" },
+                    { "timestamp": "14:00:29", "speaker": "顧客", "text": "あ、すみません。払い忘れがあったんですね。" },
+                    { "timestamp": "14:00:31", "speaker": "オペレーター", "text": "お手元に払込票か督促状はございますでしょうか？そちらでの払い込みが確認でき次第の復旧となります。" },
+                    { "timestamp": "14:00:33", "speaker": "顧客", "text": "督促状がポストに入ってました。2025年7月分ですね。こちらを払えばいいんでしょうか。" },
+                    { "timestamp": "14:00:35", "speaker": "オペレーター", "text": "はい、15,430円のお支払いになります。" },
+                    { "timestamp": "14:00:37", "speaker": "顧客", "text": "今から払うんですが、どの程度で復旧されますか？" },
+                    { "timestamp": "14:00:39", "speaker": "オペレーター", "text": "お支払いの確認が取れ次第、復旧作業に移らせていただきます。特別な工事等は発生しないため、確認後30分以内には対応させていただきます。" }
                 ],
                 "summaryUpdates": [
-                    { "time": "14:00:15", "summary": "請求書発行状況確認：郵送・Web請求書発行済み" },
-                    { "time": "14:00:25", "summary": "入金確認・差額チェック：未入金¥15,430検出" },
-                    { "time": "14:00:40", "summary": "分割払い条件調整、催促状送付停止" },
-                    { "time": "14:00:50", "summary": "債権管理帳票更新完了" }
+                    { "time": "14:00:17", "summary": "顧客情報確認完了・停電原因調査開始" },
+                    { "time": "14:00:23", "summary": "エリア停電なし・支払状況確認中" },
+                    { "time": "14:00:27", "summary": "未収金検出：2025年7月分¥15,430" },
+                    { "time": "14:00:35", "summary": "支払用紙確認・復旧手順案内完了" }
                 ],
-                "alerts": [
-                    {
-                        "type": "UNPAID_ALERT",
-                        "message": "未収金3ヶ月分¥15,430の債権管理対象",
-                        "severity": "MEDIUM",
-                        "timestamp": "14:00:25"
-                    }
-                ],
+                "alerts": [],
                 "sharedInfo": [],
                 "operatorActions": [
-                    // Phase 1: 顧客情報の段階的入力
+                    // Phase 1: 顧客情報の段階的入力（顧客の発言の0.5秒後）
                     { 
                         "type": "INPUT_SEARCH_FIELD", 
                         "field": "searchName", 
                         "value": "山田太郎", 
-                        "delay": 5000
+                        "delay": 6500
                     },
                     { 
                         "type": "INPUT_SEARCH_FIELD", 
                         "field": "searchPhone", 
                         "value": "092-123-4567", 
-                        "delay": 9000
+                        "delay": 10500
+                    },
+                    { 
+                        "type": "INPUT_SEARCH_FIELD", 
+                        "field": "searchAddress", 
+                        "value": "福岡県福岡市博多区博多駅前1-1-1", 
+                        "delay": 14500
                     },
                     
                     // Phase 2: 顧客検索実行
                     { 
                         "type": "CLICK_SEARCH_BUTTON", 
-                        "delay": 13000
-                    },
-                    
-                    // Phase 3: 請求・支払状況確認タブで発行状況確認
-                    { 
-                        "type": "SWITCH_TAB", 
-                        "tabId": "billing-payment", 
-                        "tabName": "請求・支払状況",
                         "delay": 17000
                     },
-                    { 
-                        "type": "HIGHLIGHT_FIELD", 
-                        "fieldId": "currentBill", 
-                        "duration": 2000,
-                        "delay": 18000
-                    },
                     
-                    // Phase 4: 請求・支払状況確認タブで未収金確認
+                    // Phase 3: 請求・支払状況確認タブに切り替え
                     { 
                         "type": "SWITCH_TAB", 
                         "tabId": "billing-payment", 
                         "tabName": "請求・支払状況",
-                        "delay": 22000
+                        "delay": 21000
                     },
+                    
+                    // Phase 4: 未収金額領域を強調表示
                     { 
                         "type": "HIGHLIGHT_FIELD", 
                         "fieldId": "unpaidAmount", 
-                        "duration": 2000,
-                        "delay": 25000
-                    },
-                    
-                    // Phase 5: 分割払い設定（8番目の会話「分割での支払いは」の後）
-                    { 
-                        "type": "SELECT_OPTION", 
-                        "selector": "#paymentMethod", 
-                        "value": "installment", 
-                        "delay": 35000
-                    },
-                    
-                    // Phase 6: 債権管理更新（9番目の会話「債権管理システムも更新」と同時）
-                    { 
-                        "type": "CLICK_BUTTON", 
-                        "buttonId": "confirmPayment", 
-                        "delay": 50000
+                        "duration": 3000,
+                        "delay": 24000
                     }
+                ],
+                "aiGuidance": [
+                    { "trigger": "scenario_start", "message": "シナリオ開始：停電復旧対応", "options": [] },
+                    { "trigger": "power_outage_intent", "message": "会話内容より「停電復旧」の意図を検知。\n「停電復旧」のフローに沿って手順を提示してよろしいですか？", "options": [] },
+                    { "trigger": "operator_confirm", "message": "まずはお客様照会のため情報を確認してください。\n氏名・電話番号・住所", "options": [] },
+                    { "trigger": "customer_verified", "message": "お客様確認完了。続いて供給地点における停電情報は確認できていません。", "options": [] },
+                    { "trigger": "check_billing", "message": "請求・支払い状況タブにてお客様の支払状況を確認してください。", "options": [] },
+                    { "trigger": "unpaid_found", "message": "未収による停電の可能性についてお客様に連携してください。", "options": [] },
+                    { "trigger": "check_payment_slip", "message": "続いて、払込票および督促状が手元にあるかを確認してください。", "options": [] },
+                    { "trigger": "payment_slip_confirmed", "message": "払込が確認でき次第の復旧になる旨を連携してください。", "options": [] }
                 ]
             },
             {
@@ -851,21 +842,31 @@ function selectScenario(scenarioCode) {
         text: `シナリオ開始: ${currentScenario.name}`
     });
     
-    // AIからシナリオ開始の案内を追加（より簡潔に）
+    // AIからシナリオ開始の案内を追加（RESTORE_POWERとBILLING_MANAGEMENTシナリオでは不要）
     const now = formatTime(new Date());
-    addChatMessage('bot', `${currentScenario.name}のシナリオを開始します。`, now, {
-        type: 'ai_scenario_start',
-        scenario: scenarioCode
-    });
+    if (currentScenario.code !== 'RESTORE_POWER' && currentScenario.code !== 'BILLING_MANAGEMENT') {
+        addChatMessage('bot', `${currentScenario.name}のシナリオを開始します。`, now, {
+            type: 'ai_scenario_start',
+            scenario: scenarioCode
+        });
+    }
     
-    // AIガイダンスを開始
+    // AIガイダンスを開始（RESTORE_POWERとBILLING_MANAGEMENTシナリオは専用タイミング）
     if (currentScenario.aiGuidance && currentScenario.aiGuidance.length > 0) {
-        setTimeout(() => {
-            const firstGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'scenario_start');
-            if (firstGuidance) {
-                showAIGuidance(firstGuidance);
-            }
-        }, 2000);
+        if (currentScenario.code === 'RESTORE_POWER') {
+            // RESTORE_POWERシナリオ専用のタイミング設定
+            startRestorePowerAIGuidance();
+        } else if (currentScenario.code === 'BILLING_MANAGEMENT') {
+            // BILLING_MANAGEMENTシナリオ専用のタイミング設定
+            startBillingManagementAIGuidance();
+        } else {
+            setTimeout(() => {
+                const firstGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'scenario_start');
+                if (firstGuidance) {
+                    showAIGuidance(firstGuidance);
+                }
+            }, 2000);
+        }
     }
     
     // デモモード中なら即座にシナリオ再生開始
@@ -1330,8 +1331,8 @@ function sendChatMessage() {
     });
     elements.chatInput.value = '';
     
-    // キーワードトリガーチェック
-    const triggeredKeyword = checkKeywordTrigger(message);
+    // キーワードトリガーチェック（RESTORE_POWERとBILLING_MANAGEMENTシナリオでは無効化）
+    const triggeredKeyword = (currentScenario && (currentScenario.code === 'RESTORE_POWER' || currentScenario.code === 'BILLING_MANAGEMENT')) ? null : checkKeywordTrigger(message);
     
     // ボット応答を生成
     setTimeout(() => {
@@ -1556,8 +1557,8 @@ function addCallLogMessage(message) {
     // 自動スクロール
     elements.logMessageArea.scrollTop = elements.logMessageArea.scrollHeight;
     
-    // キーワードトリガーチェック
-    if (message.speaker === '顧客') {
+    // キーワードトリガーチェック（RESTORE_POWERとBILLING_MANAGEMENTシナリオでは無効化）
+    if (message.speaker === '顧客' && (!currentScenario || (currentScenario.code !== 'RESTORE_POWER' && currentScenario.code !== 'BILLING_MANAGEMENT'))) {
         const triggeredKeyword = checkKeywordTrigger(message.text);
         if (triggeredKeyword) {
             setTimeout(() => {
@@ -1647,6 +1648,9 @@ function maybePushAISuggestionForAction(action) {
 
     // オペレーターが質問 → AIが回答する自然な流れを演出
     setTimeout(() => {
+        // RESTORE_POWERシナリオのAIガイダンスは明示的なaiGuidance配列で管理するため、
+        // ここでの自動メッセージ生成は無効化
+        /*
         if (currentScenario.code === 'RESTORE_POWER') {
             if (action.type === 'SWITCH_TAB' && action.tabId === 'restore-power') {
                 // オペレーターの質問
@@ -1699,6 +1703,7 @@ function maybePushAISuggestionForAction(action) {
                 }, 1000);
             }
         }
+        */
 
         if (currentScenario.code === 'USAGE_CALCULATION') {
             if (action.type === 'SWITCH_TAB' && action.tabId === 'simulation') {
@@ -1735,6 +1740,9 @@ function maybePushAISuggestionForAction(action) {
             }
         }
 
+        // BILLING_MANAGEMENTシナリオのAIガイダンスは明示的なaiGuidance配列で管理するため、
+        // ここでの自動メッセージ生成は無効化
+        /*
         if (currentScenario.code === 'BILLING_MANAGEMENT') {
             if (action.type === 'HIGHLIGHT_FIELD' && action.fieldId === 'unpaidAmount') {
                 addChatMessage('user', '未収金額を確認しています。どのような対応が適切ですか？', now, {
@@ -1769,6 +1777,7 @@ function maybePushAISuggestionForAction(action) {
                 }, 1000);
             }
         }
+        */
 
         if (currentScenario.code === 'CONTRACT_CHANGE') {
             if (action.type === 'SWITCH_TAB' && action.tabId === 'change-plan') {
@@ -2108,27 +2117,32 @@ function handleCustomerSearch() {
         return;
     }
     
-    // 検索実行をチャットに表示
+    // 検索実行をチャットに表示（「お客様情報を検索しています...」の表示は不要）
     const searchConditions = [];
     if (name) searchConditions.push(`氏名: ${name}`);
     if (phone) searchConditions.push(`電話番号: ${phone}`);
     if (address) searchConditions.push(`住所: ${address}`);
     
-    addChatMessage('bot', `お客様情報を検索しています...\n検索条件: ${searchConditions.join(', ')}`, formatTime(new Date()), {
-        type: 'ai_search',
-        scenario: null
-    });
+    // 検索条件は表示しない（RESTORE_POWERとBILLING_MANAGEMENTシナリオでは不要）
+    if (!currentScenario || (currentScenario.code !== 'RESTORE_POWER' && currentScenario.code !== 'BILLING_MANAGEMENT')) {
+        addChatMessage('bot', `検索条件: ${searchConditions.join(', ')}`, formatTime(new Date()), {
+            type: 'ai_search',
+            scenario: null
+        });
+    }
     
     // 検索処理をシミュレート
     setTimeout(() => {
         // 顧客情報を表示
         showCustomerInfo(name, phone, address);
         
-        // 検索完了メッセージ
-        addChatMessage('bot', 'お客様情報が見つかりました。詳細情報を表示いたします。', formatTime(new Date()), {
-            type: 'ai_search_complete',
-            scenario: null
-        });
+        // 検索完了メッセージ（RESTORE_POWERとBILLING_MANAGEMENTシナリオでは不要）
+        if (!currentScenario || (currentScenario.code !== 'RESTORE_POWER' && currentScenario.code !== 'BILLING_MANAGEMENT')) {
+            addChatMessage('bot', 'お客様情報が見つかりました。詳細情報を表示いたします。', formatTime(new Date()), {
+                type: 'ai_search_complete',
+                scenario: null
+            });
+        }
         
         // 通話ログに検索アクションを追加
         addCallLogMessage({
@@ -2356,6 +2370,9 @@ function typeIntoField(inputElement, value, delay = 100) {
 
 // AIガイダンス機能
 function showAIGuidance(guidance) {
+    // RESTORE_POWERとBILLING_MANAGEMENTシナリオは専用のタイミング制御を使用するため、この関数は使用しない
+    if (currentScenario && (currentScenario.code === 'RESTORE_POWER' || currentScenario.code === 'BILLING_MANAGEMENT')) return;
+    
     const now = formatTime(new Date());
     
     // ガイダンスメッセージを表示
@@ -2415,6 +2432,9 @@ function handleGuidanceSelection(selectedOption, trigger) {
 function processGuidanceFlow(selectedOption, trigger) {
     if (!currentScenario || !currentScenario.aiGuidance) return;
     
+    // RESTORE_POWERとBILLING_MANAGEMENTシナリオは専用のタイミング制御を使用するため、この関数は使用しない
+    if (currentScenario.code === 'RESTORE_POWER' || currentScenario.code === 'BILLING_MANAGEMENT') return;
+    
     const now = formatTime(new Date());
     let nextGuidance = null;
     
@@ -2425,7 +2445,7 @@ function processGuidanceFlow(selectedOption, trigger) {
             break;
         case 'restore_intent':
             // 自動で「はい」と回答
-            addChatMessage('user', '選択: はい', now, {
+            addChatMessage('user', 'はい', now, {
                 type: 'guidance_selection',
                 trigger: trigger,
                 scenario: currentScenario ? currentScenario.code : null
@@ -2433,23 +2453,20 @@ function processGuidanceFlow(selectedOption, trigger) {
             nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'operator_confirm');
             break;
         case 'operator_confirm':
-            if (selectedOption === '確認完了') {
-                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'customer_verified');
-            }
+            // 自動で次のガイダンスに進む
+            nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'customer_verified');
             break;
         case 'customer_verified':
-            if (selectedOption === '確認中') {
-                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'restore_complete');
-            }
+            // 自動で次のガイダンスに進む
+            nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'restore_complete');
             break;
         case 'restore_complete':
-            if (selectedOption === '完了') {
-                nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'termination_alert');
-            }
+            // 自動で次のガイダンスに進む
+            nextGuidance = currentScenario.aiGuidance.find(g => g.trigger === 'termination_alert');
             break;
         case 'termination_alert':
             // 自動で「廃止も対応」と回答
-            addChatMessage('user', '選択: 廃止も対応', now, {
+            addChatMessage('user', '廃止も対応', now, {
                 type: 'guidance_selection',
                 trigger: trigger,
                 scenario: currentScenario ? currentScenario.code : null
@@ -2458,7 +2475,7 @@ function processGuidanceFlow(selectedOption, trigger) {
             break;
         case 'termination_start':
             // 自動で「開始」と回答
-            addChatMessage('user', '選択: 開始', now, {
+            addChatMessage('user', '開始', now, {
                 type: 'guidance_selection',
                 trigger: trigger,
                 scenario: currentScenario ? currentScenario.code : null
@@ -2475,6 +2492,120 @@ function processGuidanceFlow(selectedOption, trigger) {
             showAIGuidance(nextGuidance);
         }, 1000);
     }
+}
+
+// RESTORE_POWERシナリオ専用のAIガイダンスタイミング制御
+function startRestorePowerAIGuidance() {
+    if (!currentScenario || currentScenario.code !== 'RESTORE_POWER') return;
+    
+    const aiGuidanceSchedule = [
+        { delay: 0, trigger: 'scenario_start' },          // +0s
+        { delay: 5000, trigger: 'restore_intent' },       // +5s
+        { delay: 6000, action: 'auto_response', text: 'はい' }, // +6s
+        { delay: 7000, trigger: 'operator_confirm' },     // +7s
+        { delay: 18000, trigger: 'customer_verified' },   // +18s
+        { delay: 31000, trigger: 'restore_complete' },    // +31s
+        { delay: 32000, trigger: 'termination_alert' },   // +32s
+        { delay: 37000, action: 'auto_response', text: '廃止も対応' }, // +37s
+        { delay: 38000, action: 'final_message', text: '廃止の手続きを進めます。' } // +38s
+    ];
+    
+    aiGuidanceSchedule.forEach(schedule => {
+        setTimeout(() => {
+            if (!demoMode || !currentScenario || currentScenario.code !== 'RESTORE_POWER') return;
+            
+            if (schedule.action === 'auto_response') {
+                // 自動回答を表示
+                const now = formatTime(new Date());
+                addChatMessage('user', schedule.text, now, {
+                    type: 'guidance_selection',
+                    trigger: 'auto_response',
+                    scenario: currentScenario.code
+                });
+            } else if (schedule.action === 'final_message') {
+                // 最終メッセージを表示
+                const now = formatTime(new Date());
+                addChatMessage('bot', schedule.text, now, {
+                    type: 'ai_guidance',
+                    trigger: 'final_message',
+                    scenario: currentScenario.code
+                });
+            } else {
+                // AIガイダンスを表示
+                const guidance = currentScenario.aiGuidance.find(g => g.trigger === schedule.trigger);
+                if (guidance) {
+                    showRestorePowerAIGuidance(guidance);
+                }
+            }
+        }, schedule.delay);
+    });
+}
+
+// RESTORE_POWER専用のAIガイダンス表示（選択肢なし、自動進行のみ）
+function showRestorePowerAIGuidance(guidance) {
+    const now = formatTime(new Date());
+    
+    // ガイダンスメッセージを表示（選択肢は表示しない）
+    addChatMessage('bot', guidance.message, now, {
+        type: 'ai_guidance',
+        trigger: guidance.trigger,
+        scenario: currentScenario.code
+    });
+    
+    // termination_startの場合は追加処理は不要（ユーザー仕様では+38sで終了）
+}
+
+// BILLING_MANAGEMENTシナリオ専用のAIガイダンスタイミング制御
+function startBillingManagementAIGuidance() {
+    if (!currentScenario || currentScenario.code !== 'BILLING_MANAGEMENT') return;
+    
+    const aiGuidanceSchedule = [
+        { delay: 0, trigger: 'scenario_start' },              // +0s
+        { delay: 5000, trigger: 'power_outage_intent' },      // +5s
+        { delay: 6000, action: 'auto_response', text: 'はい' }, // +6s
+        { delay: 7000, trigger: 'operator_confirm' },         // +7s
+        { delay: 19000, trigger: 'customer_verified' },       // +19s
+        { delay: 21000, trigger: 'check_billing' },           // +21s
+        { delay: 24000, action: 'auto_response', text: '未収あり' }, // +24s
+        { delay: 25000, trigger: 'unpaid_found' },            // +25s
+        { delay: 28000, trigger: 'check_payment_slip' },      // +28s
+        { delay: 33000, action: 'auto_response', text: '支払用紙あり' }, // +33s
+        { delay: 35000, trigger: 'payment_slip_confirmed' }   // +35s
+    ];
+    
+    aiGuidanceSchedule.forEach(schedule => {
+        setTimeout(() => {
+            if (!demoMode || !currentScenario || currentScenario.code !== 'BILLING_MANAGEMENT') return;
+            
+            if (schedule.action === 'auto_response') {
+                // 自動回答を表示
+                const now = formatTime(new Date());
+                addChatMessage('user', schedule.text, now, {
+                    type: 'guidance_selection',
+                    trigger: 'auto_response',
+                    scenario: currentScenario.code
+                });
+            } else {
+                // AIガイダンスを表示
+                const guidance = currentScenario.aiGuidance.find(g => g.trigger === schedule.trigger);
+                if (guidance) {
+                    showBillingManagementAIGuidance(guidance);
+                }
+            }
+        }, schedule.delay);
+    });
+}
+
+// BILLING_MANAGEMENT専用のAIガイダンス表示（選択肢なし、自動進行のみ）
+function showBillingManagementAIGuidance(guidance) {
+    const now = formatTime(new Date());
+    
+    // ガイダンスメッセージを表示（選択肢は表示しない）
+    addChatMessage('bot', guidance.message, now, {
+        type: 'ai_guidance',
+        trigger: guidance.trigger,
+        scenario: currentScenario.code
+    });
 }
 
 // 初期化完了メッセージ
