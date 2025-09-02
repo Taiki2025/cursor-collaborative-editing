@@ -56,6 +56,33 @@
                                 <span class="scenario-name">契約廃止</span>
                             </button>
                         </div>
+                        
+                        <!-- シナリオ再生制御ボタン -->
+                        <div class="scenario-controls" id="scenarioControls" style="display: none;">
+                            <div class="control-header">
+                                <h5>🎬 再生制御</h5>
+                            </div>
+                            <div class="control-buttons">
+                                <button class="control-btn pause-btn" id="pauseScenarioBtn" title="一時停止">
+                                    <span class="control-icon">⏸️</span>
+                                    <span class="control-text">一時停止</span>
+                                </button>
+                                <button class="control-btn resume-btn" id="resumeScenarioBtn" title="再開" style="display: none;">
+                                    <span class="control-icon">▶️</span>
+                                    <span class="control-text">再開</span>
+                                </button>
+                                <button class="control-btn stop-btn" id="stopScenarioBtn" title="停止">
+                                    <span class="control-icon">⏹️</span>
+                                    <span class="control-text">停止</span>
+                                </button>
+                            </div>
+                            <div class="progress-info">
+                                <span class="progress-text" id="progressText">進行状況: 0%</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
 

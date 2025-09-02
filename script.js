@@ -7,6 +7,21 @@ let currentScenarioIndex = 0;
 let operatorActionIndex = 0; // オペレーター動作のインデックス
 let chatHistory = []; // チャット履歴（タイムライン紐づけ用）
 
+// シナリオ再生制御用変数
+let scenarioPlaybackState = {
+    isPlaying: false,
+    isPaused: false,
+    currentMessageIndex: 0,
+    currentSummaryIndex: 0,
+    currentAlertIndex: 0,
+    currentSharedInfoIndex: 0,
+    currentOperatorActionIndex: 0,
+    startTime: null,
+    pauseTime: null,
+    totalDuration: 0,
+    intervals: {}
+};
+
 // DOM要素の取得
 const elements = {
     // タブ関連
@@ -31,6 +46,14 @@ const elements = {
     // シナリオ選択関連
     scenarioSelector: document.getElementById('scenarioSelector'),
     scenarioButtons: document.querySelectorAll('.scenario-btn'),
+    
+    // シナリオ制御関連
+    scenarioControls: document.getElementById('scenarioControls'),
+    pauseScenarioBtn: document.getElementById('pauseScenarioBtn'),
+    resumeScenarioBtn: document.getElementById('resumeScenarioBtn'),
+    stopScenarioBtn: document.getElementById('stopScenarioBtn'),
+    progressText: document.getElementById('progressText'),
+    progressFill: document.getElementById('progressFill'),
     
     // アラート関連
     alertPanel: document.getElementById('alertPanel'),
@@ -734,6 +757,11 @@ function setupEventListeners() {
         });
     });
     
+    // シナリオ制御
+    elements.pauseScenarioBtn.addEventListener('click', pauseScenarioPlayback);
+    elements.resumeScenarioBtn.addEventListener('click', resumeScenarioPlayback);
+    elements.stopScenarioBtn.addEventListener('click', stopScenarioPlayback);
+    
     // 再点申込スロット選択
     elements.slotButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -786,8 +814,9 @@ function setupInitialState() {
     demoMode = false;
     currentScenario = null;
     
-    // シナリオ選択パネルを非表示
+    // シナリオ選択パネルと制御パネルを非表示
     elements.scenarioSelector.style.display = 'none';
+    elements.scenarioControls.style.display = 'none';
     
     // アラートと共有事項をクリア
     elements.alertPanel.style.display = 'none';
@@ -869,6 +898,9 @@ function selectScenario(scenarioCode) {
         }
     }
     
+    // シナリオ制御パネルを表示
+    elements.scenarioControls.style.display = 'block';
+    
     // デモモード中なら即座にシナリオ再生開始
     if (demoMode) {
         setTimeout(() => {
@@ -891,24 +923,29 @@ function startScenarioPlayback() {
     
     console.log('シナリオ再生開始:', currentScenario.name);
     
-    let messageIndex = 0;
-    let summaryIndex = 0;
-    let alertIndex = 0;
-    let sharedInfoIndex = 0;
-    operatorActionIndex = 0;
+    // 再生状態を初期化
+    scenarioPlaybackState.isPlaying = true;
+    scenarioPlaybackState.isPaused = false;
+    scenarioPlaybackState.startTime = Date.now();
+    scenarioPlaybackState.totalDuration = calculateScenarioDuration();
+    
+    // 制御ボタンの状態を更新
+    updateControlButtons();
+    
+    // 進行状況の更新を開始
+    startProgressUpdate();
     
     // メッセージ表示インターバル
     const messageInterval = setInterval(() => {
-        if (!demoMode) {
-            clearInterval(messageInterval);
+        if (!scenarioPlaybackState.isPlaying || scenarioPlaybackState.isPaused) {
             return;
         }
         
-        if (messageIndex < currentScenario.transcript.length) {
-            const message = currentScenario.transcript[messageIndex];
+        if (scenarioPlaybackState.currentMessageIndex < currentScenario.transcript.length) {
+            const message = currentScenario.transcript[scenarioPlaybackState.currentMessageIndex];
             console.log('メッセージ追加:', message);
             addCallLogMessage(message);
-            messageIndex++;
+            scenarioPlaybackState.currentMessageIndex++;
         } else {
             console.log('メッセージ再生完了');
             clearInterval(messageInterval);
@@ -917,16 +954,15 @@ function startScenarioPlayback() {
     
     // 要約更新インターバル
     const summaryInterval = setInterval(() => {
-        if (!demoMode) {
-            clearInterval(summaryInterval);
+        if (!scenarioPlaybackState.isPlaying || scenarioPlaybackState.isPaused) {
             return;
         }
         
-        if (currentScenario.summaryUpdates && summaryIndex < currentScenario.summaryUpdates.length) {
-            const summary = currentScenario.summaryUpdates[summaryIndex];
+        if (currentScenario.summaryUpdates && scenarioPlaybackState.currentSummaryIndex < currentScenario.summaryUpdates.length) {
+            const summary = currentScenario.summaryUpdates[scenarioPlaybackState.currentSummaryIndex];
             console.log('要約更新:', summary);
             updateSummary(summary.summary);
-            summaryIndex++;
+            scenarioPlaybackState.currentSummaryIndex++;
         } else {
             clearInterval(summaryInterval);
         }
@@ -934,16 +970,15 @@ function startScenarioPlayback() {
     
     // アラート表示インターバル
     const alertInterval = setInterval(() => {
-        if (!demoMode) {
-            clearInterval(alertInterval);
+        if (!scenarioPlaybackState.isPlaying || scenarioPlaybackState.isPaused) {
             return;
         }
         
-        if (currentScenario.alerts && alertIndex < currentScenario.alerts.length) {
-            const alert = currentScenario.alerts[alertIndex];
+        if (currentScenario.alerts && scenarioPlaybackState.currentAlertIndex < currentScenario.alerts.length) {
+            const alert = currentScenario.alerts[scenarioPlaybackState.currentAlertIndex];
             console.log('アラート表示:', alert);
             showAlert(alert);
-            alertIndex++;
+            scenarioPlaybackState.currentAlertIndex++;
         } else {
             clearInterval(alertInterval);
         }
@@ -951,16 +986,15 @@ function startScenarioPlayback() {
     
     // 共有事項表示インターバル
     const sharedInfoInterval = setInterval(() => {
-        if (!demoMode) {
-            clearInterval(sharedInfoInterval);
+        if (!scenarioPlaybackState.isPlaying || scenarioPlaybackState.isPaused) {
             return;
         }
-        
-        if (currentScenario.sharedInfo && sharedInfoIndex < currentScenario.sharedInfo.length) {
-            const sharedInfo = currentScenario.sharedInfo[sharedInfoIndex];
+            
+        if (currentScenario.sharedInfo && scenarioPlaybackState.currentSharedInfoIndex < currentScenario.sharedInfo.length) {
+            const sharedInfo = currentScenario.sharedInfo[scenarioPlaybackState.currentSharedInfoIndex];
             console.log('共有事項表示:', sharedInfo);
             showSharedInfo(sharedInfo);
-            sharedInfoIndex++;
+            scenarioPlaybackState.currentSharedInfoIndex++;
         } else {
             clearInterval(sharedInfoInterval);
         }
@@ -969,26 +1003,26 @@ function startScenarioPlayback() {
     // オペレーター動作シミュレーション（delayに基づく個別スケジューリング）
     if (currentScenario.operatorActions) {
         currentScenario.operatorActions.forEach((action, index) => {
-            if (!demoMode) return;
+            if (!scenarioPlaybackState.isPlaying || scenarioPlaybackState.isPaused) return;
             
             const actionDelay = action.delay || (index * 3000); // delayが指定されていない場合は従来の3秒間隔
             
             setTimeout(() => {
-                if (!demoMode) return; // 実行時にもdemoModeをチェック
+                if (!scenarioPlaybackState.isPlaying || scenarioPlaybackState.isPaused) return;
                 
                 console.log('オペレーター動作実行:', action);
                 executeOperatorAction(action);
+                scenarioPlaybackState.currentOperatorActionIndex++;
             }, actionDelay);
         });
     }
     
     // インターバルIDを保存
-    window.scenarioIntervals = {
+    scenarioPlaybackState.intervals = {
         message: messageInterval,
         summary: summaryInterval,
         alert: alertInterval,
-        sharedInfo: sharedInfoInterval,
-        operatorAction: operatorActionInterval
+        sharedInfo: sharedInfoInterval
     };
 }
 
@@ -1497,6 +1531,7 @@ function toggleDemoMode() {
         elements.scenarioButtons.forEach(btn => btn.classList.remove('active'));
     } else {
         elements.scenarioSelector.style.display = 'none';
+        elements.scenarioControls.style.display = 'none';
         stopScenarioPlayback();
         
         // デモモード終了時のクリーンアップ
@@ -1515,19 +1550,150 @@ function toggleDemoMode() {
 
 // シナリオ再生停止
 function stopScenarioPlayback() {
-    if (window.scenarioIntervals) {
-        Object.values(window.scenarioIntervals).forEach(interval => {
+    if (scenarioPlaybackState.intervals) {
+        Object.values(scenarioPlaybackState.intervals).forEach(interval => {
             if (interval) {
                 clearInterval(interval);
             }
         });
-        window.scenarioIntervals = null;
+        scenarioPlaybackState.intervals = {};
     }
+    
+    // 再生状態をリセット
+    scenarioPlaybackState.isPlaying = false;
+    scenarioPlaybackState.isPaused = false;
+    scenarioPlaybackState.currentMessageIndex = 0;
+    scenarioPlaybackState.currentSummaryIndex = 0;
+    scenarioPlaybackState.currentAlertIndex = 0;
+    scenarioPlaybackState.currentSharedInfoIndex = 0;
+    scenarioPlaybackState.currentOperatorActionIndex = 0;
+    scenarioPlaybackState.startTime = null;
+    scenarioPlaybackState.pauseTime = null;
+    
+    // 制御ボタンの状態を更新
+    updateControlButtons();
+    
+    // 進行状況をリセット
+    updateProgress(0);
     
     // オペレーター進行状況を非表示
     hideOperatorProgress();
     
     console.log('シナリオ再生停止');
+}
+
+// シナリオ再生一時停止
+function pauseScenarioPlayback() {
+    if (!scenarioPlaybackState.isPlaying || scenarioPlaybackState.isPaused) {
+        return;
+    }
+    
+    scenarioPlaybackState.isPaused = true;
+    scenarioPlaybackState.pauseTime = Date.now();
+    
+    // 制御ボタンの状態を更新
+    updateControlButtons();
+    
+    console.log('シナリオ再生一時停止');
+}
+
+// シナリオ再生再開
+function resumeScenarioPlayback() {
+    if (!scenarioPlaybackState.isPlaying || !scenarioPlaybackState.isPaused) {
+        return;
+    }
+    
+    scenarioPlaybackState.isPaused = false;
+    
+    // 一時停止時間を考慮してスケジュールを調整
+    if (scenarioPlaybackState.pauseTime) {
+        const pauseDuration = Date.now() - scenarioPlaybackState.pauseTime;
+        scenarioPlaybackState.startTime += pauseDuration;
+        scenarioPlaybackState.pauseTime = null;
+    }
+    
+    // 制御ボタンの状態を更新
+    updateControlButtons();
+    
+    console.log('シナリオ再生再開');
+}
+
+// 制御ボタンの状態を更新
+function updateControlButtons() {
+    if (scenarioPlaybackState.isPlaying) {
+        if (scenarioPlaybackState.isPaused) {
+            // 一時停止中
+            elements.pauseScenarioBtn.style.display = 'none';
+            elements.resumeScenarioBtn.style.display = 'inline-flex';
+            elements.stopScenarioBtn.style.display = 'inline-flex';
+        } else {
+            // 再生中
+            elements.pauseScenarioBtn.style.display = 'inline-flex';
+            elements.resumeScenarioBtn.style.display = 'none';
+            elements.stopScenarioBtn.style.display = 'inline-flex';
+        }
+    } else {
+        // 停止中
+        elements.pauseScenarioBtn.style.display = 'none';
+        elements.resumeScenarioBtn.style.display = 'none';
+        elements.stopScenarioBtn.style.display = 'none';
+    }
+}
+
+// シナリオの総再生時間を計算
+function calculateScenarioDuration() {
+    if (!currentScenario) return 0;
+    
+    let maxDelay = 0;
+    
+    // オペレーター動作の最大遅延時間を取得
+    if (currentScenario.operatorActions) {
+        currentScenario.operatorActions.forEach(action => {
+            if (action.delay && action.delay > maxDelay) {
+                maxDelay = action.delay;
+            }
+        });
+    }
+    
+    // 基本的な再生時間（メッセージ数 × 2秒 + 要約更新 × 8秒）
+    const messageTime = currentScenario.transcript.length * 2000;
+    const summaryTime = (currentScenario.summaryUpdates ? currentScenario.summaryUpdates.length : 0) * 8000;
+    
+    return Math.max(maxDelay + 5000, messageTime, summaryTime);
+}
+
+// 進行状況の更新を開始
+function startProgressUpdate() {
+    const progressInterval = setInterval(() => {
+        if (!scenarioPlaybackState.isPlaying || !scenarioPlaybackState.startTime) {
+            clearInterval(progressInterval);
+            return;
+        }
+        
+        if (scenarioPlaybackState.isPaused) {
+            return;
+        }
+        
+        const elapsed = Date.now() - scenarioPlaybackState.startTime;
+        const progress = Math.min((elapsed / scenarioPlaybackState.totalDuration) * 100, 100);
+        
+        updateProgress(progress);
+        
+        if (progress >= 100) {
+            clearInterval(progressInterval);
+        }
+    }, 100);
+}
+
+// 進行状況を更新
+function updateProgress(progress) {
+    if (elements.progressText) {
+        elements.progressText.textContent = `進行状況: ${Math.round(progress)}%`;
+    }
+    
+    if (elements.progressFill) {
+        elements.progressFill.style.width = `${progress}%`;
+    }
 }
 
 // 通話ログメッセージ追加
