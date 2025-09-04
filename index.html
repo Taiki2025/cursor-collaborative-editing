@@ -12,7 +12,6 @@
             <img src="九州電力ロゴ.png" alt="九州電力ロゴ" class="logo">
             <h1>オペレータ業務画面</h1>
             <div class="header-controls">
-                <button class="demo-toggle" id="demoToggle">デモモード</button>
                 <span class="status-indicator" id="statusIndicator">● 接続中</span>
             </div>
         </header>
@@ -29,8 +28,8 @@
                         </div>
                     </div>
                     
-                    <!-- デモモード用シナリオ選択 -->
-                    <div class="scenario-selector" id="scenarioSelector" style="display: none;">
+                    <!-- 業務選択パネル -->
+                    <div class="scenario-selector" id="scenarioSelector">
                         <div class="scenario-header">
                             <h4>🎭 業務選択</h4>
                         </div>
@@ -56,11 +55,16 @@
                                 <span class="scenario-name">契約廃止</span>
                             </button>
                         </div>
-                        
-
                     </div>
                     
-
+                    <!-- 選択された業務の表示 -->
+                    <div class="selected-scenario" id="selectedScenario" style="display: none;">
+                        <div class="selected-scenario-header">
+                            <span class="selected-scenario-icon" id="selectedScenarioIcon">⚡</span>
+                            <span class="selected-scenario-name" id="selectedScenarioName">再点申込</span>
+                            <button class="change-scenario-btn" id="changeScenarioBtn" title="業務変更">🔄</button>
+                        </div>
+                    </div>
                     
                     <div class="log-message-area" id="logMessageArea">
                         <!-- 通話ログメッセージが動的に追加されます -->
@@ -69,7 +73,7 @@
                     <div class="summary-window" id="summaryWindow">
                         <div class="summary-header">📋 要約 (30秒更新)</div>
                         <div class="summary-content" id="summaryContent">
-                            通話開始 - 顧客からの停電相談
+                            業務を選択してください
                         </div>
                     </div>
                     
@@ -95,13 +99,7 @@
                         </div>
                     </div>
                     
-                    <div class="demo-controls">
-                        <label class="demo-switch">
-                            <input type="checkbox" id="demoModeToggle">
-                            <span class="slider"></span>
-                            <span class="label">デモモード</span>
-                        </label>
-                    </div>
+
                 </div>
             </div>
             
@@ -184,104 +182,99 @@
                         
                         <!-- 再点タブ -->
                         <div class="tab-content active" id="restore-power">
-                            <h3>⚡ 再点</h3>
                             <div class="restore-power-form">
+                                <!-- 1. 申込受付情報 -->
                                 <div class="form-section">
-                                    <h4>1. 新規利用申請受付</h4>
+                                    <h4>1. 申込受付情報</h4>
                                     <div class="search-info">
                                         <div class="info-item">
-                                            <span class="label">申請種別:</span>
+                                            <span class="label">申込理由:</span>
                                             <span class="value">引っ越しに伴う新規契約</span>
                                         </div>
                                         <div class="info-item">
                                             <span class="label">受付方法:</span>
                                             <span class="value">電話申込</span>
                                         </div>
-                                        <div class="info-item">
-                                            <span class="label">顧客ID:</span>
-                                            <span class="value">CUST-2025-0001</span>
-                                        </div>
                                     </div>
                                 </div>
-                                
+
+                                <!-- 2. 新契約概要の確認 -->
                                 <div class="form-section">
-                                    <h4>2. 新住所・利用開始日の確認</h4>
+                                    <h4>2. 新契約概要の確認</h4>
                                     <div class="contract-info">
                                         <div class="form-group">
-                                            <label for="newAddress">新住所:</label>
+                                            <label for="newAddress">利用場所の住所:</label>
                                             <input type="text" id="newAddress" class="form-input" placeholder="福岡県福岡市中央区天神2-2-2">
                                         </div>
                                         <div class="form-group">
-                                            <label for="startDate">利用開始日:</label>
+                                            <label for="startDate">利用開始希望日:</label>
                                             <input type="date" id="startDate" class="form-input" placeholder="yyyy/mm/dd">
                                         </div>
                                         <div class="form-group">
-                                            <label for="contractPlan">契約プラン:</label>
-                                            <select id="contractPlan" class="form-input">
-                                                <option value="">プランを選択してください</option>
-                                                <option value="night-select">ナイト・セレクト</option>
-                                                <option value="regular">レギュラー</option>
-                                                <option value="daytime">デイタイム</option>
+                                            <label for="contractAmpereSelect">契約アンペア数:</label>
+                                            <select id="contractAmpereSelect" class="form-input">
+                                                <option value="10">10A</option>
+                                                <option value="20">20A</option>
+                                                <option value="30" selected>30A</option>
+                                                <option value="40">40A</option>
+                                                <option value="50">50A</option>
+                                                <option value="60">60A</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="contractPlanSelect">契約プラン:</label>
+                                            <select id="contractPlanSelect" class="form-input">
+                                                <option value="night-select" selected>ナイト・セレクト</option>
+                                                <option value="hirutoku">昼トク</option>
+                                                <option value="smart-family">スマートファミリー</option>
+                                                <option value="jouyouryodenA">従量電灯A</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                
+
+                                <!-- 3. 各種確認 -->
                                 <div class="form-section">
-                                    <h4>3. 契約審査・確認</h4>
+                                    <h4>3. 各種確認</h4>
                                     <div class="contract-check">
-                                        <div class="check-item">
-                                            <span class="check-icon">✅</span>
-                                            <span class="check-text">住所確認: 福岡県福岡市中央区天神2-2-2</span>
-                                        </div>
-                                        <div class="check-item">
-                                            <span class="check-icon">✅</span>
-                                            <span class="check-text">利用開始日: 2025年8月15日</span>
-                                        </div>
-                                        <div class="check-item">
-                                            <span class="check-icon">✅</span>
-                                            <span class="check-text">既存顧客のため信用審査済み</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-section">
-                                    <h4>4. 新規契約手続き実行</h4>
-                                    <div class="contract-process">
-                                        <div class="process-step">
-                                            <span class="step-number">1</span>
-                                            <span class="step-text">新規契約データ作成</span>
-                                            <span class="step-status" id="contractCreateStatus">待機中</span>
-                                        </div>
-                                        <div class="process-step">
-                                            <span class="step-number">2</span>
-                                            <span class="step-text">供給地点特定番号発行</span>
-                                            <span class="step-status" id="supplyPointStatus">待機中</span>
-                                        </div>
-                                        <div class="process-step">
-                                            <span class="step-number">3</span>
-                                            <span class="step-text">開通工事スケジュール設定</span>
-                                            <span class="step-status" id="scheduleStatus">待機中</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-section">
-                                    <h4>5. 契約完了・顧客通知</h4>
-                                    <div class="notification-result">
-                                        <div class="result-card">
-                                            <h5 id="contractResultTitle">📄 新規契約手続き待機中</h5>
-                                            <div class="result-details" id="contractResultDetails">
-                                                <p><strong>新契約ID:</strong> <span id="newContractId">未生成</span></p>
-                                                <p><strong>開通予定日:</strong> <span id="connectionDate">2025年8月15日</span></p>
-                                                <p><strong>供給地点番号:</strong> <span id="newSupplyPoint">手続き中</span></p>
-                                                <p><strong>通知方法:</strong> 電子メール + SMS</p>
+                                        <div class="verify-item" id="verify-address">
+                                            <div class="verify-icon">
+                                                <div class="spinner"></div>
+                                                <div class="result">✓</div>
                                             </div>
+                                            <span class="verify-label">住所所在確認</span>
+                                        </div>
+                                        <div class="verify-item" id="verify-supplyid">
+                                            <div class="verify-icon">
+                                                <div class="spinner"></div>
+                                                <div class="result">✓</div>
+                                            </div>
+                                            <span class="verify-label">供給地点番号確認</span>
+                                        </div>
+                                        <div class="verify-item" id="verify-ampere">
+                                            <div class="verify-icon">
+                                                <div class="spinner"></div>
+                                                <div class="result">✓</div>
+                                            </div>
+                                            <span class="verify-label">アンペア対応確認</span>
                                         </div>
                                     </div>
+                                </div>
+
+                                <!-- 4. 契約申込 -->
+                                <div class="form-section">
+                                    <h4>4. 契約申込</h4>
                                     <div class="action-buttons">
-                                        <button class="action-btn" id="confirmNewContract">新規契約実行</button>
-                                        <button class="action-btn">開通通知送信</button>
+                                        <button class="action-btn" id="applyContractBtn">申込を受け付ける</button>
+                                    </div>
+                                    <!-- 申込結果表示領域 -->
+                                    <div class="application-result" id="applicationResult" style="display: none;">
+                                        <div class="result-message" id="resultMessage">
+                                            <!-- 受け付けた旨のメッセージが表示されます -->
+                                        </div>
+                                        <div class="result-alert" id="resultAlert" style="display: none;">
+                                            <!-- アラートメッセージが表示されます -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -885,78 +878,60 @@
                 </div>
             </div>
             
-            <!-- 右カラム: チャットボット -->
-            <div class="right-column">
-                <div class="chat-panel">
-                    <div class="chat-header">
-                        <span>🤖 My Assistant</span>
-                        <button class="faq-button" id="faqButton" title="FAQ">?</button>
-                    </div>
-                    
-                    <div class="message-area" id="messageArea">
-                        <div class="message-bubble bot">
-                            <div class="message-content">
-                                こんにちは！九州電力のAIアシスタントです。何かお手伝いできることはありますか？
+                         <!-- 右カラム: AIアシスタント -->
+             <div class="right-column">
+                 <div class="ai-assistant-panel">
+                     <!-- 上画面: AIエージェントとのやり取り -->
+                     <div class="chat-section">
+                         <div class="chat-header">
+                             <span>🤖 My Assistant</span>
+                         </div>
+                         
+                                                 <div class="message-area" id="messageArea">
+                            <div class="message-bubble bot">
+                                <div class="message-content">
+                                    こんにちは！九州電力のAIアシスタントです。左側の業務選択から開始したい業務を選んでください。
+                                </div>
+                                <div class="message-timestamp">14:00</div>
                             </div>
-                            <div class="message-timestamp">14:00</div>
                         </div>
-                    </div>
-                    
-                    <div class="input-area">
-                        <input type="text" placeholder="再点申込の手順を教えて" class="chat-input" id="chatInput">
-                        <button class="send-button" id="sendButton" title="送信">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                            </svg>
-                        </button>
-                        <button class="voice-input-button" id="voiceButton" title="音声入力">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                                <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.2-3c0 3.53-2.64 6.44-6.2 6.93V21h-2v-3.07c-3.56-.49-6.2-3.4-6.2-6.93h-2c0 4.17 3.06 7.6 7 8.4V21h4v-2.57c3.94-.8 7-4.23 7-8.4h-2z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-    
-    <!-- FAQ モーダル -->
-    <div class="modal" id="faqModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>❓ よくある質問</h3>
-                <button class="close-button" id="closeFaqModal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <div class="faq-question">再点申込の手順を教えて</div>
-                        <div class="faq-answer">1. 契約番号入力 → 2. 未収確認 → 3. 再点日選択 → 4. 予約実行</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">使用量計算の方法を教えて</div>
-                        <div class="faq-answer">契約番号を入力いただければ、使用量と料金の詳細をお調べいたします。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">今回の請求額はいくら？</div>
-                        <div class="faq-answer">2025年7月分は¥7,980（支払期限：08/20）</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">未収金の支払い方法を教えて</div>
-                        <div class="faq-answer">分割払いも可能です。契約番号をお聞かせください。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">契約変更の手続きを教えて</div>
-                        <div class="faq-answer">現在のプランと希望プランをお聞かせください。契約番号も必要です。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">契約廃止の手続きを教えて</div>
-                        <div class="faq-answer">廃止理由と希望日をお聞かせください。契約番号も必要です。</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                         
+                         <div class="input-area">
+                             <input type="text" placeholder="再点申込の手順を教えて" class="chat-input" id="chatInput">
+                             <button class="send-button" id="sendButton" title="送信">
+                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                     <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                 </svg>
+                             </button>
+                             <button class="voice-input-button" id="voiceButton" title="音声入力">
+                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                     <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.2-3c0 3.53-2.64 6.44-6.2 6.93V21h-2v-3.07c-3.56-.49-6.2-3.4-6.2-6.93h-2c0 4.17 3.06 7.6 7 8.4V21h4v-2.57c3.94-.8 7-4.23 7-8.4h-2z"/>
+                                 </svg>
+                             </button>
+                         </div>
+                     </div>
+                     
+                     <!-- 下画面: 手順とチェック項目 -->
+                     <div class="procedure-section">
+                         <div class="procedure-header">
+                             <span>📋 業務手順・チェックリスト</span>
+                             <button class="procedure-toggle" id="procedureToggle" title="手順表示切替">▼</button>
+                         </div>
+                         
+                         <div class="procedure-content" id="procedureContent">
+                             <div class="procedure-placeholder">
+                                 <div class="placeholder-icon">📋</div>
+                                 <div class="placeholder-text">
+                                     AIアシスタントが業務内容を検知すると、<br>
+                                     ここに手順とチェック項目が表示されます
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </main>
+     </div>
     
     <script src="script.js"></script>
 </body>

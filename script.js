@@ -18,7 +18,6 @@ const elements = {
     chatInput: document.getElementById('chatInput'),
     sendButton: document.getElementById('sendButton'),
     voiceButton: document.getElementById('voiceButton'),
-    faqButton: document.getElementById('faqButton'),
     
     // 通話ログ関連
     // transcriptToggle: document.getElementById('transcriptToggle'),
@@ -26,11 +25,14 @@ const elements = {
     logMessageArea: document.getElementById('logMessageArea'),
     summaryWindow: document.getElementById('summaryWindow'),
     summaryContent: document.getElementById('summaryContent'),
-    demoModeToggle: document.getElementById('demoModeToggle'),
     
     // シナリオ選択関連
     scenarioSelector: document.getElementById('scenarioSelector'),
     scenarioButtons: document.querySelectorAll('.scenario-btn'),
+    selectedScenario: document.getElementById('selectedScenario'),
+    selectedScenarioIcon: document.getElementById('selectedScenarioIcon'),
+    selectedScenarioName: document.getElementById('selectedScenarioName'),
+    changeScenarioBtn: document.getElementById('changeScenarioBtn'),
     
     // アラート関連
     alertPanel: document.getElementById('alertPanel'),
@@ -38,16 +40,13 @@ const elements = {
     sharedInfoPanel: document.getElementById('sharedInfoPanel'),
     sharedInfoContent: document.getElementById('sharedInfoContent'),
     
-    // モーダル関連
-    faqModal: document.getElementById('faqModal'),
-    closeFaqModal: document.getElementById('closeFaqModal'),
+
     
     // 再点申込関連
     slotButtons: document.querySelectorAll('.slot-btn'),
     restoreDate: document.getElementById('restoreDate'),
     
     // デモ関連
-    demoToggle: document.getElementById('demoToggle'),
     statusIndicator: document.getElementById('statusIndicator'),
     
     // 顧客検索関連
@@ -168,7 +167,8 @@ async function loadKeywords() {
             {
                 "scenario": "CONTRACT_TERMINATION",
                 "trigger": "契約廃止",
-                "bot_prompt": "契約廃止の手続きをご案内します。解約理由をお聞かせください。"
+                "bot_prompt": "契約廃止の手続きをご案内します。解約理由をお聞かせください。契約番号も必要です。",
+                "options": ["はい", "いいえ"]
             },
             {
                 "scenario": "CONTRACT_TERMINATION",
@@ -701,31 +701,24 @@ function setupEventListeners() {
     });
     
     // チャット送信
-    elements.sendButton.addEventListener('click', sendChatMessage);
-    elements.chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendChatMessage();
-        }
-    });
+    // elements.sendButton.addEventListener('click', sendChatMessage);
+    // elements.chatInput.addEventListener('keypress', (e) => {
+    //     if (e.key === 'Enter') {
+    //         sendChatMessage();
+    //     }
+    // });
     
     // 音声入力
-    elements.voiceButton.addEventListener('click', handleVoiceInput);
+    // elements.voiceButton.addEventListener('click', handleVoiceInput);
     
-    // FAQモーダル
-    elements.faqButton.addEventListener('click', openFaqModal);
-    elements.closeFaqModal.addEventListener('click', closeFaqModal);
-    elements.faqModal.addEventListener('click', (e) => {
-        if (e.target === elements.faqModal) {
-            closeFaqModal();
-        }
-    });
+
     
     // トランスクリプト切り替え（削除済み要素）
     // elements.transcriptToggle.addEventListener('click', toggleTranscript);
     
-    // デモモード
-    elements.demoModeToggle.addEventListener('change', toggleDemoMode);
-    elements.demoToggle.addEventListener('click', toggleDemoMode);
+
+    
+
     
     // シナリオ選択
     elements.scenarioButtons.forEach(button => {
@@ -734,7 +727,10 @@ function setupEventListeners() {
         });
     });
     
-
+    // 業務変更ボタン
+    elements.changeScenarioBtn.addEventListener('click', () => {
+        showScenarioSelector();
+    });
     
     // 再点申込スロット選択
     elements.slotButtons.forEach(button => {
@@ -743,14 +739,7 @@ function setupEventListeners() {
         });
     });
     
-    // FAQアイテムクリック
-    document.querySelectorAll('.faq-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const question = item.querySelector('.faq-question').textContent;
-            elements.chatInput.value = question;
-            closeFaqModal();
-        });
-    });
+
     
     // 顧客検索関連
     elements.searchCustomerBtn.addEventListener('click', handleCustomerSearch);
@@ -767,6 +756,33 @@ function setupEventListeners() {
     elements.searchAddress.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleCustomerSearch();
     });
+
+    // 契約申込（再点タブ）
+    const applyBtn = document.getElementById('applyContractBtn');
+    if (applyBtn) {
+        applyBtn.addEventListener('click', () => {
+            // 申込結果表示領域を表示
+            const resultArea = document.getElementById('applicationResult');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultAlert = document.getElementById('resultAlert');
+            
+            // 受け付けた旨のメッセージを表示
+            const timestamp = new Date().getTime();
+            resultMessage.textContent = `申込を受け付けました。受付番号: APP-${timestamp}`;
+            
+            // 結果領域を表示
+            resultArea.style.display = 'block';
+            
+            // アラートも表示（前の電気契約の廃止申込を受け付けていない場合）
+            resultAlert.textContent = 'こちらのお客様は、前の電気契約の廃止申込を受け付けておりません。契約終了もその場で対応できるかを確認してください！';
+            resultAlert.style.display = 'block';
+            
+            // ボタンを無効化
+            applyBtn.disabled = true;
+            applyBtn.textContent = '申込済み';
+            applyBtn.style.opacity = '0.6';
+        });
+    }
 }
 
 // 初期状態の設定
@@ -774,30 +790,23 @@ function setupInitialState() {
     // 顧客検索画面を表示、詳細画面は非表示
     showCustomerSearch();
     
-    // 初期メッセージを表示
-    addChatMessage('bot', 'こんにちは！九州電力のAIアシスタントです。お客様情報を検索してから対応を開始いたします。', '14:00', {
-        type: 'ai_greeting',
-        scenario: null
-    });
+
     
     // 初期通話ログをクリア（停電対応の自動設定を防ぐ）
     elements.logMessageArea.innerHTML = '';
     elements.summaryContent.textContent = 'お客様情報の検索をお待ちしています';
     
-    // デモモードは初期状態では無効
+    // デモモードは初期状態で無効（ユーザーが業務を選択するまで）
     demoMode = false;
     currentScenario = null;
     
-    // シナリオ選択パネルを非表示
-    elements.scenarioSelector.style.display = 'none';
+
     
     // アラートと共有事項をクリア
     elements.alertPanel.style.display = 'none';
     elements.sharedInfoPanel.style.display = 'none';
     elements.alertContent.innerHTML = '';
     elements.sharedInfoContent.innerHTML = '';
-    
-    // デモモード説明メッセージを削除（ユーザーは既にデモであることを認識しているため）
 }
 
 // シナリオ選択
@@ -823,6 +832,9 @@ function selectScenario(scenarioCode) {
     }
     
     console.log('選択されたシナリオ:', currentScenario);
+    
+    // 業務選択パネルを非表示にして、選択された業務のみを表示
+    showSelectedScenario(currentScenario);
     
     // 通話ログをクリア
     elements.logMessageArea.innerHTML = '';
@@ -853,9 +865,11 @@ function selectScenario(scenarioCode) {
     }
     
     // AIガイダンスを開始（RESTORE_POWERとBILLING_MANAGEMENTシナリオは専用タイミング）
+    console.log('AIガイダンス開始処理:', currentScenario.code, currentScenario.aiGuidance);
     if (currentScenario.aiGuidance && currentScenario.aiGuidance.length > 0) {
         if (currentScenario.code === 'RESTORE_POWER') {
             // RESTORE_POWERシナリオ専用のタイミング設定
+            console.log('RESTORE_POWER専用AIガイダンス開始');
             startRestorePowerAIGuidance();
         } else if (currentScenario.code === 'BILLING_MANAGEMENT') {
             // BILLING_MANAGEMENTシナリオ専用のタイミング設定
@@ -868,16 +882,39 @@ function selectScenario(scenarioCode) {
                 }
             }, 2000);
         }
+    } else {
+        console.log('AIガイダンスが定義されていません');
     }
     
 
     
-    // デモモード中なら即座にシナリオ再生開始
-    if (demoMode) {
-        setTimeout(() => {
-            startScenarioPlayback();
-        }, 500);
-    }
+    // シナリオ選択後にデモモードを有効にしてシナリオ再生開始
+    demoMode = true;
+    setTimeout(() => {
+        startScenarioPlayback();
+    }, 500);
+}
+
+// 選択された業務の表示
+function showSelectedScenario(scenario) {
+    // 業務選択パネルを非表示
+    elements.scenarioSelector.style.display = 'none';
+    
+    // 選択された業務の表示を更新
+    elements.selectedScenarioIcon.textContent = scenario.icon;
+    elements.selectedScenarioName.textContent = scenario.name;
+    
+    // 選択された業務の表示を表示
+    elements.selectedScenario.style.display = 'block';
+}
+
+// 業務選択パネルの表示
+function showScenarioSelector() {
+    // 選択された業務の表示を非表示
+    elements.selectedScenario.style.display = 'none';
+    
+    // 業務選択パネルを表示
+    elements.scenarioSelector.style.display = 'block';
 }
 
 // シナリオ再生開始
@@ -1423,17 +1460,7 @@ function handleVoiceInput() {
     }
 }
 
-// FAQモーダルを開く
-function openFaqModal() {
-    elements.faqModal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-}
 
-// FAQモーダルを閉じる
-function closeFaqModal() {
-    elements.faqModal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
 
 // トランスクリプト切り替え（削除済み機能）
 // function toggleTranscript() {
@@ -1442,45 +1469,7 @@ function closeFaqModal() {
 //     elements.transcriptToggle.textContent = isVisible ? '▲' : '▼';
 // }
 
-// デモモード切り替え
-function toggleDemoMode() {
-    demoMode = !demoMode;
-    elements.demoModeToggle.checked = demoMode;
-    elements.demoToggle.textContent = demoMode ? 'デモ停止' : 'デモモード';
-    
-    console.log('デモモード切り替え:', demoMode);
-    
-    // シナリオ選択パネルを表示/非表示
-    if (demoMode) {
-        elements.scenarioSelector.style.display = 'block';
-        // デモモード開始時はシナリオを自動選択しない
-        // ユーザーが手動でシナリオを選択するまで待機
-        currentScenario = null;
-        elements.logMessageArea.innerHTML = '';
-        elements.summaryContent.textContent = 'デモモード開始 - シナリオを選択してください';
-        elements.alertPanel.style.display = 'none';
-        elements.sharedInfoPanel.style.display = 'none';
-        elements.alertContent.innerHTML = '';
-        elements.sharedInfoContent.innerHTML = '';
-        
-        // シナリオボタンからアクティブクラスを削除
-        elements.scenarioButtons.forEach(btn => btn.classList.remove('active'));
-    } else {
-        elements.scenarioSelector.style.display = 'none';
-        
-        // デモモード終了時のクリーンアップ
-        currentScenario = null;
-        elements.logMessageArea.innerHTML = '';
-        elements.summaryContent.textContent = 'デモモード終了';
-        elements.alertPanel.style.display = 'none';
-        elements.sharedInfoPanel.style.display = 'none';
-        elements.alertContent.innerHTML = '';
-        elements.sharedInfoContent.innerHTML = '';
-        
-        // シナリオボタンからアクティブクラスを削除
-        elements.scenarioButtons.forEach(btn => btn.classList.remove('active'));
-    }
-}
+
 
 
 
@@ -2021,11 +2010,6 @@ if ('performance' in window) {
 
 // アクセシビリティ対応
 document.addEventListener('keydown', (e) => {
-    // ESCキーでモーダルを閉じる
-    if (e.key === 'Escape' && elements.faqModal.style.display === 'block') {
-        closeFaqModal();
-    }
-    
     // Tabキーでフォーカス管理
     if (e.key === 'Tab') {
         const focusableElements = document.querySelectorAll(
@@ -2506,7 +2490,61 @@ function showRestorePowerAIGuidance(guidance) {
         scenario: currentScenario.code
     });
     
+    // operator_confirmの場合は手順1を表示
+    if (guidance.trigger === 'operator_confirm') {
+        setTimeout(() => {
+            displayRestorePowerProcedure();
+        }, 1000);
+    }
+    
+    // customer_verifiedの場合は手順2に遷移
+    if (guidance.trigger === 'customer_verified') {
+        setTimeout(() => {
+            advanceToNextStep();
+        }, 1000);
+        // 各種確認のアニメーションを開始（住所所在確認: 成功）
+        startVerificationAnimation('verify-address', true);
+    }
+    
+    // restore_completeの場合は手順3に遷移
+    if (guidance.trigger === 'restore_complete') {
+        setTimeout(() => {
+            advanceToNextStep();
+        }, 1000);
+        // 供給地点番号確認: 成功、アンペア対応確認: 成功（デモ）
+        startVerificationAnimation('verify-supplyid', true);
+        setTimeout(() => startVerificationAnimation('verify-ampere', true), 300);
+    }
+    
+    // termination_startの場合は手順完了
+    if (guidance.trigger === 'termination_start') {
+        setTimeout(() => {
+            completeProcedure();
+        }, 1000);
+    }
+    
     // termination_startの場合は追加処理は不要（ユーザー仕様では+38sで終了）
+}
+
+// 各種確認のアニメーション制御
+function startVerificationAnimation(targetId, isSuccess) {
+    const container = document.getElementById(targetId);
+    if (!container) return;
+    const icon = container.querySelector('.verify-icon');
+    if (!icon) return;
+    // 初期化
+    icon.classList.remove('show-success', 'show-failure', 'show-spinner');
+    // スピナー表示
+    icon.classList.add('show-spinner');
+    // 1.5秒後に結果表示
+    setTimeout(() => {
+        icon.classList.remove('show-spinner');
+        icon.classList.add(isSuccess ? 'show-success' : 'show-failure');
+        const resultEl = icon.querySelector('.result');
+        if (resultEl) {
+            resultEl.textContent = isSuccess ? '✓' : '✕';
+        }
+    }, 1500);
 }
 
 // BILLING_MANAGEMENTシナリオ専用のAIガイダンスタイミング制御
@@ -2564,3 +2602,130 @@ function showBillingManagementAIGuidance(guidance) {
 
 // 初期化完了メッセージ
 console.log('AIエージェントUI JavaScript初期化完了');
+
+// 手順表示用の関数
+function displayRestorePowerProcedure() {
+    const procedureContent = document.getElementById('procedureContent');
+    if (!procedureContent) return;
+    
+    const procedure = {
+        title: '⚡ 再点申込手順',
+        steps: [
+            {
+                step: '手順1. 本人確認',
+                checklist: [
+                    'お客様の名前、住所、電話番号を確認する',
+                    '各情報を復唱し、お客様情報の検索を行う'
+                ]
+            },
+            {
+                step: '手順2. 再点用の情報確認',
+                checklist: [
+                    '新しく電気を利用する住所を確認する',
+                    '電気の利用日を確認する',
+                    '契約アンペア・契約プラン数に変更がないか確認する'
+                ]
+            },
+            {
+                step: '手順3. 廃止情報の確認',
+                checklist: [
+                    'お客様に対し、今回の申し込みに関連する情報確認を行う旨を伝える',
+                    '廃止の申し込みが入っているかを確認する'
+                ]
+            }
+        ]
+    };
+    
+    window.currentProcedureStep = 0;
+    window.totalProcedureSteps = procedure.steps.length;
+    
+    procedureContent.innerHTML = generateStepHTML(0);
+    
+    const procedureSection = document.querySelector('.procedure-section');
+    if (procedureSection) {
+        procedureSection.classList.remove('collapsed');
+        const procedureToggle = document.getElementById('procedureToggle');
+        if (procedureToggle) {
+            procedureToggle.textContent = '▼';
+        }
+    }
+}
+
+function generateStepHTML(stepIndex) {
+    const procedure = {
+        title: '⚡ 再点申込手順',
+        steps: [
+            {
+                step: '手順1. 本人確認',
+                checklist: [
+                    'お客様の名前、住所、電話番号を確認する',
+                    '各情報を復唱し、お客様情報の検索を行う'
+                ]
+            },
+            {
+                step: '手順2. 再点用の情報確認',
+                checklist: [
+                    '新しく電気を利用する住所を確認する',
+                    '電気の利用日を確認する',
+                    '契約アンペア・契約プラン数に変更がないか確認する'
+                ]
+            },
+            {
+                step: '手順3. 廃止情報の確認',
+                checklist: [
+                    'お客様に対し、今回の申し込みに関連する情報確認を行う旨を伝える',
+                    '廃止の申し込みが入っているかを確認する'
+                ]
+            }
+        ]
+    };
+    
+    const step = procedure.steps[stepIndex];
+    
+    return `
+        <div class="procedure-step">
+            <div class="step-header">
+                <h4>${procedure.title}</h4>
+                <div class="step-navigation">
+                    <span class="step-counter">手順 ${stepIndex + 1} / ${procedure.steps.length}. ${step.step.replace(/^手順\d+\.\s*/, '')}</span>
+                </div>
+            </div>
+            
+            <div class="step-content">
+                <ul class="checklist">
+                    ${step.checklist.map(item => `<li><span class="checkmark">☐</span>${item}</li>`).join('')}
+                </ul>
+            </div>
+            
+            <div class="step-status">
+                <div class="status-indicator">
+                    ${stepIndex === 0 ? '🔄 進行中' : stepIndex < window.totalProcedureSteps - 1 ? '⏳ 待機中' : '⏳ 待機中'}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function advanceToNextStep() {
+    if (window.currentProcedureStep < window.totalProcedureSteps - 1) {
+        window.currentProcedureStep++;
+        const procedureContent = document.getElementById('procedureContent');
+        if (procedureContent) {
+            procedureContent.innerHTML = generateStepHTML(window.currentProcedureStep);
+        }
+    }
+}
+
+function completeProcedure() {
+    const procedureContent = document.getElementById('procedureContent');
+    if (procedureContent) {
+        procedureContent.innerHTML = `
+            <div class="procedure-complete">
+                <div class="complete-icon">✅</div>
+                <h4>手順完了</h4>
+                <p>再点申込の手順が完了しました。</p>
+                <button class="step-btn restart-btn" onclick="displayRestorePowerProcedure()">最初からやり直す</button>
+            </div>
+        `;
+    }
+}
