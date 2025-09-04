@@ -196,27 +196,6 @@ async function loadScenarios() {
                 "code": "RESTORE_POWER",
                 "name": "再点申込",
                 "icon": "⚡",
-                "transcript": [
-                    { "speaker": "顧客", "text": "引越し先での電気利用の契約をしたいです。" },
-                    { "speaker": "オペレーター", "text": "はい、オペレーターの鈴木が承ります。それではまずご本人様確認をさせていただきます。お名前をフルネームでお答えいただけますでしょうか。" },
-                    { "speaker": "顧客", "text": "山田太郎です。" },
-                    { "speaker": "オペレーター", "text": "山田太郎さまでございますね。続きまして、ご利用のお電話番号をお願いいたします。" },
-                    { "speaker": "顧客", "text": "092-123-4567です。" },
-                    { "speaker": "オペレーター", "text": "はい、092-123-4567ですね。最後に、現在電気利用の契約をしているご住所につきましてもお願いいたします。" },
-                    { "speaker": "顧客", "text": "福岡県福岡市博多区博多駅前1-1-1です。" },
-                    { "speaker": "オペレーター", "text": "はい、福岡県福岡市博多区博多駅前1-1-1ですね。ありがとうございます。" },
-                    { "speaker": "オペレーター", "text": "お客様の確認が取れました。本日は引越し先での新規電気利用契約のお申込みとのことですので、こちらで対応させていただきます。まずは新しいご利用場所の住所についてお聞かせ願えますでしょうか。" },
-                    { "speaker": "顧客", "text": "はい、福岡県福岡市中央区天神2-2-2です。" },
-                    { "speaker": "オペレーター", "text": "福岡県福岡市中央区天神2-2-2ですね。続きまして、ご利用開始の希望日はいつごろになりますでしょうか。" },
-                    { "speaker": "顧客", "text": "8/15でお願いしたいです。" },
-                    { "speaker": "オペレーター", "text": "8/15で承りました。電気利用の契約プランにつきましては、現在のレギュラープランのままでよろしかったでしょうか。" },
-                    { "speaker": "顧客", "text": "大丈夫です。" },
-                    { "speaker": "オペレーター", "text": "承知いたしました。それでは、福岡県福岡市中央区天神2-2-2で、8/15よりレギュラープランの開始申込を受付いたしました。" },
-                    { "speaker": "顧客", "text": "ありがとうございます。" },
-                    { "speaker": "オペレーター", "text": "ちなみに、山田様は引越し前の現在のご住所における契約につきまして、解約の申し込みがまだお済みでないようですが、この電話にて合わせて対応いたしましょうか？" },
-                    { "speaker": "顧客", "text": "あ、忘れてたかもしれないですね。じゃあ解約の件も今お願いします。" },
-                    { "speaker": "オペレーター", "text": "承知いたしました。それでは廃止の手続きも進めさせていただきます。" }
-                ],
                 "summaryUpdates": [
                     { "time": "14:00:25", "summary": "顧客情報確認完了・新規契約申込受付開始" },
                     { "time": "14:00:30", "summary": "新住所確認・利用開始日調整" },
@@ -226,73 +205,6 @@ async function loadScenarios() {
                 ],
                 "alerts": [],
                 "sharedInfo": [],
-                "operatorActions": [
-                    // Phase 1: 顧客情報の段階的入力（顧客の発言の0.5秒後）
-                    { 
-                        "type": "INPUT_SEARCH_FIELD", 
-                        "field": "searchName", 
-                        "value": "山田太郎", 
-                        "delay": 6500
-                    },
-                    { 
-                        "type": "INPUT_SEARCH_FIELD", 
-                        "field": "searchPhone", 
-                        "value": "092-123-4567", 
-                        "delay": 10500
-                    },
-                    { 
-                        "type": "INPUT_SEARCH_FIELD", 
-                        "field": "searchAddress", 
-                        "value": "福岡県福岡市博多区博多駅前1-1-1", 
-                        "delay": 14500
-                    },
-                    
-                    // Phase 2: 顧客検索実行
-                    { 
-                        "type": "CLICK_SEARCH_BUTTON", 
-                        "delay": 17000
-                    },
-                    
-                    // Phase 3: 再点タブに切り替え
-                    { 
-                        "type": "SWITCH_TAB", 
-                        "tabId": "restore-power", 
-                        "tabName": "再点",
-                        "delay": 18000
-                    },
-                    
-                    // Phase 4: 新住所入力
-                    { 
-                        "type": "INPUT_DATA", 
-                        "field": "newAddress", 
-                        "value": "福岡県福岡市中央区天神2-2-2", 
-                        "delay": 20500
-                    },
-                    
-                    // Phase 5: 利用開始日入力
-                    { 
-                        "type": "INPUT_DATA", 
-                        "field": "startDate", 
-                        "value": "2025-08-15", 
-                        "delay": 22500
-                    },
-                    
-                    // Phase 6: 契約プラン確認
-                    { 
-                        "type": "SELECT_OPTION", 
-                        "selector": "#contractPlan", 
-                        "value": "regular", 
-                        "delay": 28500
-                    },
-                    
-                    // Phase 7: 廃止タブに切り替え
-                    { 
-                        "type": "SWITCH_TAB", 
-                        "tabId": "termination", 
-                        "tabName": "廃止",
-                        "delay": 38000
-                    }
-                ],
                 "aiGuidance": [
                     { "trigger": "scenario_start", "message": "シナリオ開始：引越し先での新規電気利用契約申込", "options": [] },
                     { "trigger": "restore_intent", "message": "会話内容より「再点」の意図を検知。\n「再点」のフローに沿って手順を提示してよろしいですか？", "options": [] },
@@ -848,12 +760,15 @@ function selectScenario(scenarioCode) {
     elements.alertContent.innerHTML = '';
     elements.sharedInfoContent.innerHTML = '';
     
-    // シナリオ開始メッセージを追加
-    addCallLogMessage({
-        timestamp: "14:00:00",
-        speaker: "システム",
-        text: `シナリオ開始: ${currentScenario.name}`
-    });
+    // RESTORE_POWERシナリオの場合は、シナリオ開始メッセージは追加しない
+    // （startRestorePowerAIGuidance内で完全に制御するため）
+    if (currentScenario.code !== 'RESTORE_POWER') {
+        addCallLogMessage({
+            timestamp: "14:00:00",
+            speaker: "システム",
+            text: `シナリオ開始: ${currentScenario.name}`
+        });
+    }
     
     // AIからシナリオ開始の案内を追加（RESTORE_POWERとBILLING_MANAGEMENTシナリオでは不要）
     const now = formatTime(new Date());
@@ -1648,40 +1563,7 @@ function maybePushAISuggestionForAction(action) {
         }
         */
 
-        if (currentScenario.code === 'USAGE_CALCULATION') {
-            if (action.type === 'SWITCH_TAB' && action.tabId === 'simulation') {
-                addChatMessage('user', '料金シミュレーションタブで使用量を確認中です。220kWhは適正ですか？', now, {
-                    type: 'operator_question',
-                    linkedTo: 'operator_action',
-                    scenario: currentScenario.code,
-                    action
-                });
-                setTimeout(() => {
-                    addChatMessage('bot', '220kWhは前月235kWhと比較して適正値です。ナイト・セレクトプランで基本料金¥2,400＋従量料金¥5,580で計算されます。', now, {
-                        type: 'ai_response',
-                        linkedTo: 'operator_question',
-                        scenario: currentScenario.code,
-                        action
-                    });
-                }, 1100);
-            }
-            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'calculateBill') {
-                addChatMessage('user', '料金計算を実行しました。結果に問題はありませんか？', now, {
-                    type: 'operator_question',
-                    linkedTo: 'operator_action',
-                    scenario: currentScenario.code,
-                    action
-                });
-                setTimeout(() => {
-                    addChatMessage('bot', '💰 計算結果は¥7,980です。異常値チェックも完了しており、請求データ生成に問題ありません。監査ログも生成済みです。', now, {
-                        type: 'ai_response',
-                        linkedTo: 'operator_question',
-                        scenario: currentScenario.code,
-                        action
-                    });
-                }, 1000);
-            }
-        }
+        // 古いMyAssistant表示は削除（新しいMyAssistant表示に統合済み）
 
         // BILLING_MANAGEMENTシナリオのAIガイダンスは明示的なaiGuidance配列で管理するため、
         // ここでの自動メッセージ生成は無効化
@@ -1722,75 +1604,7 @@ function maybePushAISuggestionForAction(action) {
         }
         */
 
-        if (currentScenario.code === 'CONTRACT_CHANGE') {
-            if (action.type === 'SWITCH_TAB' && action.tabId === 'change-plan') {
-                addChatMessage('user', '契約変更タブで確認中です。レギュラー50Aへの変更影響は？', now, {
-                    type: 'operator_question',
-                    linkedTo: 'operator_action',
-                    scenario: currentScenario.code,
-                    action
-                });
-                setTimeout(() => {
-                    addChatMessage('bot', 'レギュラー50Aへの変更で月額+¥1,420（年間+¥17,040）となります。アンペア変更工事費¥3,300が別途発生します。', now, {
-                        type: 'ai_response',
-                        linkedTo: 'operator_question',
-                        scenario: currentScenario.code,
-                        action
-                    });
-                }, 1100);
-            }
-            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmPlanChange') {
-                addChatMessage('user', '契約変更を実行しました。顧客への通知はどうしますか？', now, {
-                    type: 'operator_question',
-                    linkedTo: 'operator_action',
-                    scenario: currentScenario.code,
-                    action
-                });
-                setTimeout(() => {
-                    addChatMessage('bot', '🔄 変更完了です。変更後契約書PDFの生成とメール通知を送付してください。適用開始は2025/09/01からです。', now, {
-                        type: 'ai_response',
-                        linkedTo: 'operator_question',
-                        scenario: currentScenario.code,
-                        action
-                    });
-                }, 1000);
-            }
-        }
-
-        if (currentScenario.code === 'CONTRACT_TERMINATION') {
-            if (action.type === 'SWITCH_TAB' && action.tabId === 'termination') {
-                addChatMessage('user', '契約廃止タブを確認中です。解約条件に問題はありませんか？', now, {
-                    type: 'operator_question',
-                    linkedTo: 'operator_action',
-                    scenario: currentScenario.code,
-                    action
-                });
-                setTimeout(() => {
-                    addChatMessage('bot', '解約条件を確認しました。最低利用期間・違約金はありません。2025/07/31での解約が可能です。', now, {
-                        type: 'ai_response',
-                        linkedTo: 'operator_question',
-                        scenario: currentScenario.code,
-                        action
-                    });
-                }, 1200);
-            }
-            if (action.type === 'CLICK_BUTTON' && action.buttonId === 'confirmTermination') {
-                addChatMessage('user', '解約手続きを実行しました。証明書の発行はどうしますか？', now, {
-                    type: 'operator_question',
-                    linkedTo: 'operator_action',
-                    scenario: currentScenario.code,
-                    action
-                });
-                setTimeout(() => {
-                    addChatMessage('bot', '🚪 解約手続き完了です。解約証明書PDFを即時発行し、顧客へ送付してください。最終精算書は8/5に送付予定です。', now, {
-                        type: 'ai_response',
-                        linkedTo: 'operator_question',
-                        scenario: currentScenario.code,
-                        action
-                    });
-                }, 1000);
-            }
-        }
+        // 古いMyAssistant表示は削除（新しいMyAssistant表示に統合済み）
     }, 1500); // 1.5秒遅延でオペレーターが操作を確認してから質問する流れを演出
 }
 
@@ -2432,51 +2246,214 @@ function processGuidanceFlow(selectedOption, trigger) {
     }
 }
 
-// RESTORE_POWERシナリオ専用のAIガイダンスタイミング制御
+// RESTORE_POWERシナリオ専用の会話ログ表示制御
 function startRestorePowerAIGuidance() {
     if (!currentScenario || currentScenario.code !== 'RESTORE_POWER') return;
     
-    const aiGuidanceSchedule = [
-        { delay: 0, trigger: 'scenario_start' },          // +0s
-        { delay: 5000, trigger: 'restore_intent' },       // +5s
-        { delay: 6000, action: 'auto_response', text: 'はい' }, // +6s
-        { delay: 7000, trigger: 'operator_confirm' },     // +7s
-        { delay: 18000, trigger: 'customer_verified' },   // +18s
-        { delay: 31000, trigger: 'restore_complete' },    // +31s
-        { delay: 32000, trigger: 'termination_alert' },   // +32s
-        { delay: 37000, action: 'auto_response', text: '廃止も対応' }, // +37s
-        { delay: 38000, action: 'final_message', text: '廃止の手続きを進めます。' } // +38s
+    // 通話ログを完全にクリア
+    elements.logMessageArea.innerHTML = '';
+    
+    const conversationSchedule = [
+        { delay: 0, speaker: "システム", text: "シナリオ開始: 再点申込" },
+        { delay: 1000, speaker: "オペレーター", text: "お待たせいたしました。オペレーターの鈴木が承ります。" },
+        { delay: 4000, speaker: "顧客", text: "今度引越すんですけど、その新居での電気を契約したいです。" },
+        { delay: 11000, speaker: "オペレーター", text: "承知いたしました。新しいお住まいでの電気のご利用契約ですね。前のお住まいでの電気契約も九州電力をご利用されておりましたでしょうか。" },
+        { delay: 12000, speaker: "顧客", text: "そうです。" },
+        { delay: 14000, speaker: "オペレーター", text: "ありがとうございます。それでは、お客様情報のご確認をさせていただきます。まずはお名前をフルネームでお伺いしてもよろしいでしょうか。" },
+        { delay: 17000, speaker: "顧客", text: "山田太郎です。" },
+        { delay: 20000, speaker: "オペレーター", text: "ヤマダ タロウさまでございますね。続きまして、ご契約されている電話番号をお願いいたします。" },
+        { delay: 23000, speaker: "顧客", text: "092-123-4567です。" },
+        { delay: 26500, speaker: "オペレーター", text: "はい、092-123-4567ですね。最後に、現在契約されているご住所をお願いいたします。" },
+        { delay: 30000, speaker: "顧客", text: "福岡県福岡市博多区博多駅前1-1-1です。" },
+        { delay: 34000, speaker: "オペレーター", text: "はい、福岡県福岡市博多区博多駅前1-1-1ですね。ありがとうございます。" },
+        { delay: 38000, speaker: "オペレーター", text: "お客様の確認が取れました。こちらで新しい電気のご利用契約につきまして進めさせていただきます。" },
+        { delay: 43000, speaker: "オペレーター", text: "まずは、新しくご利用いただくお引越し先の住所はどちらになりますでしょうか。" },
+        { delay: 45000, speaker: "顧客", text: "福岡県福岡市中央区天神2-2-2です。" },
+        { delay: 48000, speaker: "オペレーター", text: "福岡県福岡市中央区天神2-2-2ですね。" },
+        { delay: 50000, speaker: "オペレーター", text: "続きまして、ご利用開始日はいつ頃をご希望なさいますか。" },
+        { delay: 52000, speaker: "顧客", text: "8月15日でお願いしたいです。" },
+        { delay: 55000, speaker: "オペレーター", text: "はい、8月15日で承りました。" },
+        { delay: 57000, speaker: "オペレーター", text: "前のお住まいのご契約内容から変更はございませんでしょうか。昼間の在宅が増えたり、同居者が増えたり等あれば、こちらで変更のご相談も可能です" },
+        { delay: 61000, speaker: "顧客", text: "あー、そこは大丈夫です。前と同じで。" },
+        { delay: 63000, speaker: "オペレーター", text: "承知いたしました。いただいた条件を基に契約実施が可能であるかを確認させていただきます。少々お待ちください。" },
+        { delay: 71000, speaker: "オペレーター", text: "お待たせいたしました。新しいご利用場所、福岡県福岡市中央区天神2-2-2にて、従来同様のご契約内容で、8月15日より電気供給が可能であることを確認できましたた。こちらで新しい電気契約を承らせていただきます。" },
+        { delay: 75000, speaker: "顧客", text: "ありがとうございます。" },
+        { delay: 80000, speaker: "オペレーター", text: "追加でのご確認となりますが、山田様は引越し前のお住まいでの電気契約の廃止手続きは既にお済みでしょうか。" },
+        { delay: 83000, speaker: "顧客", text: "あ、忘れてたかもしれないですね..." },
+        { delay: 86000, speaker: "オペレーター", text: "承知いたしました。それでは廃止の手続きも..." }
     ];
     
-    aiGuidanceSchedule.forEach(schedule => {
+    // 360度ビュー操作のスケジュール
+    const viewOperations = [
+        { delay: 18500, action: 'inputName', value: 'ヤマダタロウ' },
+        { delay: 24500, action: 'inputPhone', value: '0921234567' },
+        { delay: 31500, action: 'inputAddress', value: '福岡県福岡市博多区博多駅前1-1-1' },
+        { delay: 36000, action: 'clickSearch' },
+        { delay: 39000, action: 'switchToRestoreTab' },
+        { delay: 46500, action: 'inputNewAddress', value: '福岡県福岡市中央区天神2-2-2' },
+        { delay: 53500, action: 'inputStartDate', value: '2025-08-15' },
+        { delay: 65000, action: 'startAddressVerification' },
+        { delay: 66000, action: 'startSupplyIdVerification' },
+        { delay: 67000, action: 'startAmpereVerification' },
+        { delay: 76500, action: 'clickApplyButton' },
+        { delay: 92000, action: 'switchToTerminationTab' }
+    ];
+    
+    // 会話ログを順次表示
+    conversationSchedule.forEach(schedule => {
         setTimeout(() => {
             if (!demoMode || !currentScenario || currentScenario.code !== 'RESTORE_POWER') return;
             
-            if (schedule.action === 'auto_response') {
-                // 自動回答を表示
-                const now = formatTime(new Date());
-                addChatMessage('user', schedule.text, now, {
-                    type: 'guidance_selection',
-                    trigger: 'auto_response',
-                    scenario: currentScenario.code
-                });
-            } else if (schedule.action === 'final_message') {
-                // 最終メッセージを表示
-                const now = formatTime(new Date());
-                addChatMessage('bot', schedule.text, now, {
-                    type: 'ai_guidance',
-                    trigger: 'final_message',
-                    scenario: currentScenario.code
-                });
-            } else {
-                // AIガイダンスを表示
-                const guidance = currentScenario.aiGuidance.find(g => g.trigger === schedule.trigger);
-                if (guidance) {
-                    showRestorePowerAIGuidance(guidance);
-                }
+            // 通話ログにメッセージを追加
+            addCallLogMessage({
+                speaker: schedule.speaker,
+                text: schedule.text,
+                timestamp: formatTime(new Date())
+            });
+            
+            // 特定のタイミングで手順表示やアニメーションを開始
+            if (schedule.delay === 38000) {
+                // お客様確認完了後、手順1を表示
+                setTimeout(() => {
+                    displayRestorePowerProcedure();
+                }, 1000);
+            } else if (schedule.delay === 71000) {
+                // 契約確認完了後、手順2に遷移
+                setTimeout(() => {
+                    advanceToNextStep();
+                    startVerificationAnimation('verify-address', true);
+                }, 1000);
+            } else if (schedule.delay === 86000) {
+                // 廃止手続き開始後、手順3に遷移
+                setTimeout(() => {
+                    advanceToNextStep();
+                    startVerificationAnimation('verify-supplyid', true);
+                    setTimeout(() => startVerificationAnimation('verify-ampere', true), 300);
+                }, 1000);
             }
         }, schedule.delay);
     });
+    
+    // 360度ビュー操作を順次実行
+    viewOperations.forEach(operation => {
+        setTimeout(() => {
+            if (!demoMode || !currentScenario || currentScenario.code !== 'RESTORE_POWER') return;
+            
+            executeViewOperation(operation);
+        }, operation.delay);
+    });
+    
+    // MyAssistantの表示スケジュール
+    const assistantSchedule = [
+        { delay: 0, type: 'bot', message: 'シナリオ開始：引越し先での新規電気利用契約申込' },
+        { delay: 7000, type: 'bot', message: '会話内容より「再点」の意図を検知。 「再点」のフローに沿って手順を提示してよろしいですか？' },
+        { delay: 13000, type: 'user', message: 'はい' },
+        { delay: 14000, type: 'bot', message: '下記フィールドに表示される業務手順に沿って対応を進めてください。' },
+        { delay: 76500, type: 'bot', message: '廃止アラートメッセージ' },
+        { delay: 88000, type: 'user', message: '廃止も対応' },
+        { delay: 90000, type: 'bot', message: '最終メッセージ「廃止の手続きを進めます。」' }
+    ];
+    
+    // MyAssistantの表示を順次実行
+    assistantSchedule.forEach(schedule => {
+        setTimeout(() => {
+            if (!demoMode || !currentScenario || currentScenario.code !== 'RESTORE_POWER') return;
+            
+            const now = formatTime(new Date());
+            addChatMessage(schedule.type, schedule.message, now, {
+                type: 'ai_guidance',
+                trigger: 'assistant_schedule',
+                scenario: currentScenario.code
+            });
+        }, schedule.delay);
+    });
+}
+
+// 360度ビュー操作実行関数
+function executeViewOperation(operation) {
+    switch (operation.action) {
+        case 'inputName':
+            // 氏名入力フィールドに「ヤマダタロウ」入力
+            const nameField = document.getElementById('searchName');
+            if (nameField) {
+                typeIntoField(nameField, operation.value, 100);
+            }
+            break;
+            
+        case 'inputPhone':
+            // 電話番号入力フィールドに「0921234567」入力
+            const phoneField = document.getElementById('searchPhone');
+            if (phoneField) {
+                typeIntoField(phoneField, operation.value, 100);
+            }
+            break;
+            
+        case 'inputAddress':
+            // 住所入力フィールドに「福岡県福岡市博多区博多駅前1-1-1」入力
+            const addressField = document.getElementById('searchAddress');
+            if (addressField) {
+                typeIntoField(addressField, operation.value, 100);
+            }
+            break;
+            
+        case 'clickSearch':
+            // 検索ボタンクリック
+            const searchBtn = document.getElementById('searchCustomerBtn');
+            if (searchBtn) {
+                searchBtn.click();
+            }
+            break;
+            
+        case 'switchToRestoreTab':
+            // 再点タブに切り替え
+            switchTab('restore-power');
+            break;
+            
+        case 'inputNewAddress':
+            // 新住所フィールドに「福岡県福岡市中央区天神2-2-2」入力
+            const newAddressField = document.getElementById('newAddress');
+            if (newAddressField) {
+                typeIntoField(newAddressField, operation.value, 100);
+            }
+            break;
+            
+        case 'inputStartDate':
+            // 利用開始日フィールドに「2025/8/15」を選択
+            const startDateField = document.getElementById('startDate');
+            if (startDateField) {
+                startDateField.value = operation.value;
+                startDateField.dispatchEvent(new Event('change'));
+            }
+            break;
+            
+        case 'startAddressVerification':
+            // 「3. 各種確認」の所在地確認のアニメーション作動(チェックOKパターン)
+            startVerificationAnimation('verify-address', true);
+            break;
+            
+        case 'startSupplyIdVerification':
+            // 「3. 各種確認」の供給地点番号確認のアニメーション作動(チェックOKパターン)
+            startVerificationAnimation('verify-supplyid', true);
+            break;
+            
+        case 'startAmpereVerification':
+            // 「3. 各種確認」のアンペア対応確認のアニメーション作動(チェックOKパターン)
+            startVerificationAnimation('verify-ampere', true);
+            break;
+            
+        case 'clickApplyButton':
+            // 「申込を受け付ける」ボタンを押下（アラート表示パターン）
+            const applyBtn = document.getElementById('applyContractBtn');
+            if (applyBtn) {
+                applyBtn.click();
+            }
+            break;
+            
+        case 'switchToTerminationTab':
+            // 廃止タブに切り替え
+            switchTab('contract-termination');
+            break;
+    }
 }
 
 // RESTORE_POWER専用のAIガイダンス表示（選択肢なし、自動進行のみ）
