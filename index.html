@@ -137,7 +137,10 @@
                     
                     <!-- 顧客情報表示画面（検索後） -->
                     <div class="customer-info" id="customerInfo" style="display: none;">
-                        <h2>👤 顧客・契約情報</h2>
+                        <div class="customer-header">
+                            <h2>👤 顧客・契約情報</h2>
+                            <button type="button" id="newSearchBtn" class="action-btn">新規検索</button>
+                        </div>
                         <div class="customer-summary">
                             <div class="name-block">
                                 <div class="furigana" id="customerFurigana">ヤマダ タロウ</div>
@@ -160,9 +163,6 @@
                                     <div class="info-row"><span class="label">通算契約期間</span><span class="value" id="customerContractPeriod">4年10か月</span></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="customer-actions">
-                            <button type="button" id="newSearchBtn" class="action-btn">新規検索</button>
                         </div>
                     </div>
                 </div>

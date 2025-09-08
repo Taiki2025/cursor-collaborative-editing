@@ -1348,6 +1348,72 @@ function addChatMessage(sender, text, time, meta = {}) {
     elements.messageArea.scrollTop = elements.messageArea.scrollHeight;
 }
 
+// 選択肢ボタン付きチャットメッセージ追加
+function addChatMessageWithOptions(sender, text, time, options = [], meta = {}) {
+    // チャット履歴へ保存（タイムライン紐づけ情報付き）
+    chatHistory.push({ sender, text, time, meta });
+
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message-bubble', sender);
+    
+    const messageContent = document.createElement('div');
+    messageContent.classList.add('message-content');
+    messageContent.textContent = text;
+    
+    const timestamp = document.createElement('div');
+    timestamp.classList.add('message-timestamp');
+    timestamp.textContent = time;
+    
+    messageContainer.appendChild(messageContent);
+    messageContainer.appendChild(timestamp);
+    
+    // 選択肢ボタンを追加
+    if (options.length > 0) {
+        const optionsContainer = document.createElement('div');
+        optionsContainer.classList.add('message-options');
+        
+        options.forEach(option => {
+            const button = document.createElement('button');
+            button.classList.add('option-button');
+            button.textContent = option.text;
+            button.addEventListener('click', () => {
+                // 選択されたボタンを無効化
+                optionsContainer.querySelectorAll('.option-button').forEach(btn => {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.6';
+                });
+                
+                // 選択されたオプションをユーザーメッセージとして追加
+                const now = formatTime(new Date());
+                addChatMessage('user', option.text, now, {
+                    type: 'option_selection',
+                    trigger: option.trigger,
+                    scenario: currentScenario ? currentScenario.code : null
+                });
+                
+                // オプション選択後の処理
+                if (option.callback) {
+                    option.callback();
+                }
+            });
+            
+            optionsContainer.appendChild(button);
+        });
+        
+        messageContainer.appendChild(optionsContainer);
+    }
+    
+    elements.messageArea.appendChild(messageContainer);
+    
+    // アニメーション
+    setTimeout(() => {
+        messageContainer.classList.add('show');
+    }, 10);
+    
+    // 自動スクロール
+    elements.messageArea.scrollTop = elements.messageArea.scrollHeight;
+}
+
 // 音声入力処理
 function handleVoiceInput() {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
@@ -2312,25 +2378,9 @@ function startRestorePowerAIGuidance() {
             });
             
             // 特定のタイミングで手順表示やアニメーションを開始
-            if (schedule.delay === 38000) {
-                // お客様確認完了後、手順1を表示
-                setTimeout(() => {
-                    displayRestorePowerProcedure();
-                }, 1000);
-            } else if (schedule.delay === 71000) {
-                // 契約確認完了後、手順2に遷移
-                setTimeout(() => {
-                    advanceToNextStep();
-                    startVerificationAnimation('verify-address', true);
-                }, 1000);
-            } else if (schedule.delay === 86000) {
-                // 廃止手続き開始後、手順3に遷移
-                setTimeout(() => {
-                    advanceToNextStep();
-                    startVerificationAnimation('verify-supplyid', true);
-                    setTimeout(() => startVerificationAnimation('verify-ampere', true), 300);
-                }, 1000);
-            }
+            // 手順1は「下記フィールドに表示される業務手順に沿って対応を進めてください。」がMyassistantで表示すると同時
+            // 手順2は顧客検索結果が表示されるのと同時
+            // 手順3は「廃止手続きの手順を表示します」がMyassistantで表示すると同時
         }, schedule.delay);
     });
     
@@ -2340,18 +2390,52 @@ function startRestorePowerAIGuidance() {
             if (!demoMode || !currentScenario || currentScenario.code !== 'RESTORE_POWER') return;
             
             executeViewOperation(operation);
+            
+            // 手順2のトリガー: 顧客検索結果が表示されるのと同時
+            if (operation.action === 'clickSearch') {
+                // 検索実行後、手順2に遷移
+                setTimeout(() => {
+                    advanceToNextStep();
+                }, 1500); // 検索処理完了を待つ
+            }
         }, operation.delay);
     });
     
     // MyAssistantの表示スケジュール
     const assistantSchedule = [
         { delay: 0, type: 'bot', message: 'シナリオ開始：引越し先での新規電気利用契約申込' },
-        { delay: 7000, type: 'bot', message: '会話内容より「再点」の意図を検知。 「再点」のフローに沿って手順を提示してよろしいですか？' },
-        { delay: 13000, type: 'user', message: 'はい' },
-        { delay: 14000, type: 'bot', message: '下記フィールドに表示される業務手順に沿って対応を進めてください。' },
-        { delay: 76500, type: 'bot', message: '廃止アラートメッセージ' },
-        { delay: 88000, type: 'user', message: '廃止も対応' },
-        { delay: 90000, type: 'bot', message: '最終メッセージ「廃止の手続きを進めます。」' }
+        { delay: 7000, type: 'bot', message: '会話内容より「再点」の意図を検知。 「再点」のフローに沿って手順を提示してよろしいですか？', options: [
+            { text: 'はい', trigger: 'restore_intent_yes', callback: () => {
+                // 自動で「はい」を選択した後の処理
+                setTimeout(() => {
+                    const now = formatTime(new Date());
+                    addChatMessage('bot', '下記フィールドに表示される業務手順に沿って対応を進めてください。', now, {
+                        type: 'ai_guidance',
+                        trigger: 'assistant_schedule',
+                        scenario: currentScenario.code
+                    });
+                    // 手順1の表示
+                    displayRestorePowerProcedure();
+                }, 1000);
+            }},
+            { text: 'いいえ', trigger: 'restore_intent_no' }
+        ]},
+        { delay: 76500, type: 'bot', message: 'このお客様は前住所の廃止申込が未了です。廃止も対応するかを確認してください', options: [
+            { text: '廃止も対応', trigger: 'termination_yes', callback: () => {
+                // 自動で「廃止も対応」を選択した後の処理
+                setTimeout(() => {
+                    const now = formatTime(new Date());
+                    addChatMessage('bot', '廃止手続きの手順を表示します', now, {
+                        type: 'ai_guidance',
+                        trigger: 'assistant_schedule',
+                        scenario: currentScenario.code
+                    });
+                    // 手順3の表示
+                    advanceToNextStep();
+                }, 1000);
+            }},
+            { text: '廃止対応は不要', trigger: 'termination_no' }
+        ]}
     ];
     
     // MyAssistantの表示を順次実行
@@ -2360,11 +2444,43 @@ function startRestorePowerAIGuidance() {
             if (!demoMode || !currentScenario || currentScenario.code !== 'RESTORE_POWER') return;
             
             const now = formatTime(new Date());
-            addChatMessage(schedule.type, schedule.message, now, {
-                type: 'ai_guidance',
-                trigger: 'assistant_schedule',
-                scenario: currentScenario.code
-            });
+            
+            // 選択肢ボタンがある場合は専用関数を使用
+            if (schedule.options && schedule.options.length > 0) {
+                addChatMessageWithOptions(schedule.type, schedule.message, now, schedule.options, {
+                    type: 'ai_guidance',
+                    trigger: 'assistant_schedule',
+                    scenario: currentScenario.code
+                });
+                
+                // 自動選択の処理
+                if (schedule.delay === 7000) {
+                    // 「再点」の意図検知メッセージ - 自動で「はい」を選択
+                    setTimeout(() => {
+                        const buttons = document.querySelectorAll('.option-button');
+                        const yesButton = Array.from(buttons).find(btn => btn.textContent === 'はい');
+                        if (yesButton) {
+                            yesButton.click();
+                        }
+                    }, 2000); // 2秒後に自動選択
+                } else if (schedule.delay === 76500) {
+                    // 廃止アラートメッセージ - 自動で「廃止も対応」を選択
+                    setTimeout(() => {
+                        const buttons = document.querySelectorAll('.option-button');
+                        const yesButton = Array.from(buttons).find(btn => btn.textContent === '廃止も対応');
+                        if (yesButton) {
+                            yesButton.click();
+                        }
+                    }, 2000); // 2秒後に自動選択
+                }
+            } else {
+                // 通常のメッセージ
+                addChatMessage(schedule.type, schedule.message, now, {
+                    type: 'ai_guidance',
+                    trigger: 'assistant_schedule',
+                    scenario: currentScenario.code
+                });
+            }
         }, schedule.delay);
     });
 }

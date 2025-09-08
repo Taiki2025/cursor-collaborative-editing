@@ -627,8 +627,16 @@ body {
     50% { transform: translateY(-10px) rotate(180deg); }
 }
 
-.customer-info h2 {
+/* 顧客情報ヘッダー */
+.customer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+}
+
+.customer-info h2 {
+    margin: 0;
     font-size: 20px;
     font-weight: 600;
 }
@@ -761,14 +769,7 @@ body {
 .customer-columns .info-row .value { color: #333; font-weight: 600; }
 .customer-columns .info-row .value.supply-id { white-space: nowrap; }
 
-/* 顧客アクション */
-.customer-actions {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #e1e5e9;
-    display: flex;
-    gap: 10px;
-}
+/* 顧客アクション（削除済み - ボタンはヘッダーに移動） */
 
 /* AIガイダンス選択肢 */
 .guidance-options {
@@ -2073,6 +2074,36 @@ body {
     color: #666;
     margin-top: 4px;
     margin-left: 8px;
+}
+
+/* 選択肢ボタン */
+.message-options {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.option-button {
+    background: #005BAC;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.option-button:hover {
+    background: #004a99;
+    transform: translateY(-1px);
+}
+
+.option-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .input-area {
