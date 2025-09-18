@@ -1348,6 +1348,34 @@ function addChatMessage(sender, text, time, meta = {}) {
     elements.messageArea.scrollTop = elements.messageArea.scrollHeight;
 }
 
+// HTMLを含むチャットメッセージ追加
+function addChatMessageWithHTML(sender, html, time, meta = {}) {
+    // チャット履歴へ保存（タイムライン紐づけ情報付き）
+    chatHistory.push({ sender, text: html, time, meta });
+
+    const messageContainer = document.createElement('div');
+    messageContainer.classList.add('message-bubble', sender);
+    
+    const messageContent = document.createElement('div');
+    messageContent.classList.add('message-content');
+    messageContent.innerHTML = html;
+    
+    const timestamp = document.createElement('div');
+    timestamp.classList.add('message-timestamp');
+    timestamp.textContent = time;
+    
+    messageContainer.appendChild(messageContent);
+    messageContainer.appendChild(timestamp);
+    
+    elements.messageArea.appendChild(messageContainer);
+    
+    setTimeout(() => {
+        messageContainer.classList.add('show');
+    }, 10);
+    
+    elements.messageArea.scrollTop = elements.messageArea.scrollHeight;
+}
+
 // 選択肢ボタン付きチャットメッセージ追加
 function addChatMessageWithOptions(sender, text, time, options = [], meta = {}) {
     // チャット履歴へ保存（タイムライン紐づけ情報付き）
@@ -2435,7 +2463,8 @@ function startRestorePowerAIGuidance() {
                 }, 1000);
             }},
             { text: '廃止対応は不要', trigger: 'termination_no' }
-        ]}
+        ]},
+        { delay: 87000, type: 'bot', message: '__AUTO_SUMMARY__' }
     ];
     
     // MyAssistantの表示を順次実行
@@ -2473,6 +2502,25 @@ function startRestorePowerAIGuidance() {
                         }
                     }, 2000); // 2秒後に自動選択
                 }
+            } else if (schedule.message === '__AUTO_SUMMARY__') {
+                // 85秒後 自動で要約表示
+                const nameEl = document.getElementById('customerFullName');
+                const idEl = document.getElementById('customerId');
+                const customerName = nameEl ? nameEl.textContent : '';
+                const customerId = idEl ? idEl.textContent : '';
+                const summaryHtml =
+                    `<div><strong>対応要約</strong></div>` +
+                    `<div>お客様名：${customerName || '（未取得）'}</div>` +
+                    `<div>お客様番号：${customerId || '（未取得）'}</div>` +
+                    `<div>・本人確認完了（氏名/電話/現住所）</div>` +
+                    `<div>・新契約概要確認（住所/開始日/30A/ナイト・セレクト）</div>` +
+                    `<div>・各種確認（所在地/供給地点/アンペア対応 いずれもOK）</div>` +
+                    `<div>・申込受付完了（アラート：前住所の廃止未了）</div>` +
+                    `<div>・廃止手続きへ誘導</div>` +
+                    `<div>・廃止申し込みも受付完了</div>` +
+                    `<div>対応時間：2分30秒</div>` +
+                    `<div>ステータス：完了</div>`;
+                addChatMessageWithHTML('bot', summaryHtml, now, { type: 'ai_summary', scenario: currentScenario.code });
             } else {
                 // 通常のメッセージ
                 addChatMessage(schedule.type, schedule.message, now, {
